@@ -1,3 +1,5 @@
+
+
 let courses = []
 
 let counter = 0
@@ -66,11 +68,15 @@ const app = Vue.createApp({
         })
         .then(data => {
           // Split the CSV data into rows
-          const rows = data.split('\n')
-
+          const rows = data.split(/\r?\n/)
+          
           // Parse each row into course objects
           rows.forEach(row => {
+            if (row.trim() === '') {
+              return; // Skip empty strings
+          }
             const columns = row.split(',')
+            
             const course = new Course(
               columns[0].trim(),
               columns[1].trim(),
@@ -89,6 +95,7 @@ const app = Vue.createApp({
         })
         .catch(error => {
           console.log('loadCourses error')
+          console.log(error.message)
           this.showError(error.message)
         })
     },
@@ -111,21 +118,29 @@ const app = Vue.createApp({
           return response.text()
         })
         .then(data => {
+          console.log(data)
           // Split the CSV data into rows
-          const rows = data.split('\n')
+          const rows = data.split(/\r?\n/)
+          console.log(rows)
 
           // Parse each row into classroom objects
           rows.forEach(row => {
-            const [name, capacity] = row.split(',')
-            const classroomName = name.trim()
-            const classroomCapacity = parseInt(capacity.trim())
-            classrooms[classroomName] = classroomCapacity
-          })
+            if (row.trim() === '') {
+                return; // Skip empty strings
+            }
+        
+            const rowArray = row.split(';');
+            const classroomName = rowArray[0].trim();
+            const classroomCapacity = parseInt(rowArray[1].trim(), 10);
+            classrooms[classroomName] = classroomCapacity;
+        })
+        
 
           console.log('Classrooms loaded:', classrooms)
         })
         .catch(error => {
           console.log('loadClassrooms error')
+          console.log(error.message)
           this.showError(error.message)
         })
     },
@@ -162,49 +177,54 @@ const app = Vue.createApp({
 
       return foundClassroom
     },
-    readBusy (data) {
-      for (let line of data.split('\n')) {
-        let [instructor, day] = line.trim().split(',', 2)
-        let timeSlots = line.trim().split('"')[1]
-        let slots = timeSlots.replace(/"/g, '').split(',')
-
-        const times = []
-        for (const slot of slots) {
-          const hour =
-            parseInt(slot.split(':')[0]) -
-            8 +
-            8 *
-              {
-                Monday: 0,
-                Tuesday: 1,
-                Wednesday: 2,
-                Thursday: 3,
-                Friday: 4
-              }[day]
-          times.push(hour)
-        }
-        if (busy[instructor] !== undefined) {
-          busy[instructor].push(...times)
-        } else {
-          busy[instructor] = times
-        }
-      }
-    },
-    loadBusy () {
+    loadBusy() {
       fetch('data/busy.csv')
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Failed to load busy schedule')
-          }
-          return response.text()
-        })
-        .then(data => {
-          this.readBusy(data)
-        })
-        .catch(error => {
-          console.error('Error:', error.message)
-        })
-    },
+          .then(response => {
+              if (!response.ok) {
+                  throw new Error('Failed to load busy schedule');
+              }
+              return response.text();
+          })
+          .then(data => {
+              // Split the CSV data into rows
+              const rows = data.split(/\r?\n/);
+  
+              // Parse each row into busy schedule
+              rows.forEach(line => {
+                  if (line.trim() === '') {
+                      return; // Skip empty lines
+                  }
+          
+                  let [instructor, day] = line.trim().split(',', 2);
+                  let timeSlots = line.trim().split('"')[1];
+                  let slots = timeSlots.replace(/"/g, '').split(',');
+  
+                  const times = [];
+                  for (const slot of slots) {
+                      const hour = parseInt(slot.split(":")[0]) - 8 + 8 * {
+                          "Monday": 0,
+                          "Tuesday": 1,
+                          "Wednesday": 2,
+                          "Thursday": 3,
+                          "Friday": 4
+                      }[day];
+                      times.push(hour);
+                  }
+                  if (busy[instructor] !== undefined) {
+                      busy[instructor].push(...times);
+                  } else {
+                      ;
+                  }
+              });
+  
+              console.log('Busy schedule loaded:', busy);
+              console.log(busy[0].times)
+          })
+          .catch(error => {
+              console.error('loadBusy error:', error.message);
+              // Handle error as needed
+          });
+  },  
     lay (year = 1, hour = 0) {
       counter++
       if (hour >= 40) {
