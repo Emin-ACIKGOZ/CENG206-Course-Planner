@@ -74,18 +74,15 @@
         <button @click="editBusyHours">Edit Busy Hours</button>
 
         <button @click="addClass">Add a Class</button>
-
         <div v-if="showAddClassForm" class="class-form">
             <h2>Add a New Class</h2>
             <form @submit.prevent="submitClass">
                 <!-- Add input fields for classroom ID and capacity -->
                 <label for="classroom-id">Classroom ID:</label>
                 <input type="text" id="classroom-id" v-model="newClass.classroomId" />
-                <p v-if="errors.classroomId" class="error">{{ errors.classroomId }}</p>
 
                 <label for="capacity">Capacity:</label>
                 <input type="number" id="capacity" v-model="newClass.capacity" />
-                <p v-if="errors.capacity" class="error">{{ errors.capacity }}</p>
 
                 <!-- Add buttons for saving and canceling -->
                 <button type="submit">Add Class</button>
@@ -94,7 +91,11 @@
             <div v-if="showSuccessMessage" class="success-message">
                 Class successfully added
             </div>
+            <!-- Error paragraphs moved to the bottom -->
+            <p v-if="errors.classroomId" class="error">{{ errors.classroomId }}</p>
+            <p v-if="errors.capacity" class="error">{{ errors.capacity }}</p>
         </div>
+
 
         <button @click="makeSchedule">Make Schedule</button>
 
