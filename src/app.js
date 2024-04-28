@@ -1,5 +1,3 @@
-
-
 let courses = []
 
 let counter = 0
@@ -39,7 +37,29 @@ class Course {
 const app = Vue.createApp({
   /* root component options */
   data () {
-    return {}
+    return {
+      // Existing data properties...
+      showAddCourseForm: false,
+      newCourse: {
+        code: '',
+        name: '',
+        year: '',
+        credit: '',
+        type: '',
+        dept: '',
+        num_students: '',
+        instructor: '',
+        block: ''
+      },
+      // Add new properties for adding a class
+      showAddClassForm: false,
+      newClass: {
+        classroomId: '',
+        capacity: ''
+      },
+      errors: {},
+      showSuccessMessage: false
+    }
   },
   methods: {
     printTest () {
@@ -69,14 +89,14 @@ const app = Vue.createApp({
         .then(data => {
           // Split the CSV data into rows
           const rows = data.split(/\r?\n/)
-          
+
           // Parse each row into course objects
           rows.forEach(row => {
             if (row.trim() === '') {
-              return; // Skip empty strings
-          }
+              return // Skip empty strings
+            }
             const columns = row.split(',')
-            
+
             const course = new Course(
               columns[0].trim(),
               columns[1].trim(),
@@ -126,15 +146,14 @@ const app = Vue.createApp({
           // Parse each row into classroom objects
           rows.forEach(row => {
             if (row.trim() === '') {
-                return; // Skip empty strings
+              return // Skip empty strings
             }
-        
-            const rowArray = row.split(';');
-            const classroomName = rowArray[0].trim();
-            const classroomCapacity = parseInt(rowArray[1].trim(), 10);
-            classrooms[classroomName] = classroomCapacity;
-        })
-        
+
+            const rowArray = row.split(';')
+            const classroomName = rowArray[0].trim()
+            const classroomCapacity = parseInt(rowArray[1].trim(), 10)
+            classrooms[classroomName] = classroomCapacity
+          })
 
           console.log('Classrooms loaded:', classrooms)
         })
@@ -177,54 +196,58 @@ const app = Vue.createApp({
 
       return foundClassroom
     },
-    loadBusy() {
+    loadBusy () {
       fetch('data/busy.csv')
-          .then(response => {
-              if (!response.ok) {
-                  throw new Error('Failed to load busy schedule');
-              }
-              return response.text();
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Failed to load busy schedule')
+          }
+          return response.text()
+        })
+        .then(data => {
+          // Split the CSV data into rows
+          const rows = data.split(/\r?\n/)
+
+          // Parse each row into busy schedule
+          rows.forEach(line => {
+            if (line.trim() === '') {
+              return // Skip empty lines
+            }
+
+            let [instructor, day] = line.trim().split(',', 2)
+            let timeSlots = line.trim().split('"')[1]
+            let slots = timeSlots.replace(/"/g, '').split(',')
+
+            const times = []
+            for (const slot of slots) {
+              const hour =
+                parseInt(slot.split(':')[0]) -
+                8 +
+                8 *
+                  {
+                    Monday: 0,
+                    Tuesday: 1,
+                    Wednesday: 2,
+                    Thursday: 3,
+                    Friday: 4
+                  }[day]
+              times.push(hour)
+            }
+            if (busy[instructor] !== undefined) {
+              busy[instructor].push(...times)
+            } else {
+              busy[instructor] = times
+            }
           })
-          .then(data => {
-              // Split the CSV data into rows
-              const rows = data.split(/\r?\n/);
-  
-              // Parse each row into busy schedule
-              rows.forEach(line => {
-                  if (line.trim() === '') {
-                      return; // Skip empty lines
-                  }
-          
-                  let [instructor, day] = line.trim().split(',', 2);
-                  let timeSlots = line.trim().split('"')[1];
-                  let slots = timeSlots.replace(/"/g, '').split(',');
-  
-                  const times = [];
-                  for (const slot of slots) {
-                      const hour = parseInt(slot.split(":")[0]) - 8 + 8 * {
-                          "Monday": 0,
-                          "Tuesday": 1,
-                          "Wednesday": 2,
-                          "Thursday": 3,
-                          "Friday": 4
-                      }[day];
-                      times.push(hour);
-                  }
-                  if (busy[instructor] !== undefined) {
-                      busy[instructor].push(...times);
-                  } else {
-                      ;
-                  }
-              });
-  
-              console.log('Busy schedule loaded:', busy);
-              console.log(busy[0].times)
-          })
-          .catch(error => {
-              console.error('loadBusy error:', error.message);
-              // Handle error as needed
-          });
-  },  
+
+          console.log('Busy schedule loaded:', busy)
+          console.log(busy[0].times)
+        })
+        .catch(error => {
+          console.error('loadBusy error:', error.message)
+          // Handle error as needed
+        })
+    },
     lay (year = 1, hour = 0) {
       counter++
       if (hour >= 40) {
@@ -316,66 +339,191 @@ const app = Vue.createApp({
 
       return true
     },
-    displayScheduleAsHTML (schedule) {
-      const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
-      const table = document.createElement('table')
-      const thead = document.createElement('thead')
-      const tbody = document.createElement('tbody')
-
-      // Create table headers
-      const headerRow = document.createElement('tr')
-      headerRow.innerHTML = '<th>Hour</th>'
-      for (let year = 1; year <= 4; year++) {
-        const th = document.createElement('th')
-        th.textContent = `Year ${year}`
-        headerRow.appendChild(th)
-      }
-      thead.appendChild(headerRow)
-      table.appendChild(thead)
-
-      // Create table body
-      for (let hour = 0; hour < 40; hour++) {
-        // Adjusted loop range to cover all hours of the week
-        const row = document.createElement('tr')
-        const dayIndex = Math.floor(hour / 8) // Calculate dayIndex based on hour
-        const hourLabel = `${days[dayIndex]} ${(hour % 8) + 8}:30`
-
-        // Create hour cell
-        const hourCell = document.createElement('td')
-        hourCell.textContent = hourLabel
-        row.appendChild(hourCell)
-
-        // Create cells for each year
-        for (let year = 1; year <= 4; year++) {
-          const course = schedule[year][hour]
-          const cell = document.createElement('td')
-          if (course) {
-            const courseCode = course[0].code
-            const instructor = course[0].instructor.split(` `).slice(-1)[0]
-            cell.textContent = `${courseCode} ${course[1]} ${instructor}`
-          }
-          row.appendChild(cell)
-        }
-
-        tbody.appendChild(row)
-      }
-
-      table.appendChild(tbody)
-      document.body.appendChild(table)
-    },
     addCourse () {
-      console.log('Course button')
+      this.showAddCourseForm = true
+    },
+    cancelAddCourse () {
+      this.showAddCourseForm = false
+      this.clearNewCourse()
+    },
+    submitCourse () {
+      // Validate the new course
+      if (this.validateNewCourse()) {
+        // Add the course to the list of courses
+        courses.push(
+          new Course(
+            this.newCourse.code,
+            this.newCourse.name,
+            parseInt(this.newCourse.year),
+            parseInt(this.newCourse.credit),
+            this.newCourse.type,
+            this.newCourse.dept,
+            parseInt(this.newCourse.num_students),
+            this.newCourse.instructor,
+            parseInt(this.newCourse.block)
+          )
+        )
+        // Show success message
+        this.showSuccessMessage = true
+        // Clear the form and hide it after a delay
+        console.log(courses) //test
+        setTimeout(() => {
+          this.clearNewCourse()
+          //this.showAddCourseForm = false
+          this.showSuccessMessage = false
+        }, 2000) // Adjust the delay as needed
+      }
+    },
+    validateNewCourse () {
+      // Reset errors
+      this.errors = {}
+
+      // Perform validation for each field
+      let isValid = true
+      if (!this.newCourse.code) {
+        this.errors.code = 'Course code is required'
+        isValid = false
+      }
+      if (!this.newCourse.name) {
+        this.errors.name = 'Course name is required'
+        isValid = false
+      }
+      if (
+        !this.newCourse.year ||
+        isNaN(this.newCourse.year) ||
+        this.newCourse.year < 1 ||
+        this.newCourse.year > 6
+      ) {
+        this.errors.year = 'Year must be a number between 1 and 6'
+        isValid = false
+      }
+      if (
+        !this.newCourse.credit ||
+        isNaN(this.newCourse.credit) ||
+        this.newCourse.credit <= 0
+      ) {
+        this.errors.credit = 'Credit must be a number greater than zero'
+        isValid = false
+      }
+      if (
+        !this.newCourse.type ||
+        !['C', 'E'].includes(this.newCourse.type.toUpperCase())
+      ) {
+        this.errors.type = 'Type must be C or E'
+        isValid = false
+      }
+      if (
+        !this.newCourse.dept ||
+        !['D', 'S'].includes(this.newCourse.dept.toUpperCase())
+      ) {
+        this.errors.dept = 'Department must be D or S'
+        isValid = false
+      }
+      if (
+        !this.newCourse.num_students ||
+        isNaN(this.newCourse.num_students) ||
+        this.newCourse.num_students <= 0
+      ) {
+        this.errors.num_students =
+          'Number of students must be a number greater than zero'
+        isValid = false
+      }
+      if (!this.newCourse.instructor) {
+        this.errors.instructor = 'Instructor name is required'
+        isValid = false
+      }
+      if (
+        !this.newCourse.block ||
+        !/^(\d+|\d+\+\d+)$/.test(this.newCourse.block)
+      ) {
+        this.errors.block = 'Block must be in the format of 3 or 2+1'
+        isValid = false
+      }
+
+      return isValid
+    },
+    clearNewCourse () {
+      // Clear the new course object
+      this.newCourse = {
+        code: '',
+        name: '',
+        year: '',
+        credit: '',
+        type: '',
+        dept: '',
+        num_students: '',
+        instructor: '',
+        block: ''
+      }
+      // Reset errors
+      this.errors = {}
     },
     editBusyHours () {
       console.log('Busy button')
     },
     addClass () {
-      console.log('Class button')
+      this.showAddClassForm = true
+    },
+    cancelAddClass () {
+      this.showAddClassForm = false
+      this.clearNewClass()
+    },
+    submitClass () {
+      // Validate the new class
+      if (this.validateNewClass()) {
+        // Add the class
+        const classroomName = this.newClass.classroomId.trim()
+        const classroomCapacity = parseInt(this.newClass.capacity)
+
+        // Check if the classroom already exists
+        if (classrooms[classroomName] !== undefined) {
+          this.errors.classroomId = 'Classroom ID already exists'
+          return
+        }
+
+        // Add the new classroom to the classrooms object
+        classrooms[classroomName] = classroomCapacity
+
+        // Show success message
+        this.showSuccessMessage = true
+
+        // Clear the form and hide it after a delay
+        setTimeout(() => {
+          this.clearNewClass()
+          this.showSuccessMessage = false
+        }, 2000) // Adjust the delay as needed
+      }
+    },
+    validateNewClass () {
+      // Reset errors
+      this.errors = {}
+
+      // Perform validation for each field
+      let isValid = true
+      if (!this.newClass.classroomId) {
+        this.errors.classroomId = 'Classroom ID is required'
+        isValid = false
+      }
+      if (!this.newClass.capacity || this.newClass.capacity <= 0) {
+        this.errors.capacity = 'Capacity must be a number greater than zero'
+        isValid = false
+      }
+
+      return isValid
+    },
+    clearNewClass () {
+      // Clear the new class object
+      this.newClass = {
+        classroomId: '',
+        capacity: ''
+      }
+      // Reset errors
+      this.errors = {}
     },
     makeSchedule () {
       console.log('Schedule button')
       if (this.lay()) {
-        this.displayScheduleAsHTML(schedule)
+        //this.displayScheduleAsHTML(schedule) showSchedule
       } else {
         console.log('Failed')
       }
