@@ -533,6 +533,9 @@ const app = Vue.createApp({
     }
   },
   mounted () {
+    //empty for now
+  },
+  created () {
     this.loadCourses()
     this.loadClassrooms()
     this.loadBusy()
