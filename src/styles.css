@@ -1,3 +1,19 @@
+.logo {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+
+
+
+}
+
+.logo img {
+    width: 100px;
+    height: 150px;
+    margin-left: 50px;
+}
+
 .success-message {
     position: fixed;
     top: 20px;
@@ -15,3 +31,61 @@
 .success-message.show {
     opacity: 1;
 }
+
+.mainButton {
+    background-color: #3281a5;
+    color: #ffffff;
+    border-radius: 5px;
+    height: 50px;
+    width: 150px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.miniButton {
+    background-color: #3281a5;
+    color: #ffffff;
+    border-radius: 5px;
+    height: 20px;
+    width: 80px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 12px;
+    margin-top: 10px;
+    margin-right: 5px;
+    margin-left: 5px;
+}
+
+.course-form label {
+    display: block;
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    margin-right: 2px;
+    margin-left: 8px;
+}
+
+.header {
+    display: block;
+    font-family: 'Roboto', sans-serif;
+    font-size: 24px;
+    font-weight: bold;
+    color: #3281a5;
+    margin-right: 2px;
+    margin-left: 8px;
+}
+
+.error {
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    color: #ff0000;
+    margin-right: 2px;
+    margin-left: 8px;
+}
+
+
+
+
+
+
