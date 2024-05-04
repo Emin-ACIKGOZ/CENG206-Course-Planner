@@ -189,7 +189,6 @@ const app = Vue.createApp({
           })
 
           console.log('Busy schedule loaded:', busy)
-          console.log(busy[0].times)
         })
         .catch(error => {
           console.error('loadBusy error:', error.message)
