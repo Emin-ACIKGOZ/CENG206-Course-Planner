@@ -1,18 +1,3 @@
-let courses = []
-
-let counter = 0
-
-let busy = {}
-
-let schedule = {
-  1: new Array(40).fill(null),
-  2: new Array(40).fill(null),
-  3: new Array(40).fill(null),
-  4: new Array(40).fill(null)
-}
-
-let classrooms = {}
-
 class Course {
   constructor (
     code,
@@ -35,10 +20,21 @@ class Course {
 }
 
 const app = Vue.createApp({
-  /* root component options */
+  
   data () {
     return {
-      // Existing data properties...
+      //Arrays to store relevant data
+      classrooms: {},
+      courses: [],
+      busy: {},
+      counter: 0,
+      schedule: {
+        1: new Array(40).fill(null),
+        2: new Array(40).fill(null),
+        3: new Array(40).fill(null),
+        4: new Array(40).fill(null)
+      },
+      // Forms and boolean flags for forms
       showAddCourseForm: false,
       newCourse: {
         code: '',
@@ -57,33 +53,19 @@ const app = Vue.createApp({
         classroomId: '',
         capacity: ''
       },
-      showAddBusyForm: false,
-        newBusy: {
-            instructor: '',
-            day: '',
-            timeSlots: ''
-        },
       errors: {},
-      showSuccessMessage: false
+      showSuccessMessage: false,
+      
     }
   },
+  
   methods: {
-    printTest () {
-      // Print busy counter
-      console.log('Busy Counter:')
-      console.log(busy)
-
-      // Print courses
-      console.log('Courses:')
-      console.log(courses)
-
-      // Print counter
-      console.log('Counter:', counter)
-
-      // Print classrooms
-      console.log('Classrooms:')
-      console.log(classrooms)
+    //General purpose function to show errors on a page
+    showError (message) {
+      alert(`Error: ${message}`)
     },
+
+    //Loading Methods
     loadCourses () {
       fetch('data/courses.csv')
         .then(response => {
@@ -114,26 +96,16 @@ const app = Vue.createApp({
               columns[7].trim(),
               parseInt(columns[8])
             )
-            courses.push(course)
+            this.courses.push(course)
           })
 
-          console.log('Courses loaded:', courses)
+          console.log('Courses loaded:', this.courses)
         })
         .catch(error => {
           console.log('loadCourses error')
           console.log(error.message)
           this.showError(error.message)
         })
-    },
-    findCourse (code) {
-      const foundCourse = courses.find(course => course.code === code)
-      if (foundCourse) {
-        console.log('Found course:', foundCourse)
-        return foundCourse
-      } else {
-        this.showError(`Course with code ${code} not found.`)
-        return null
-      }
     },
     loadClassrooms () {
       fetch('data/classroom.csv')
@@ -158,49 +130,16 @@ const app = Vue.createApp({
             const rowArray = row.split(';')
             const classroomName = rowArray[0].trim()
             const classroomCapacity = parseInt(rowArray[1].trim(), 10)
-            classrooms[classroomName] = classroomCapacity
+            this.classrooms[classroomName] = classroomCapacity
           })
 
-          console.log('Classrooms loaded:', classrooms)
+          console.log('Classrooms loaded:', this.classrooms)
         })
         .catch(error => {
           console.log('loadClassrooms error')
           console.log(error.message)
           this.showError(error.message)
         })
-    },
-    findClassroom (course, hour) {
-      // Finds the smallest class suitable then returns it.
-      let foundClassroom = null
-
-      for (const m in classrooms) {
-        if (classrooms[m] >= course.num_students) {
-          let flag = false
-
-          // Is the classroom assigned to any other class in this hour?
-          // Check for every hour in the block.
-          for (let k of [1, 2, 3, 4]) {
-            for (let j = 0; j < course.hours; j++) {
-              if (
-                this.schedule[k][hour + j] &&
-                this.schedule[k][hour + j][1] !== null
-              ) {
-                if (this.schedule[k][hour + j][1] === m) {
-                  flag = true
-                  break
-                }
-              }
-            }
-          }
-
-          if (!flag) {
-            foundClassroom = m
-            break
-          }
-        }
-      }
-
-      return foundClassroom
     },
     loadBusy () {
       fetch('data/busy.csv')
@@ -239,112 +178,31 @@ const app = Vue.createApp({
                   }[day]
               times.push(hour)
             }
-            if (busy[instructor] !== undefined) {
-              busy[instructor].push(...times)
+            if (this.busy[instructor] !== undefined) {
+              this.busy[instructor].push(...times)
             } else {
-              busy[instructor] = times
+              this.busy[instructor] = times
             }
           })
 
-          console.log('Busy schedule loaded:', busy)
-          console.log(busy[0].times)
+          console.log('Busy schedule loaded:', this.busy)
         })
         .catch(error => {
           console.error('loadBusy error:', error.message)
           // Handle error as needed
         })
     },
-    lay (year = 1, hour = 0) {
-      counter++
-      if (hour >= 40) {
-        return this.lay(year + 1, 0)
-      }
-
-      if (year > 4) {
-        return courses.length === 0
-      }
-
-      // Try every course if it ever fits.
-      for (let i = 0; i < courses.length; i++) {
-        const course = courses[i]
-
-        if (course.year !== year) {
-          // Is the course for this year?
-          continue
-        }
-
-        let classroom = this.findClassroom(course, hour)
-
-        if (
-          this.checkHourAvailable(year, hour, course, course.hours) &&
-          classroom
-        ) {
-          schedule[year].fill([course, classroom], hour, hour + course.hours)
-          counter++
-          courses.splice(i, 1)
-
-          // Recursive call
-          if (this.lay(year, hour + course.hours)) {
-            return true
-          } else {
-            // Failed: backtracking.
-            schedule[year].fill(null, hour, hour + course.hours)
-            courses.push(course)
-            counter++
-            return false
-          }
-        }
-      }
-      return this.lay(year, hour + 1)
+    //Methods for showCourses button
+    showCourses(){
+      console.log('Show Courses Button')
     },
-    checkHourAvailable (year, hour, course, block) {
-      // 6.saate 3 saatlik ders koyulamaz.
-      if (block === 3) {
-        if (hour % 8 === 6 || hour % 7 === 0) return false
-      }
 
-      // 7.saate 2 saatlik ders koyulamaz.
-      if (block === 2) {
-        if (hour % 8 === 7) return false
-      }
-
-      // Same lesson can't be in same day multiple times
-      for (let z = hour - (hour % 8); z < hour - (hour % 8) + block; z++) {
-        if (
-          schedule[year][z] !== null &&
-          course.code === schedule[year][z][0].code
-        ) {
-          return false
-        }
-      }
-
-      for (let j = 0; j < block; j++) {
-        // Every hour of the block to be empty
-        if (schedule[year][hour + j] !== null) {
-          return false
-        }
-
-        // ıs it busy hour for the instructor?
-        if (
-          busy[course.instructor] !== undefined &&
-          busy[course.instructor].includes(hour + j)
-        ) {
-          return false
-        }
-
-        // Instructor can only have one lecture at a time.
-        for (let i = 1; i <= 4; i++) {
-          if (
-            schedule[i][hour + j] !== null &&
-            schedule[i][hour + j][0].instructor === course.instructor
-          ) {
-            return false
-          }
-        }
-      }
-
-      return true
+    //Methods for editCourses button
+    editCourses(){
+      console.log('Edit Courses Button')
     },
+
+    //Methods for addCourse button
     addCourse () {
       this.showAddCourseForm = true
     },
@@ -356,7 +214,7 @@ const app = Vue.createApp({
       // Validate the new course
       if (this.validateNewCourse()) {
         // Add the course to the list of courses
-        courses.push(
+        this.courses.push(
           new Course(
             this.newCourse.code,
             this.newCourse.name,
@@ -372,7 +230,7 @@ const app = Vue.createApp({
         // Show success message
         this.showSuccessMessage = true
         // Clear the form and hide it after a delay
-        console.log(courses) //test
+        console.log(this.courses) //test
         setTimeout(() => {
           this.clearNewCourse()
           //this.showAddCourseForm = false
@@ -464,9 +322,18 @@ const app = Vue.createApp({
       // Reset errors
       this.errors = {}
     },
-    editBusyHours () {
-      console.log('Busy button')
+
+    //Methods for addBusyHour button
+    addBusyHour () {
+      console.log('Add Busy button')
     },
+
+    //Methods for editBusyHours button
+    editBusyHours () {
+      console.log('Edit Busy button')
+    },
+
+    //Methods for addClass button
     addClass () {
       this.showAddClassForm = true
     },
@@ -482,13 +349,13 @@ const app = Vue.createApp({
         const classroomCapacity = parseInt(this.newClass.capacity)
 
         // Check if the classroom already exists
-        if (classrooms[classroomName] !== undefined) {
+        if (this.classrooms[classroomName] !== undefined) {
           this.errors.classroomId = 'Classroom ID already exists'
           return
         }
 
         // Add the new classroom to the classrooms object
-        classrooms[classroomName] = classroomCapacity
+        this.classrooms[classroomName] = classroomCapacity
 
         // Show success message
         this.showSuccessMessage = true
@@ -526,106 +393,157 @@ const app = Vue.createApp({
       // Reset errors
       this.errors = {}
     },
-    addBusy () {
-      this.showAddBusyForm = true
-    },
-    cancelAddBusy () {
-      this.showAddBusyForm = false
-      this.clearNewBusy()
-    },
-    submitBusy () {
-      // Validate the new busy hours
-      if (this.validateBusy()) {
-          // Parse the form data
-          const instructor = this.newBusy.instructor.trim()
-          const day = this.newBusy.day.trim()
-          const timeSlots = this.newBusy.timeSlots.trim()
-  
-          // Split the time slots into an array
-          const slots = timeSlots.split(',')
-  
-          // Initialize an array to store the busy hours
-          const times = []
-  
-          // Map each time slot to its corresponding hour
-          slots.forEach(slot => {
-              // Extract the hour and convert it to the corresponding hour value
-              const hour = parseInt(slot.split(':')[0]) - 8 + 8 * {
-                  Monday: 0,
-                  Tuesday: 1,
-                  Wednesday: 2,
-                  Thursday: 3,
-                  Friday: 4
-              }[day]
-              
-              // Push the hour to the times array
-              times.push(hour)
-          })
-  
-          // Add the busy hours to the busy object
-          if (this.busy[instructor] !== undefined) {
-              this.busy[instructor].push(...times)
-          } else {
-              this.busy[instructor] = times
-          }
-  
-          // Show success message
-          this.showSuccessMessage = true
-  
-          // Clear the form and hide it after a delay
-          setTimeout(() => {
-              this.clearNewBusy()
-              this.showSuccessMessage = false
-          }, 2000) // Adjust the delay as needed
+    // Functions for makeSchedule button
+    findCourse (code) {
+      const foundCourse = this.courses.find(course => course.code === code)
+      if (foundCourse) {
+        console.log('Found course:', foundCourse)
+        return foundCourse
+      } else {
+        this.showError(`Course with code ${code} not found.`)
+        return null
       }
-  },
-  validateBusy () {
-    //add more validation for data.
-    // Reset errors
-    this.errors = {}
+    },
+    findClassroom (course, hour) {
+      // Finds the smallest class suitable then returns it.
+      let foundClassroom = null
 
-    // Perform validation for each field
-    let isValid = true
-    if (!this.newBusy.instructor) {
-        this.errors.instructor = 'Instructor name is required'
-        isValid = false
-    }
-    if (!this.newBusy.day) {
-        this.errors.day = 'Day is required'
-        isValid = false
-    }
-    if (!this.newBusy.timeSlots) {
-        this.errors.timeSlots = 'Time slots are required'
-        isValid = false
-    }
+      for (const m in this.classrooms) {
+        if (this.classrooms[m] >= course.num_students) {
+          let flag = false
 
-    return isValid
-},
-clearNewBusy () {
-    // Clear the new busy hours object
-    this.newBusy = {
-        instructor: '',
-        day: '',
-        timeSlots: ''
-    }
-    // Reset errors
-    this.errors = {}
-},    
+          // Is the classroom assigned to any other class in this hour?
+          // Check for every hour in the block.
+          for (let k of [1, 2, 3, 4]) {
+            for (let j = 0; j < course.hours; j++) {
+              if (
+                this.schedule[k][hour + j] &&
+                this.schedule[k][hour + j][1] !== null
+              ) {
+                if (this.schedule[k][hour + j][1] === m) {
+                  flag = true
+                  break
+                }
+              }
+            }
+          }
+
+          if (!flag) {
+            foundClassroom = m
+            break
+          }
+        }
+      }
+
+      return foundClassroom
+    },
+    lay (year = 1, hour = 0) {
+      this.counter++
+      if (hour >= 40) {
+        return this.lay(year + 1, 0)
+      }
+
+      if (year > 4) {
+        return this.courses.length === 0
+      }
+
+      // Try every course if it ever fits.
+      for (let i = 0; i < this.courses.length; i++) {
+        const course = this.courses[i]
+
+        if (course.year !== year) {
+          // Is the course for this year?
+          continue
+        }
+
+        let classroom = this.findClassroom(course, hour)
+
+        if (
+          this.checkHourAvailable(year, hour, course, course.hours) &&
+          classroom
+        ) {
+          this.schedule[year].fill([course, classroom], hour, hour + course.hours)
+          this.counter++
+          this.courses.splice(i, 1)
+
+          // Recursive call
+          if (this.lay(year, hour + course.hours)) {
+            return true
+          } else {
+            // Failed: backtracking.
+            this.schedule[year].fill(null, hour, hour + course.hours)
+            this.courses.push(course)
+            this.counter++
+            return false
+          }
+        }
+      }
+      return this.lay(year, hour + 1)
+    },
+    checkHourAvailable (year, hour, course, block) {
+      // You cannot put a 3 hour lesson at the 6. hour of a day (Not enough time)
+      if (block === 3) {
+        if (hour % 8 === 6 || hour % 7 === 0) return false
+      }
+
+      // You cannot put a 2 hour lesson at the 7. hour of a day (Not enough time)
+      if (block === 2) {
+        if (hour % 8 === 7) return false
+      }
+
+      // Same lesson cannot occur in the same day multiple times
+      for (let z = hour - (hour % 8); z < hour - (hour % 8) + block; z++) {
+        if (
+          this.schedule[year][z] !== null &&
+          course.code === this.schedule[year][z][0].code
+        ) {
+          return false
+        }
+      }
+
+      for (let j = 0; j < block; j++) {
+        // Returns false if every hour of the block is NOT empty
+        if (this.schedule[year][hour + j] !== null) {
+          return false
+        }
+
+        // Returns false if the course falls on the busy hour of the instructor of the course
+        if (
+          this.busy[course.instructor] !== undefined &&
+          this.busy[course.instructor].includes(hour + j)
+        ) {
+          return false
+        }
+
+        // Returns false if the instructor has more than one class at the same time (Illegal state)
+        for (let i = 1; i <= 4; i++) {
+          if (
+            this.schedule[i][hour + j] !== null &&
+            this.schedule[i][hour + j][0].instructor === course.instructor
+          ) {
+            return false
+          }
+        }
+      }
+
+      return true
+    },
     makeSchedule () {
       console.log('Schedule button')
       if (this.lay()) {
-        //this.displayScheduleAsHTML(schedule) showSchedule
+        // Code to display the Schedule
       } else {
-        console.log('Failed')
+        console.log('Failed to create a schedule.')
       }
-    },
-    showError (message) {
-      alert(`Error: ${message}`)
     }
   },
+
+  //Runs upon mounting
   mounted () {
-    //empty for now
+    //Empty for now
   },
+
+  //Runs upon creation
   created () {
     this.loadCourses()
     this.loadClassrooms()
