@@ -6,104 +6,127 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <title>Course Planner</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
-    <div id="app">
-        <!-- Add a message container -->
+<div class="logo">
+    <img src="https://aybu.edu.tr/images/aybu_logo.png" alt="logo">
+    <h2 class="header">Course Planner</h2>
+</div>
 
-        <!-- Table goes here -->
+<!-- Add a div between the logo and buttons to create some space -->
+<div style="height: 250px;"></div>
 
-        <button @click="addCourse">Add a Course</button>
-        <!-- Add a section for input form -->
-        <div v-if="showAddCourseForm" class="course-form">
-            <h2>Add a New Course</h2>
-            <form @submit.prevent="submitCourse">
-                <label for="code">Course Code:</label>
-                <input type="text" id="code" v-model="newCourse.code" />
 
-                <label for="name">Course Name:</label>
-                <input type="text" id="name" v-model="newCourse.name" />
+<div id="app">
 
-                <label for="year">Year of Semester:</label>
-                <input type="number" id="year" v-model="newCourse.year" />
+    <!-- Add a message container -->
 
-                <label for="credit">Credit:</label>
-                <input type="number" id="credit" v-model="newCourse.credit" />
+    <!-- Table goes here -->
 
-                <label for="type">Type (C/E):</label>
-                <select id="type" v-model="newCourse.type">
-                    <option value="C">C</option>
-                    <option value="E">E</option>
-                </select>
+    <button @click="showCourses"class="mainButton" v-if="!showAddCourseForm">Show Courses</button>
 
-                <label for="dept">Department (D/S):</label>
-                <select id="dept" v-model="newCourse.dept">
-                    <option value="D">D</option>
-                    <option value="S">S</option>
-                </select>
+    <button @click="addCourse"class="mainButton" >Add a Course</button>
 
-                <label for="num_students">Number of Students:</label>
-                <input type="number" id="num_students" v-model="newCourse.num_students" />
+    <div v-if="showAddCourseForm" class="course-form">
+        <h2 class="header">Add a New Course </h2>
+        <form @submit.prevent="submitCourse">
+            <label for="code">Course Code:</label>
+            <input type="text" id="code" v-model="newCourse.code" />
 
-                <label for="instructor">Instructor:</label>
-                <input type="text" id="instructor" v-model="newCourse.instructor" />
+            <label for="name">Course Name:</label>
+            <input type="text" id="name" v-model="newCourse.name" />
 
-                <label for="block">Course Hours Preference:</label>
-                <input type="text" id="block" v-model="newCourse.block" />
+            <label for="year">Year of Semester:</label>
+            <input type="number" id="year" v-model="newCourse.year" />
 
-                <button type="submit">Add Course</button>
-                <button @click="cancelAddCourse">Cancel</button>
-            </form>
-            <div v-if="showSuccessMessage" class="success-message">
-                Course successfully added
-            </div>
-            <!-- Error paragraphs moved to the bottom -->
-            <p v-if="errors.code" class="error">{{ errors.code }}</p>
-            <p v-if="errors.name" class="error">{{ errors.name }}</p>
-            <p v-if="errors.year" class="error">{{ errors.year }}</p>
-            <p v-if="errors.credit" class="error">{{ errors.credit }}</p>
-            <p v-if="errors.type" class="error">{{ errors.type }}</p>
-            <p v-if="errors.dept" class="error">{{ errors.dept }}</p>
-            <p v-if="errors.num_students" class="error">{{ errors.num_students }}</p>
-            <p v-if="errors.instructor" class="error">{{ errors.instructor }}</p>
-            <p v-if="errors.block" class="error">{{ errors.block }}</p>
+            <label for="credit">Credit:</label>
+            <input type="number" id="credit" v-model="newCourse.credit" />
+
+            <label for="type">Type (C/E):</label>
+            <select id="type" v-model="newCourse.type">
+                <option value="C">C</option>
+                <option value="E">E</option>
+            </select>
+
+            <label for="dept">Department (D/S):</label>
+            <select id="dept" v-model="newCourse.dept">
+                <option value="D">D</option>
+                <option value="S">S</option>
+            </select>
+
+            <label for="num_students">Number of Students:</label>
+            <input type="number" id="num_students" v-model="newCourse.num_students" />
+
+            <label for="instructor">Instructor:</label>
+            <input type="text" id="instructor" v-model="newCourse.instructor" />
+
+            <label for="block">Course Hours Preference:</label>
+            <input type="text" id="block" v-model="newCourse.block" />
+
+            <button type="submit" class="miniButton">Add Course  </button>
+            <button @click="cancelAddCourse" class="miniButton">Cancel</button>
+        </form>
+        <div v-if="showSuccessMessage" class="success-message">
+            Course successfully added
         </div>
-
-
-        <button @click="editBusyHours">Edit Busy Hours</button>
-
-        <button @click="addClass">Add a Class</button>
-        <div v-if="showAddClassForm" class="class-form">
-            <h2>Add a New Class</h2>
-            <form @submit.prevent="submitClass">
-                <!-- Add input fields for classroom ID and capacity -->
-                <label for="classroom-id">Classroom ID:</label>
-                <input type="text" id="classroom-id" v-model="newClass.classroomId" />
-
-                <label for="capacity">Capacity:</label>
-                <input type="number" id="capacity" v-model="newClass.capacity" />
-
-                <!-- Add buttons for saving and canceling -->
-                <button type="submit">Add Class</button>
-                <button @click="cancelAddClass">Cancel</button>
-            </form>
-            <div v-if="showSuccessMessage" class="success-message">
-                Class successfully added
-            </div>
-            <!-- Error paragraphs moved to the bottom -->
-            <p v-if="errors.classroomId" class="error">{{ errors.classroomId }}</p>
-            <p v-if="errors.capacity" class="error">{{ errors.capacity }}</p>
-        </div>
-
-
-        <button @click="makeSchedule">Make Schedule</button>
-
+        <!-- Error paragraphs moved to the bottom -->
+        <p v-if="errors.code" class="error">{{ errors.code }}</p>
+        <p v-if="errors.name" class="error">{{ errors.name }}</p>
+        <p v-if="errors.year" class="error">{{ errors.year }}</p>
+        <p v-if="errors.credit" class="error">{{ errors.credit }}</p>
+        <p v-if="errors.type" class="error">{{ errors.type }}</p>
+        <p v-if="errors.dept" class="error">{{ errors.dept }}</p>
+        <p v-if="errors.num_students" class="error">{{ errors.num_students }}</p>
+        <p v-if="errors.instructor" class="error">{{ errors.instructor }}</p>
+        <p v-if="errors.block" class="error">{{ errors.block }}</p>
     </div>
 
-    <div id="displayDiv" class="hidden"></div>
 
-    <script src="./app.js"></script>
+    <button @click="editBusyHours"class="mainButton" v-if="!showAddCourseForm">Edit Busy Hours</button>
+
+
+    <button @click="editCourses"class="mainButton" v-if="!showAddCourseForm">Edit Courses</button>
+
+
+    <button @click="addBusyHour"class="mainButton" v-if="!showAddCourseForm">Add a Busy Hour</button>
+
+
+    <button @click="makeSchedule"class="mainButton" v-if="!showAddCourseForm">Make Schedule</button>
+
+
+
+
+    <button @click="addClass" class="mainButton" v-if="!showAddCourseForm">Add a Class</button>
+    <div v-if="showAddClassForm" class="class-form">
+        <h2 class="header">Add a New Class</h2>
+        <form @submit.prevent="submitClass">
+            <!-- Add input fields for classroom ID and capacity -->
+            <label for="classroom-id">Classroom ID:</label>
+            <input type="text" id="classroom-id" v-model="newClass.classroomId" />
+
+            <label for="capacity">Capacity:</label>
+            <input type="number" id="capacity" v-model="newClass.capacity" />
+
+            <!-- Add buttons for saving and canceling -->
+            <button type="submit">Add Class</button>
+            <button @click="cancelAddClass" class="miniButton">Cancel</button>
+        </form>
+        <div v-if="showSuccessMessage" class="success-message">
+            Class successfully added
+        </div>
+        <!-- Error paragraphs moved to the bottom -->
+        <p v-if="errors.classroomId" class="error">{{ errors.classroomId }}</p>
+        <p v-if="errors.capacity" class="error">{{ errors.capacity }}</p>
+    </div>
+
+
+</div>
+
+<div id="displayDiv" class="hidden"></div>
+
+<script src="./app.js"></script>
 </body>
 
 </html>
