@@ -64,8 +64,11 @@
             <label for="instructor">Instructor:</label>
             <input type="text" id="instructor" v-model="newCourse.instructor" />
 
-            <label for="block">Course Hours Preference:</label>
-            <input type="text" id="block" v-model="newCourse.block" />
+            <label for="block">Course Hours Preference (2+1/3):</label>
+            <select id="block" v-model="newCourse.block">
+                <option value="2+1">2+1</option>
+                <option value="3">3</option>
+            </select>
 
             <button type="submit" class="miniButton">Add Course  </button>
             <button @click="cancelAddCourse" class="miniButton">Cancel</button>
