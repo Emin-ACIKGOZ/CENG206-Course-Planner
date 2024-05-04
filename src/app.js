@@ -1,18 +1,3 @@
-let courses = []
-
-let counter = 0
-
-let busy = {}
-
-let schedule = {
-  1: new Array(40).fill(null),
-  2: new Array(40).fill(null),
-  3: new Array(40).fill(null),
-  4: new Array(40).fill(null)
-}
-
-let classrooms = {}
-
 class Course {
   constructor (
     code,
@@ -38,6 +23,17 @@ const app = Vue.createApp({
   
   data () {
     return {
+      //Arrays to store relevant data
+      classrooms: {},
+      courses: [],
+      busy: {},
+      counter: 0,
+      schedule: {
+        1: new Array(40).fill(null),
+        2: new Array(40).fill(null),
+        3: new Array(40).fill(null),
+        4: new Array(40).fill(null)
+      },
       // Forms and boolean flags for forms
       showAddCourseForm: false,
       newCourse: {
@@ -58,7 +54,8 @@ const app = Vue.createApp({
         capacity: ''
       },
       errors: {},
-      showSuccessMessage: false
+      showSuccessMessage: false,
+      
     }
   },
   
@@ -99,10 +96,10 @@ const app = Vue.createApp({
               columns[7].trim(),
               parseInt(columns[8])
             )
-            courses.push(course)
+            this.courses.push(course)
           })
 
-          console.log('Courses loaded:', courses)
+          console.log('Courses loaded:', this.courses)
         })
         .catch(error => {
           console.log('loadCourses error')
@@ -133,10 +130,10 @@ const app = Vue.createApp({
             const rowArray = row.split(';')
             const classroomName = rowArray[0].trim()
             const classroomCapacity = parseInt(rowArray[1].trim(), 10)
-            classrooms[classroomName] = classroomCapacity
+            this.classrooms[classroomName] = classroomCapacity
           })
 
-          console.log('Classrooms loaded:', classrooms)
+          console.log('Classrooms loaded:', this.classrooms)
         })
         .catch(error => {
           console.log('loadClassrooms error')
@@ -181,14 +178,14 @@ const app = Vue.createApp({
                   }[day]
               times.push(hour)
             }
-            if (busy[instructor] !== undefined) {
-              busy[instructor].push(...times)
+            if (this.busy[instructor] !== undefined) {
+              this.busy[instructor].push(...times)
             } else {
-              busy[instructor] = times
+              this.busy[instructor] = times
             }
           })
 
-          console.log('Busy schedule loaded:', busy)
+          console.log('Busy schedule loaded:', this.busy)
         })
         .catch(error => {
           console.error('loadBusy error:', error.message)
@@ -208,7 +205,7 @@ const app = Vue.createApp({
       // Validate the new course
       if (this.validateNewCourse()) {
         // Add the course to the list of courses
-        courses.push(
+        this.courses.push(
           new Course(
             this.newCourse.code,
             this.newCourse.name,
@@ -224,7 +221,7 @@ const app = Vue.createApp({
         // Show success message
         this.showSuccessMessage = true
         // Clear the form and hide it after a delay
-        console.log(courses) //test
+        console.log(this.courses) //test
         setTimeout(() => {
           this.clearNewCourse()
           //this.showAddCourseForm = false
@@ -338,13 +335,13 @@ const app = Vue.createApp({
         const classroomCapacity = parseInt(this.newClass.capacity)
 
         // Check if the classroom already exists
-        if (classrooms[classroomName] !== undefined) {
+        if (this.classrooms[classroomName] !== undefined) {
           this.errors.classroomId = 'Classroom ID already exists'
           return
         }
 
         // Add the new classroom to the classrooms object
-        classrooms[classroomName] = classroomCapacity
+        this.classrooms[classroomName] = classroomCapacity
 
         // Show success message
         this.showSuccessMessage = true
@@ -384,7 +381,7 @@ const app = Vue.createApp({
     },
     // Functions for makeSchedule button
     findCourse (code) {
-      const foundCourse = courses.find(course => course.code === code)
+      const foundCourse = this.courses.find(course => course.code === code)
       if (foundCourse) {
         console.log('Found course:', foundCourse)
         return foundCourse
@@ -397,8 +394,8 @@ const app = Vue.createApp({
       // Finds the smallest class suitable then returns it.
       let foundClassroom = null
 
-      for (const m in classrooms) {
-        if (classrooms[m] >= course.num_students) {
+      for (const m in this.classrooms) {
+        if (this.classrooms[m] >= course.num_students) {
           let flag = false
 
           // Is the classroom assigned to any other class in this hour?
@@ -427,18 +424,18 @@ const app = Vue.createApp({
       return foundClassroom
     },
     lay (year = 1, hour = 0) {
-      counter++
+      this.counter++
       if (hour >= 40) {
         return this.lay(year + 1, 0)
       }
 
       if (year > 4) {
-        return courses.length === 0
+        return this.courses.length === 0
       }
 
       // Try every course if it ever fits.
-      for (let i = 0; i < courses.length; i++) {
-        const course = courses[i]
+      for (let i = 0; i < this.courses.length; i++) {
+        const course = this.courses[i]
 
         if (course.year !== year) {
           // Is the course for this year?
@@ -451,18 +448,18 @@ const app = Vue.createApp({
           this.checkHourAvailable(year, hour, course, course.hours) &&
           classroom
         ) {
-          schedule[year].fill([course, classroom], hour, hour + course.hours)
-          counter++
-          courses.splice(i, 1)
+          this.schedule[year].fill([course, classroom], hour, hour + course.hours)
+          this.counter++
+          this.courses.splice(i, 1)
 
           // Recursive call
           if (this.lay(year, hour + course.hours)) {
             return true
           } else {
             // Failed: backtracking.
-            schedule[year].fill(null, hour, hour + course.hours)
-            courses.push(course)
-            counter++
+            this.schedule[year].fill(null, hour, hour + course.hours)
+            this.courses.push(course)
+            this.counter++
             return false
           }
         }
@@ -483,8 +480,8 @@ const app = Vue.createApp({
       // Same lesson cannot occur in the same day multiple times
       for (let z = hour - (hour % 8); z < hour - (hour % 8) + block; z++) {
         if (
-          schedule[year][z] !== null &&
-          course.code === schedule[year][z][0].code
+          this.schedule[year][z] !== null &&
+          course.code === this.schedule[year][z][0].code
         ) {
           return false
         }
@@ -492,14 +489,14 @@ const app = Vue.createApp({
 
       for (let j = 0; j < block; j++) {
         // Returns false if every hour of the block is NOT empty
-        if (schedule[year][hour + j] !== null) {
+        if (this.schedule[year][hour + j] !== null) {
           return false
         }
 
         // Returns false if the course falls on the busy hour of the instructor of the course
         if (
-          busy[course.instructor] !== undefined &&
-          busy[course.instructor].includes(hour + j)
+          this.busy[course.instructor] !== undefined &&
+          this.busy[course.instructor].includes(hour + j)
         ) {
           return false
         }
@@ -507,8 +504,8 @@ const app = Vue.createApp({
         // Returns false if the instructor has more than one class at the same time (Illegal state)
         for (let i = 1; i <= 4; i++) {
           if (
-            schedule[i][hour + j] !== null &&
-            schedule[i][hour + j][0].instructor === course.instructor
+            this.schedule[i][hour + j] !== null &&
+            this.schedule[i][hour + j][0].instructor === course.instructor
           ) {
             return false
           }
