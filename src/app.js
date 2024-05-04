@@ -57,6 +57,12 @@ const app = Vue.createApp({
         classroomId: '',
         capacity: ''
       },
+      showAddBusyForm: false,
+        newBusy: {
+            instructor: '',
+            day: '',
+            timeSlots: ''
+        },
       errors: {},
       showSuccessMessage: false
     }
@@ -520,6 +526,91 @@ const app = Vue.createApp({
       // Reset errors
       this.errors = {}
     },
+    addBusy () {
+      this.showAddBusyForm = true
+    },
+    cancelAddBusy () {
+      this.showAddBusyForm = false
+      this.clearNewBusy()
+    },
+    submitBusy () {
+      // Validate the new busy hours
+      if (this.validateBusy()) {
+          // Parse the form data
+          const instructor = this.newBusy.instructor.trim()
+          const day = this.newBusy.day.trim()
+          const timeSlots = this.newBusy.timeSlots.trim()
+  
+          // Split the time slots into an array
+          const slots = timeSlots.split(',')
+  
+          // Initialize an array to store the busy hours
+          const times = []
+  
+          // Map each time slot to its corresponding hour
+          slots.forEach(slot => {
+              // Extract the hour and convert it to the corresponding hour value
+              const hour = parseInt(slot.split(':')[0]) - 8 + 8 * {
+                  Monday: 0,
+                  Tuesday: 1,
+                  Wednesday: 2,
+                  Thursday: 3,
+                  Friday: 4
+              }[day]
+              
+              // Push the hour to the times array
+              times.push(hour)
+          })
+  
+          // Add the busy hours to the busy object
+          if (this.busy[instructor] !== undefined) {
+              this.busy[instructor].push(...times)
+          } else {
+              this.busy[instructor] = times
+          }
+  
+          // Show success message
+          this.showSuccessMessage = true
+  
+          // Clear the form and hide it after a delay
+          setTimeout(() => {
+              this.clearNewBusy()
+              this.showSuccessMessage = false
+          }, 2000) // Adjust the delay as needed
+      }
+  },
+  validateBusy () {
+    //add more validation for data.
+    // Reset errors
+    this.errors = {}
+
+    // Perform validation for each field
+    let isValid = true
+    if (!this.newBusy.instructor) {
+        this.errors.instructor = 'Instructor name is required'
+        isValid = false
+    }
+    if (!this.newBusy.day) {
+        this.errors.day = 'Day is required'
+        isValid = false
+    }
+    if (!this.newBusy.timeSlots) {
+        this.errors.timeSlots = 'Time slots are required'
+        isValid = false
+    }
+
+    return isValid
+},
+clearNewBusy () {
+    // Clear the new busy hours object
+    this.newBusy = {
+        instructor: '',
+        day: '',
+        timeSlots: ''
+    }
+    // Reset errors
+    this.errors = {}
+},    
     makeSchedule () {
       console.log('Schedule button')
       if (this.lay()) {
@@ -533,6 +624,9 @@ const app = Vue.createApp({
     }
   },
   mounted () {
+    //empty for now
+  },
+  created () {
     this.loadCourses()
     this.loadClassrooms()
     this.loadBusy()
