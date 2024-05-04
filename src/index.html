@@ -27,6 +27,8 @@
 
     <button @click="showCourses"class="mainButton" v-if="!showAddCourseForm">Show Courses</button>
 
+    <button @click="editCourses"class="mainButton" v-if="!showAddCourseForm">Edit Courses</button>
+
     <button @click="addCourse"class="mainButton" >Add a Course</button>
 
     <div v-if="showAddCourseForm" class="course-form">
@@ -85,9 +87,6 @@
 
 
     <button @click="editBusyHours"class="mainButton" v-if="!showAddCourseForm">Edit Busy Hours</button>
-
-
-    <button @click="editCourses"class="mainButton" v-if="!showAddCourseForm">Edit Courses</button>
 
 
     <button @click="addBusyHour"class="mainButton" v-if="!showAddCourseForm">Add a Busy Hour</button>
