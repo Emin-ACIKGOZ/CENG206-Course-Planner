@@ -192,6 +192,15 @@ const app = Vue.createApp({
           // Handle error as needed
         })
     },
+    //Methods for showCourses button
+    showCourses(){
+      console.log('Show Courses Button')
+    },
+
+    //Methods for editCourses button
+    editCourses(){
+      console.log('Edit Courses Button')
+    },
 
     //Methods for addCourse button
     addCourse () {
@@ -314,9 +323,14 @@ const app = Vue.createApp({
       this.errors = {}
     },
 
+    //Methods for addBusyHour button
+    addBusyHour () {
+      console.log('Add Busy button')
+    },
+
     //Methods for editBusyHours button
     editBusyHours () {
-      console.log('Busy button')
+      console.log('Edit Busy button')
     },
 
     //Methods for addClass button
