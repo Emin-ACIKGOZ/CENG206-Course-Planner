@@ -70,7 +70,37 @@
             <p v-if="errors.block" class="error">{{ errors.block }}</p>
         </div>
 
-
+        <button @click="addBusy">Add Busy Hours</button>
+        
+        <div v-if="showAddBusyForm" class="busy-form">
+            <h2>Add Busy Hours</h2>
+            <form @submit.prevent="submitBusy">
+                <!-- Add input fields for instructor and busy hours -->
+                <label for="instructor">Instructor:</label>
+                <input type="text" id="instructor" v-model="newBusy.instructor" />
+        
+                <label for="day">Day:</label>
+                <select id="day" v-model="newBusy.day">
+                    <option value="Monday">Monday</option>
+                    <option value="Tuesday">Tuesday</option>
+                    <option value="Wednesday">Wednesday</option>
+                    <option value="Thursday">Thursday</option>
+                    <option value="Friday">Friday</option>
+                </select>
+        
+                <label for="timeSlots">Time Slots:</label>
+                <input type="text" id="timeSlots" v-model="newBusy.timeSlots" />
+        
+                <!-- Add buttons for saving and canceling -->
+                <button type="submit">Add Busy Hours</button>
+                <button @click="cancelAddBusy">Cancel</button>
+            </form>
+            <!-- Error paragraphs moved to the bottom -->
+            <p v-if="errors.instructor" class="error">{{ errors.instructor }}</p>
+            <p v-if="errors.day" class="error">{{ errors.day }}</p>
+            <p v-if="errors.timeSlots" class="error">{{ errors.timeSlots }}</p>
+        </div>
+        
         <button @click="editBusyHours">Edit Busy Hours</button>
 
         <button @click="addClass">Add a Class</button>
