@@ -10,9 +10,10 @@
 </head>
 
 <body>
+
 <div class="logo">
-    <img src="https://aybu.edu.tr/images/aybu_logo.png" alt="logo">
-    <span class="header">Course Planner</span>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Ankara_Y%C4%B1ld%C4%B1r%C4%B1m_Beyaz%C4%B1t_University_logo.svg/2048px-Ankara_Y%C4%B1ld%C4%B1r%C4%B1m_Beyaz%C4%B1t_University_logo.svg.png" alt="logo">
+    <h1 class="header">Course Planner</h1>
 </div>
 
 
@@ -20,18 +21,21 @@
 <div style="height: 250px;"></div>
 
 
-<div id="app" style="height: 1000px;">
+<div id="app" style="height: 1500px;">
 
 
     <!-- Add a message container -->
 
     <!-- Table goes here -->
 
-    <button @click="showCourses"class="mainButton" v-if="!showAddCourseForm">Show Courses</button>
+    <button @click="showCourses" class="mainButton" v-if="!showAddCourseForm && !showAddClassForm && !showAddBusyHourForm && !showEditBusyHoursForm">Show Courses</button>
 
-    <button @click="editCourses"class="mainButton" v-if="!showAddCourseForm">Edit Courses</button>
 
-    <button @click="addCourse"class="mainButton" >Add a Course</button>
+    <button @click="editCourses" class="mainButton" v-if="!showAddCourseForm && !showAddClassForm && !showAddBusyHourForm && !showEditBusyHoursForm">Edit Courses</button>
+
+
+    <button @click="addCourse" class="mainButton" v-if="!showAddCourseForm && !showAddClassForm && !showAddBusyHourForm && !showEditBusyHoursForm">Add a Course</button>
+
 
     <div v-if="showAddCourseForm" class="course-form">
         <h2 class="header">Add a New Course </h2>
@@ -93,13 +97,16 @@
     </div>
 
 
-    <button @click="editBusyHours"class="mainButton" v-if="!showAddCourseForm">Edit Busy Hours</button>
+    <button @click="editBusyHours" class="mainButton" v-if="!showAddCourseForm && !showAddClassForm && !showAddBusyHourForm && !showEditBusyHoursForm">Edit Busy Hours</button>
 
 
-    <button @click="addBusyHour"class="mainButton" v-if="!showAddCourseForm">Add a Busy Hour</button>
+
+    <button @click="addBusyHour" class="mainButton" v-if="!showAddCourseForm && !showAddClassForm && !showAddBusyHourForm && !showEditBusyHoursForm">Add a Busy Hour</button>
 
 
-    <button @click="makeSchedule"class="mainButton" v-if="!showAddCourseForm">Make Schedule</button>
+
+    <button @click="makeSchedule" class="mainButton" v-if="!showAddCourseForm && !showAddClassForm && !showAddBusyHourForm && !showEditBusyHoursForm">Make Schedule</button>
+
 
 
 
