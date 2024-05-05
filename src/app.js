@@ -58,6 +58,13 @@ const app = Vue.createApp({
         classroomId: '',
         capacity: ''
       },
+      // New properties for adding a busy hour
+      showAddBusyHourForm: false,
+      newBusyHour: {
+        instructor: '',
+        day: '',
+        hours: []
+      },
       errors: {},
       showSuccessMessage: false,
 
@@ -385,7 +392,88 @@ const app = Vue.createApp({
 
     //Methods for addBusyHour button
     addBusyHour() {
-      console.log('Add Busy button')
+      this.showAddBusyHourForm = true
+    },
+    cancelAddBusyHour() {
+      this.showAddBusyHourForm = false
+      this.clearNewBusyHour()
+    },
+    submitBusyHour() {
+  // Validate the new busy hour
+  if (this.validateNewBusyHour()) {
+    // Extract input values
+    const instructorName = this.newBusyHour.instructor.trim()
+    const selectedDay = this.newBusyHour.day
+    const selectedHours = this.newBusyHour.hours
+
+    // Process selected hours
+    const processedHours = selectedHours.map(hour => {
+      return parseInt(hour) - 8 * (1 + 1 * this.weekdays[selectedDay])
+    })
+
+    // Check if all fields are filled
+    if (!instructorName || !selectedDay || selectedHours.length === 0) {
+      this.errors.busyHour = 'All fields are required'
+      return
+    }
+
+    // Check if the instructor is already busy during selected hours
+    for (const hour of processedHours) {
+      const busyTimes = this.busy[instructorName]
+      if (busyTimes && busyTimes.includes(hour)) {
+        this.errors.busyHour = `Instructor is already busy at ${hour + 8 * (1 + 1 * this.weekdays[selectedDay])}:30`
+        return
+      }
+    }
+
+    // Add the new busy hour to the busy schedule
+    if (!this.busy[instructorName]) {
+      this.busy[instructorName] = []
+    }
+    this.busy[instructorName].push(...processedHours)
+    console.log(this.busy) //debugging
+
+    // Show success message
+    this.showSuccessMessage = true
+
+    // Clear the form and hide it after a delay
+    setTimeout(() => {
+      this.clearNewBusyHour()
+      this.showSuccessMessage = false
+    }, 2000) // Adjust the delay as needed
+  }
+}
+,
+    validateNewBusyHour() {
+      // Reset errors
+      this.errors = {}
+    
+      // Perform validation for each field
+      let isValid = true
+      if (!this.newBusyHour.instructor) {
+        this.errors.instructor = 'Instructor name is required'
+        isValid = false
+      }
+      if (!this.newBusyHour.day) {
+        this.errors.day = 'Day of the week is required'
+        isValid = false
+      }
+      if (this.newBusyHour.hours.length === 0) {
+        this.errors.hours = 'At least one hour must be selected'
+        isValid = false
+      }
+    
+      return isValid
+    },
+    clearNewBusyHour() {
+      // Clear the new busy hour object
+      this.newBusyHour = {
+        instructor: '',
+        day: '',
+        hours: []
+      }
+      // Reset errors
+      this.errors = {}
     },
 
     //Methods for editBusyHours button
