@@ -17,7 +17,8 @@
     </div>
 
     <!-- Add a div between the logo and buttons to create some space -->
-    <div style="height: 250px"></div>
+    <div style="height: 250px; background-image: url('https://t4.ftcdn.net/jpg/03/09/24/63/360_F_309246316_uXQOS2tcdUceurcmAJprpxBbbktiSW0C.jpg'); background-size: cover;"></div>
+
 
     <div id="app" style="height: 1500px">
         <!-- Add a message container -->
@@ -40,7 +41,7 @@
         </button>
 
         <div v-if="showAddCourseForm" class="course-form">
-            <h2 class="header">Add a New Course</h2>
+            <span class="header">Add a New Course</span>
             <form @submit.prevent="submitCourse">
                 <label for="code">Course Code:</label>
                 <input type="text" id="code" v-model="newCourse.code" />
@@ -109,7 +110,7 @@
         </button>
 
         <div v-if="showAddBusyHourForm" class="busy-hour-form">
-            <h2 class="header">Add a Busy Hour</h2>
+            <span class="header">Add a Busy Hour</span>
             <form @submit.prevent="submitBusyHour">
                 <!-- Add input fields for instructor name, day, and hours -->
                 <label for="instructor">Instructor:</label>
@@ -185,7 +186,7 @@
             Add a Class
         </button>
         <div v-if="showAddClassForm" class="class-form">
-            <h2 class="header">Add a New Class</h2>
+            <span class="header">Add a New Class</span>
             <form @submit.prevent="submitClass">
                 <!-- Add input fields for classroom ID and capacity -->
                 <label for="classroom-id">Classroom ID:</label>
