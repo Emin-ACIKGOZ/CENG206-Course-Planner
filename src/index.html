@@ -124,47 +124,41 @@
                     <option value="Thursday">Thursday</option>
                     <option value="Friday">Friday</option>
                 </select>
+                <br>
                 <p v-if="errors.day" class="error">{{ errors.day }}</p>
-
-                <label for="hours">Hours:</label>
-                <div id="hours">
-                    <label>
-                        <input type="checkbox" v-model="newBusyHour.hours" value="8" />
-                        8:30
-                    </label>
-                    <label>
-                        <input type="checkbox" v-model="newBusyHour.hours" value="9" />
-                        9:30
-                    </label>
-                    <label>
-                        <input type="checkbox" v-model="newBusyHour.hours" value="10" />
-                        10:30
-                    </label>
-                    <label>
-                        <input type="checkbox" v-model="newBusyHour.hours" value="11" />
-                        11:30
-                    </label>
-                    <label>
-                        <input type="checkbox" v-model="newBusyHour.hours" value="12" />
-                        12:30
-                    </label>
-                    <label>
-                        <input type="checkbox" v-model="newBusyHour.hours" value="13" />
-                        13:30
-                    </label>
-                    <label>
-                        <input type="checkbox" v-model="newBusyHour.hours" value="14" />
-                        14:30
-                    </label>
-                    <label>
-                        <input type="checkbox" v-model="newBusyHour.hours" value="15" />
-                        15:30
-                    </label>
-                    <label>
-                        <input type="checkbox" v-model="newBusyHour.hours" value="16" />
-                        16:30
-                    </label>
+                <div>
+                    <label for="hours" style="display: inline-block;">Hours: </label>
+                    <div id="hours" style="display: inline-block;">
+                        <label style="display: inline-block; margin-right: 10px;">
+                            <input type="checkbox" v-model="newBusyHour.hours" value="8" /> 8:30
+                        </label>
+                        <label style="display: inline-block; margin-right: 10px;">
+                            <input type="checkbox" v-model="newBusyHour.hours" value="9" /> 9:30
+                        </label>
+                        <label style="display: inline-block; margin-right: 10px;">
+                            <input type="checkbox" v-model="newBusyHour.hours" value="10" /> 10:30
+                        </label>
+                        <label style="display: inline-block; margin-right: 10px;">
+                            <input type="checkbox" v-model="newBusyHour.hours" value="11" /> 11:30
+                        </label>
+                        <label style="display: inline-block; margin-right: 10px;">
+                            <input type="checkbox" v-model="newBusyHour.hours" value="12" /> 12:30
+                        </label>
+                        <label style="display: inline-block; margin-right: 10px;">
+                            <input type="checkbox" v-model="newBusyHour.hours" value="13" /> 13:30
+                        </label>
+                        <label style="display: inline-block; margin-right: 10px;">
+                            <input type="checkbox" v-model="newBusyHour.hours" value="14" /> 14:30
+                        </label>
+                        <label style="display: inline-block; margin-right: 10px;">
+                            <input type="checkbox" v-model="newBusyHour.hours" value="15" /> 15:30
+                        </label>
+                        <label style="display: inline-block;">
+                            <input type="checkbox" v-model="newBusyHour.hours" value="16" /> 16:30
+                        </label>
+                    </div>
                 </div>
+
 
                 <p v-if="errors.hours" class="error">{{ errors.hours }}</p>
 
