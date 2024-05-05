@@ -1,22 +1,30 @@
 .logo {
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 50%;
     transform: translateX(-50%);
-
-
-
+    z-index: 9999;
+    text-align: center;
 }
 
 .logo img {
     width: 100px;
     height: 150px;
-    margin-left: 50px;
+    z-index: 9999;
+    display: block;
+    margin: 0 auto;
 }
+
+.logo .header {
+    display: block;
+    font-size: 24px;
+    font-weight: bold;
+}
+
 
 .success-message {
     position: fixed;
-    top: 20px;
+    top: 50%;
     left: 50%;
     transform: translateX(-50%);
     background-color: #4CAF50;
@@ -24,8 +32,8 @@
     padding: 15px;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    opacity: 0;
-    transition: opacity 0.5s ease-in-out;
+    opacity: 1;
+    transition: opacity 1s ease-in-out;
 }
 
 .success-message.show {
@@ -33,7 +41,7 @@
 }
 
 .mainButton {
-    background-color: #3281a5;
+    background-color: #3c8fb6;
     color: #ffffff;
     border-radius: 5px;
     height: 50px;
@@ -45,7 +53,7 @@
 }
 
 .miniButton {
-    background-color: #3281a5;
+    background-color: #3c8fb6;
     color: #ffffff;
     border-radius: 5px;
     height: 20px;
@@ -55,6 +63,25 @@
     margin-top: 10px;
     margin-right: 5px;
     margin-left: 5px;
+}
+
+.mainButton:hover {
+    background-color: #276e8f;
+    cursor: pointer;
+}
+
+.miniButton:hover {
+    background-color: #276e8f;
+    cursor: pointer;
+}
+
+
+.mainButton:active {
+    background-color: #194965;
+}
+
+.miniButton:active {
+    background-color: #194965;
 }
 
 .course-form label {
@@ -71,18 +98,24 @@
     font-size: 24px;
     font-weight: bold;
     color: #3281a5;
-    margin-right: 2px;
-    margin-left: 8px;
+
+
 }
 
 .error {
+
     font-family: 'Roboto', sans-serif;
     font-size: 16px;
     font-weight: bold;
+    left: 50%;
     color: #ff0000;
-    margin-right: 2px;
-    margin-left: 8px;
+
+    margin-top: 5px;
 }
+
+
+
+
 
 
 
