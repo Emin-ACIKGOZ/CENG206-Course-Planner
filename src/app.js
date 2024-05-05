@@ -263,8 +263,8 @@ const app = Vue.createApp({
     },
 
     //Methods for editCourses button
-    editCourses() {
-      console.log('Edit Courses Button')
+    editCourse() {
+      console.log('Edit Course Button')
     },
 
     //Methods for addCourse button
