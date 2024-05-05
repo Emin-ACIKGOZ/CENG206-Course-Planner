@@ -18,8 +18,9 @@
 
 .logo .header {
     display: block;
-    font-size: 24px;
+    font-size: 32px;
     font-weight: bold;
+    color: #ffffff;
 }
 
 body {
@@ -45,16 +46,31 @@ body {
     opacity: 1;
 }
 
+#app {
+    height: 1500px;
+    background-image: url('https://t4.ftcdn.net/jpg/03/09/24/63/360_F_309246316_uXQOS2tcdUceurcmAJprpxBbbktiSW0C.jpg');
+    background-repeat: no-repeat;
+    background-size: 100% 50px;
+
+}
+
+
 .mainButton {
-    background-color: #3c8fb6;
+    position: relative;
+    background-color: transparent;
     color: #ffffff;
-    border-radius: 5px;
-    height: 50px;
+    border: none;
+    border-radius: 50px;
+    height: 40px;
     width: 150px;
     font-family: 'Roboto', sans-serif;
     font-size: 16px;
     font-weight: bold;
     margin-right: 10px;
+    margin: 0 40px;
+    z-index: 1;
+
+
 }
 
 .miniButton {
@@ -102,7 +118,9 @@ body {
     font-family: 'Roboto', sans-serif;
     font-size: 24px;
     font-weight: bold;
-    color: #3281a5;
+    color: #ffffff;
+    text-align: center;
+    margin-bottom: 50px;
 
 
 }
@@ -117,6 +135,7 @@ body {
 
     margin-top: 5px;
 }
+
 
 
 
