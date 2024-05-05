@@ -8,17 +8,22 @@
 }
 
 .logo img {
-    width: 100px;
+    width: 200px;
     height: 150px;
     z-index: 9999;
     display: block;
     margin: 0 auto;
+    margin-top: 20px;
 }
 
 .logo .header {
     display: block;
     font-size: 24px;
     font-weight: bold;
+}
+
+body {
+    background-color: #bfd9f3; /* Set your desired background color here */
 }
 
 
