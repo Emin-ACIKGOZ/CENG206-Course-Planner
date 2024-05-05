@@ -186,7 +186,8 @@
         </button>
 
 
-        <button @click="addClass" class="mainButton" v-if="!showAddCourseForm">
+        <button @click="addClass" class="mainButton" 
+            v-if="!showAddCourseForm && !showAddClassForm && !showAddBusyHourForm && !showEditBusyHoursForm">
             Add a Class
         </button>
         <div v-if="showAddClassForm" class="class-form">
