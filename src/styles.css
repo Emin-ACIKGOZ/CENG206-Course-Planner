@@ -54,7 +54,8 @@ body {
     font-family: 'Roboto', sans-serif;
     font-size: 16px;
     font-weight: bold;
-    margin-right: 10px;
+    margin: 20px;
+    margin-right: 0px;
 }
 
 .miniButton {
@@ -118,12 +119,44 @@ body {
     margin-top: 5px;
 }
 
+/* Accordion container */
+.accordion {
+    border: 2px solid #ccc;
+    margin-bottom: 10px;
+    background-color: #f9f9f9; /* Light background color */
+    border-radius: 5px; /* Rounded corners */
+}
 
+/* Accordion header */
+.accordion-header {
+    background-color: #f1f1f1; /* Header background color */
+    color: #333;
+    cursor: pointer;
+    padding: 15px; /* Increase padding for better clickability */
+    border: none;
+    outline: none;
+    width: 100%;
+    text-align: left;
+    font-size: 18px; /* Smaller font size for the header */
+    transition: background-color 0.3s ease; /* Smooth transition for background color */
+}
 
+/* Hover effect for accordion header */
+.accordion-header:hover {
+    background-color: #e0e0e0; /* Lighter background color on hover */
+}
 
+/* Add this CSS to handle accordion display and animation */
+.accordion-panel {
+    overflow: hidden; /* Hide overflowing content */
+    max-height: 0; /* Collapse the panel */
+    transition: max-height 0.5s ease, opacity 0.3s ease; /* Add transition for smooth animation */
+    opacity: 0; /* Initially hide the panel */
+}
 
-
-
-
-
+/* Active state for accordion panel */
+.accordion-panel.active {
+    max-height: 200px; /* Set a maximum height for the panel */
+    opacity: 1; /* Show the panel */
+}
 

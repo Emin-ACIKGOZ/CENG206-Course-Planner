@@ -22,6 +22,7 @@ const app = Vue.createApp({
 
   data() {
     return {
+      
       //Arrays to store relevant data
       classrooms: {},
       courses: [],
@@ -60,6 +61,7 @@ const app = Vue.createApp({
       },
       errors: {},
       showSuccessMessage: false,
+      activeAccordion: `courses`,
 
     }
   },
@@ -70,6 +72,12 @@ const app = Vue.createApp({
     showError(message) {
       alert(`Error: ${message}`)
     },
+
+    toggleAccordion(accordionName) {
+      console.log('Toggling accordion:', accordionName);
+      this.activeAccordion = (this.activeAccordion === accordionName) ? null : accordionName;
+      console.log('Active accordion:', this.activeAccordion);
+  },
 
     //Loading Methods
     loadCourses() {
@@ -617,4 +625,3 @@ const app = Vue.createApp({
 })
 
 app.mount('#app')
-
