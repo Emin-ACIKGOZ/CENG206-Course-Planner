@@ -1,8 +1,5 @@
-
 <!DOCTYPE html>
 <html lang="en">
-
-
 
 <head>
     <meta charset="UTF-8" />
@@ -21,7 +18,7 @@
 </div>
 
 
-<!-- Add a div between the logo and buttons to create some space -->
+
 <div style="height: 250px;"></div>
 
 
@@ -32,13 +29,11 @@
         <button class="accordion-header" @click="toggleAccordion('courses')">Courses</button>
         <div class="accordion-panel" :class="{ 'active': activeAccordion === 'courses' }">
     
-            <button @click="editCourses" class="mainButton" v-if="!showAddCourseForm && !showAddClassForm && !showAddBusyHourForm && !showEditBusyHoursForm">Edit Courses</button>
             <button @click="addCourse" class="mainButton" v-if="!showAddCourseForm && !showAddClassForm && !showAddBusyHourForm && !showEditBusyHoursForm">Add a Course</button>
             
             <div v-if="showAddCourseForm" class="course-form">
    
             </div>
-
        
                 <table class="course-list">
                     <thead>
@@ -100,7 +95,8 @@
                 <tbody>
                     <tr v-for="(inst, busyhours) in busy" :key="name">
                         <td>{{ busyhours }}</td>
-                        <td>{{ arrayofhours(inst) }}</td>
+                        <td>{{ inst }}</td>
+                        <td>{{ inst }}</td>
                     </tr>
                 </tbody>
             </table>
@@ -169,44 +165,43 @@
         </div>
     </div>
 
-
-
-    <!-- Add a message container -->
-
-    <!-- Table goes here -->
-
-
+    
     <button @click="makeSchedule" class="mainButton" v-if="!showAddCourseForm && !showAddClassForm && !showAddBusyHourForm && !showEditBusyHoursForm">Make Schedule</button>
 
 
-    <table class="course-list">
-        <thead>
-            <tr>
-                <th>Day</th>
-                <th>Hour</th>
-                <th>Year 1</th>
-                <th>Year 2</th>
-                <th>Year 3</th>
-                <th>Year 4</th>
-            </tr>
-        </thead>
-        <tbody>
-            <template v-for="(day, index) in Object.keys(weekdays)">
-                <tr>
-                    <td rowspan="9">{{ day }}</td>
-                </tr>
-                <tr v-for="hour in getHourRange(index)" :key="hour">
-                    <td><b>{{ toHour(hour) }}</b></td>
-                    <td>{{ schedule[1][hour] ? schedule[1][hour][0].code + "  " + schedule[1][hour][1] : '' }}</td>
-                    <td>{{ schedule[2][hour] ? schedule[2][hour][0].code + "  " + schedule[2][hour][1] : '' }}</td>
-                    <td>{{ schedule[3][hour] ? schedule[3][hour][0].code + "  " + schedule[3][hour][1] : '' }}</td>
-                    <td>{{ schedule[4][hour] ? schedule[4][hour][0].code + "  " + schedule[4][hour][1] : '' }}</td>
-                </tr>
-            </template>
-        </tbody>
-    </table>
-    
-    
+
+    <div class="accordion">
+        <button class="accordion-header" @click="toggleAccordion('schedule')">Schedule</button>
+        <div class="accordion-panel" :class="{ 'active': activeAccordion === 'schedule' }">
+            <table class="course-list">
+                <thead>
+                    <tr>
+                        <th>Day</th>
+                        <th>Hour</th>
+                        <th>Year 1</th>
+                        <th>Year 2</th>
+                        <th>Year 3</th>
+                        <th>Year 4</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <template v-for="(day, index) in Object.keys(weekdays)">
+                        <tr>
+                            <td rowspan="9">{{ day }}</td>
+                        </tr>
+                        <tr v-for="hour in getHourRange(index)" :key="hour">
+                            <td><b>{{ toHour(hour) }}</b></td>
+                            <td>{{ schedule[1][hour] ? schedule[1][hour][0].code + "  " + schedule[1][hour][1] : '' }}</td>
+                            <td>{{ schedule[2][hour] ? schedule[2][hour][0].code + "  " + schedule[2][hour][1] : '' }}</td>
+                            <td>{{ schedule[3][hour] ? schedule[3][hour][0].code + "  " + schedule[3][hour][1] : '' }}</td>
+                            <td>{{ schedule[4][hour] ? schedule[4][hour][0].code + "  " + schedule[4][hour][1] : '' }}</td>
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
 
 
 </div>

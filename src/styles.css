@@ -24,7 +24,7 @@
 }
 
 body {
-    background-color: #bfd9f3; /* Set your desired background color here */
+    background-color: #bfd9f3; 
 }
 
 
@@ -114,39 +114,38 @@ body {
     margin-top: 5px;
 }
 
-/* Accordion container */
+
 .accordion {
     border: 2px solid #ccc;
-    margin-bottom: 10px;
-    background-color: #f9f9f9; /* Light background color */
-    border-radius: 5px; /* Rounded corners */
+    background-color: #f9f9f9; 
+    border-radius: 5px; 
 }
 
-/* Accordion header */
+
 .accordion-header {
-    background-color: #f1f1f1; /* Header background color */
+    background-color: #f1f1f1; 
     color: #333;
     cursor: pointer;
-    padding: 15px; /* Increase padding for better clickability */
     border: none;
     outline: none;
     width: 100%;
     text-align: left;
-    font-size: 18px; /* Smaller font size for the header */
-    transition: background-color 0.3s ease; /* Smooth transition for background color */
+    font-size: 18px; 
+    transition: background-color 0.3s ease; 
+    padding : 20px;
 }
 
-/* Hover effect for accordion header */
+
 .accordion-header:hover {
-    background-color: #e0e0e0; /* Lighter background color on hover */
+    background-color: #e0e0e0; /
 }
 
-/* Accordion panel */
+
 .accordion-panel {
-    overflow-y: auto; /* Enable vertical scrolling */
-    max-height: 0; /* Set maximum height to fill available space */
-    transition: max-height 0.5s ease, opacity 0.3s ease; /* Add transition for smooth animation */
-    opacity: 1; /* Initially hide the panel */
+    overflow-y: auto; 
+    max-height: 0; 
+    transition: max-height 0.5s ease, opacity 0.23s ease; 
+    opacity: 1; 
     
 
 }
@@ -176,9 +175,9 @@ body {
     background-color: #ddd;
   }
   
-/* Active state for accordion panel */
+
 .accordion-panel.active {
-    max-height: calc(100vh - 200px); /* Set a maximum height for the panel */
-    opacity: 1; /* Show the panel */
+    max-height: calc(200vh - 0px); 
+    opacity: 1; 
 }
 
