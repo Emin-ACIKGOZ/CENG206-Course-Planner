@@ -39,7 +39,7 @@ body {
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     opacity: 1;
-    transition: opacity 1s ease-in-out;
+    transition: opacity 1s slide-ease-in-out;
 }
 
 .success-message.show {
@@ -116,9 +116,26 @@ body {
 
 
 .accordion {
-    border: 2px solid #ccc;
-    background-color: #f9f9f9; 
-    border-radius: 5px; 
+
+
+    --circle-x: 1.8rem;
+	--circle-y: 0;
+	--circle-r: 200%;
+	--circle-bg: #fff;
+	color: #000;
+
+	background-color: var(--circle-bg);
+
+	margin-bottom: 1rem;
+	border-radius: min(8px, 0.5rem);
+
+	grid-template-rows: 0fr 0fr;
+	transition-timing-function: var(--slide-ease);
+	transition-duration: 200ms, 200ms, var(--slide-duration);
+	transition-property: opacity, box-shadow, grid-template-rows;
+	transition-delay: 0ms, 0ms, var(--slide-delay);
+	box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+	opacity: 0.9;
 }
 
 
@@ -135,6 +152,14 @@ body {
     padding : 20px;
 }
 
+/* Add this CSS to your existing stylesheet */
+.accordion-header::after {
+    content: "+"; /* Unicode for a right-pointing triangle */
+    float: right;
+    margin-left: 5px;
+    transition: transform 0.3s ease; /* Add transition effect for rotation */
+    display: inline-block; /* Ensure the pseudo-element is treated as a block */
+}
 
 .accordion-header:hover {
     background-color: #e0e0e0; /
@@ -144,9 +169,8 @@ body {
 .accordion-panel {
     overflow-y: auto; 
     max-height: 0; 
-    transition: max-height 0.5s ease, opacity 0.23s ease; 
+    transition: all 0.5s cubic-bezier(0.215, 0.610, 0.355, 1), opacity 0.23s ease; 
     opacity: 1; 
-    
 
 }
 
@@ -219,11 +243,9 @@ body {
     opacity: 1; 
 }
 
-.schedule tr:nth-child(8) {
-    background-color: #f2f2f2;
-  }
 
-.schedule tr:nth-child(8) {
-    background-color: #ddd;
+
+#schedule-button {
+    background-color: #194965;
+    color: white;
 }
-  

@@ -437,16 +437,18 @@ const app = Vue.createApp({
     },
     submitClass() {
       // Validate the new class
-      if (this.validateNewClass()) {
+      if (!this.validateNewClass()) {
         // Add the class
         const classroomName = this.newClass.classroomId.trim()
         const classroomCapacity = parseInt(this.newClass.capacity)
-
+        
         // Check if the classroom already exists
         if (this.classrooms[classroomName] !== undefined) {
           this.errors.classroomId = 'Classroom ID already exists'
           return
         }
+
+        
 
         // Add the new classroom to the classrooms object
         this.classrooms[classroomName] = classroomCapacity
@@ -668,6 +670,7 @@ const app = Vue.createApp({
     },
 
     makeSchedule() {
+      activeAccordion = 'schedule'
       console.log('Schedule button')
       let courses = JSON.parse(JSON.stringify(this.courses))
 
