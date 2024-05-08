@@ -8,6 +8,7 @@ class Course {
     dept,
     num_students,
     instructor,
+    block,
   ) {
     this.code = code
     this.credit = credit
@@ -18,6 +19,7 @@ class Course {
     this.num_students = num_students
     this.instructor = instructor
     this.hours = 0
+    this.block = block
   }
 }
 
@@ -87,6 +89,7 @@ const app = Vue.createApp({
       return hourRange;
   },
 
+
     arrayofhours(list) {
     
     let s = "";
@@ -104,9 +107,9 @@ const app = Vue.createApp({
     },
 
     toggleAccordion(accordionName) {
-      console.log('Toggling accordion:', accordionName);
+    
       this.activeAccordion = (this.activeAccordion === accordionName) ? null : accordionName;
-      console.log('Active accordion:', this.activeAccordion);
+     
     },
 
     deleteCourse(code) {
@@ -143,20 +146,10 @@ const app = Vue.createApp({
               columns[4].trim(),
               columns[5].trim(),
               parseInt(columns[6]),
-              columns[7].trim()
+              columns[7].trim(),
+              columns[8]
             )
-            if (columns[8] === "2+1") {
-              course.hours = 1;
-              // creates duplicate
-              this.courses.push(JSON.parse(JSON.stringify(course)));
-              course.hours = 2;
-              this.courses.push(course);
-              // Add two lessons with same attributes but different hour.
-            } else {
-              // assumes 3 then try to raise error if on anything else
-              course.hours = 3;
-              this.courses.push(course);
-            }
+            this.courses.push(course);
           })
 
           console.log('Courses loaded:', this.courses)
@@ -508,7 +501,7 @@ const app = Vue.createApp({
 
     findClassroom(course, hour) {
 
-      // Finds smallest class suitable then returns it.
+
       let classroom = null;
 
       for (const m in this.classrooms) {
@@ -516,8 +509,7 @@ const app = Vue.createApp({
 
           var flag = false;
 
-          // Is the classroom assigned to any other class in this hour?
-          // Maybe won't always work.
+     
           for (let k of [1, 2, 3, 4]) {
 
             // Check for the every hour in block.
@@ -542,11 +534,39 @@ const app = Vue.createApp({
     },
 
     layService(courses) {
-
       
+      // this logic is sort of wrong
+      // WONT WORK IF HOURS ARE LISTED LIKE 9:30 8:30 10:30
 
+      for (const code in this.service) {
+
+        const hours = this.service[code];
+        const course = courses.find(course => course.code === code);
+
+        hours.sort((a, b) => a - b);
+        
+        let hour = hours[0]
+        let classroom = this.findClassroom(course, hour);
+
+         
+
+        if (classroom === null) {
+          throw new Error("Can't find a classroom for: " + course.code);
+        }
+
+        if (this.checkHourAvailable(course.year, hour, course, course.hours)) {
+          this.schedule[course.year].fill([course, classroom], hour, hour + course.hours);
+        } else {
+          // hatalar
+        
+        }
+
+    
+        courses.splice(courses.findIndex(c => c.code === course.code), 1);
+      }
+    
     },
-
+    
     lay(courses, year = 1, hour = 0) {
 
       if (hour >= 40) {
@@ -569,19 +589,23 @@ const app = Vue.createApp({
 
         let classroom = this.findClassroom(course, hour);
 
+        
+
         if (this.checkHourAvailable(courses, year, hour, course, course.hours) && classroom) {
           this.schedule[year].fill([course, classroom], hour, hour + course.hours);
+         
           courses.splice(i, 1);
 
-
+          
+          
           // Recursive call
           if (this.lay(courses, year, hour + course.hours)) {
-
             return true;
           } else {
             // Failed: backtracking.
             this.schedule[year].fill(null, hour, hour + course.hours);
             courses.push(course);
+            
             return false;
           }
         }
@@ -645,7 +669,7 @@ const app = Vue.createApp({
 
     makeSchedule() {
       console.log('Schedule button')
-      let courses = this.courses.slice();
+      let courses = JSON.parse(JSON.stringify(this.courses))
 
       this.schedule = {
         1: new Array(40).fill(null),
@@ -654,11 +678,26 @@ const app = Vue.createApp({
         4: new Array(40).fill(null)
       }
 
-      layService(courses);
+
+      courses.forEach(course => {
+        if (course.block === "2+1") {
+          course.hours = 1;
+          let course2 = JSON.parse(JSON.stringify(course));
+          course2.hours = 2;
+          courses.push(course2);
+        } else {
+          course.hours = 3;
+        }
+      });
+
+   
+
+      this.layService(courses);
+
       if (this.lay(courses)) {
-        // Code to display the Schedule
-        toggleAccordion('schedule')
-        console.log(this.schedule)
+    
+        this.activeAccordion = 'schedule'
+        
       } else {
         console.log('Failed to create a schedule.')
       }
