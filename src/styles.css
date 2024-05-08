@@ -1,3 +1,4 @@
+
 .logo {
     position: absolute;
     top: 0;
@@ -54,8 +55,7 @@ body {
     font-family: 'Roboto', sans-serif;
     font-size: 16px;
     font-weight: bold;
-    margin: 20px;
-    margin-right: 0px;
+
 }
 
 .miniButton {
@@ -66,9 +66,6 @@ body {
     width: 80px;
     font-family: 'Roboto', sans-serif;
     font-size: 12px;
-    margin-top: 10px;
-    margin-right: 5px;
-    margin-left: 5px;
 }
 
 .mainButton:hover {
@@ -104,8 +101,6 @@ body {
     font-size: 24px;
     font-weight: bold;
     color: #3281a5;
-
-
 }
 
 .error {
@@ -146,17 +141,44 @@ body {
     background-color: #e0e0e0; /* Lighter background color on hover */
 }
 
-/* Add this CSS to handle accordion display and animation */
+/* Accordion panel */
 .accordion-panel {
-    overflow: hidden; /* Hide overflowing content */
-    max-height: 0; /* Collapse the panel */
+    overflow-y: auto; /* Enable vertical scrolling */
+    max-height: 0; /* Set maximum height to fill available space */
     transition: max-height 0.5s ease, opacity 0.3s ease; /* Add transition for smooth animation */
-    opacity: 0; /* Initially hide the panel */
+    opacity: 1; /* Initially hide the panel */
+    
+
 }
 
+.course-list {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Roboto', sans-serif;
+  }
+  
+  .course-list th,
+  .course-list td {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+  
+  .course-list th {
+    background-color: #f2f2f2;
+    text-align: left;
+  }
+  
+  .course-list tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  
+  .course-list tr:hover {
+    background-color: #ddd;
+  }
+  
 /* Active state for accordion panel */
 .accordion-panel.active {
-    max-height: 200px; /* Set a maximum height for the panel */
+    max-height: calc(100vh - 200px); /* Set a maximum height for the panel */
     opacity: 1; /* Show the panel */
 }
 

@@ -10,6 +10,9 @@ class Course {
     instructor,
   ) {
     this.code = code
+    this.credit = credit
+    this.type = type
+    this.dept = dept
     this.name = name
     this.year = year
     this.num_students = num_students
@@ -69,6 +72,33 @@ const app = Vue.createApp({
   methods: {
 
     //General purpose function to show errors on a page
+    getHourRange(day) {
+
+      let s = day * 8;
+      let e = s + 8 ;
+  
+      let hourRange = [];
+      for (let i = s; i < e; i++) {
+          hourRange.push(i);
+      }
+    
+
+      return hourRange;
+  },
+
+    arrayofhours(list) {
+    
+    newList = [];
+    let s = "";
+
+    for (let i = 0; i < list.length; i++) {
+      s = "" + s + this.toHour(list[i]);
+    }
+
+    return newList;
+
+    },
+
     showError(message) {
       alert(`Error: ${message}`)
     },
@@ -77,7 +107,11 @@ const app = Vue.createApp({
       console.log('Toggling accordion:', accordionName);
       this.activeAccordion = (this.activeAccordion === accordionName) ? null : accordionName;
       console.log('Active accordion:', this.activeAccordion);
-  },
+    },
+
+    deleteCourse(code) {
+      this.courses.splice(this.findCourse(code), 1); 
+    },
 
     //Loading Methods
     loadCourses() {
@@ -241,7 +275,7 @@ const app = Vue.createApp({
             const times = []
             for (const slot of slots) {
               const hour =
-                parseInt(slot.split(':')[0]) - 8 * (1 + 1 * this.weekdays[day])
+                parseInt(slot.split(':')[0]) - 8 + 8 * this.weekdays[day]
               times.push(hour)
             }
             if (this.busy[instructor] !== undefined) {
@@ -550,6 +584,13 @@ const app = Vue.createApp({
       return this.lay(year, hour + 1);
 
     },
+
+    toHour(integer) {
+      //day = {0: "Monday", 1: "Tuesday", 2:"Wednesday", 3: "Thursday", 4:"Friday"}
+      //return "" + day[Math.floor(integer / 8)] + "  "+ (integer % 8 + 8)  + ":30";
+      return (integer % 8 + 8)  + ":30";
+    },
+
     checkHourAvailable(year, hour, course, block) {
       // You cannot put a 3 hour lesson at the 6. hour of a day (Not enough time)
       if (block === 3) {
@@ -560,7 +601,7 @@ const app = Vue.createApp({
       if (block === 2) {
         if (hour % 8 === 7) return false
       }
-
+      
       // Same lesson cannot occur in the same day multiple times
       for (let z = hour - (hour % 8); z < hour - (hour % 8) + block; z++) {
         if (
