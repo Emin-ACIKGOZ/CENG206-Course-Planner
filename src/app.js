@@ -372,9 +372,9 @@ const app = Vue.createApp({
         !this.newCourse.year ||
         isNaN(this.newCourse.year) ||
         this.newCourse.year < 1 ||
-        this.newCourse.year > 6
+        this.newCourse.year > 4
       ) {
-        this.errors.year = 'Year must be a number between 1 and 6'
+        this.errors.year = 'Year must be a number between 1 and 4'
         isValid = false
       }
       if (
