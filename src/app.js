@@ -61,6 +61,7 @@ const app = Vue.createApp({
       },
       // Add new properties for adding a class
       showAddClassForm: false,
+      showAddBusyForm: false,
       newClass: {
         classroomId: '',
         capacity: ''
@@ -89,18 +90,23 @@ const app = Vue.createApp({
       return hourRange;
   },
 
-
-    arrayofhours(list) {
-    
-    let s = "";
-
-    for (let i = 0; i < list.length; i++) {
-      s = s + this.toHour(list[i]) + ", ";
+  getDayColor(hour) {
+    switch (Math.floor(hour / 8)) {
+        case 0:
+            return "#d9ffff";
+        case 1:
+            return "pink";
+        case 2:
+            return "#fff6b9";
+        case 3:
+            return "#f7ffc7";
+        case 4:
+            return "aquamarine";
+        default:
+            return ""; // Default color, if no condition matches
     }
+},
 
-    return s;
-
-    },
 
     showError(message) {
       alert(`Error: ${message}`)
@@ -118,6 +124,26 @@ const app = Vue.createApp({
           this.courses.splice(courseIndex, 1);
       }
     },
+
+    // for printing rows when printing
+    notInMiddle(schedule, hour, year) {
+
+      console.log(schedule)
+
+      if (schedule[year][hour - 1] === null) {
+          return true;
+      } else {
+          if (hour % 8 === 0) {
+            // beginning of a day
+            return true;
+          }
+          else if (schedule[year][hour][0].code === schedule[year][hour - 1][0].code) {
+              return false;
+          } else {
+              return true;
+          }
+      }
+  },
   
     //Loading Methods
     loadCourses() {
@@ -419,7 +445,7 @@ const app = Vue.createApp({
 
     //Methods for addBusyHour button
     addBusyHour() {
-      console.log('Add Busy button')
+      this.showAddBusyForm = true
     },
 
     //Methods for editBusyHours button
@@ -550,7 +576,7 @@ const app = Vue.createApp({
         let hour = hours[0]
         let classroom = this.findClassroom(course, hour);
 
-         
+       
 
         if (classroom === null) {
           throw new Error("Can't find a classroom for: " + course.code);
@@ -593,7 +619,7 @@ const app = Vue.createApp({
 
         
 
-        if (this.checkHourAvailable(courses, year, hour, course, course.hours) && classroom) {
+        if (this.checkHourAvailable(year, hour, course, course.hours) && classroom) {
           this.schedule[year].fill([course, classroom], hour, hour + course.hours);
          
           courses.splice(i, 1);
@@ -699,7 +725,9 @@ const app = Vue.createApp({
 
       if (this.lay(courses)) {
     
-        this.activeAccordion = 'schedule'
+  
+        this.toggleAccordion('schedule')
+        console.log(schedule)
         
       } else {
         console.log('Failed to create a schedule.')

@@ -23,7 +23,7 @@
     <div style="height: 250px;"></div>
 
 
-    <div id="app" style="height: 1500px;">
+    <div id="app">
 
 
         <div class="accordion">
@@ -88,41 +88,41 @@
                 </div>
 
                 <button @click="addCourse" class="mainButton" v-if="">Add a Course</button>
-           
-                    <table class="course-list">
-                        <thead>
-                            <tr>
-                                <th>Course Code</th>
-                                <th>Course Name</th>
-                                <th>Year</th>
-                                <th>Credit</th>
-                                <th>Type</th>
-                                <th>Department</th>
-                                <th>Number of Students</th>
-                                <th>Instructor</th>
-                                <th>Block</th>
-                                <th>Edit </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-for="course in courses" :key="course.code">
-                                <td>{{ course.code }}</td>
-                                <td>{{ course.name }}</td>
-                                <td>{{ course.year }}</td>
-                                <td>{{ course.credit }}</td>
-                                <td>{{ course.type }}</td>
-                                <td>{{ course.dept }}</td>
-                                <td>{{ course.num_students }}</td>
-                                <td>{{ course.instructor }}</td>
-                                <td>{{ course.block }}</td>
-                                <td>
-                                    <button @click="editCourse(course.code)" class="main">✏️</button>
-                                    <button @click="deleteCourse(course.code)" class="deleteButton">❌</button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-              
+
+                <table class="course-list">
+                    <thead>
+                        <tr>
+                            <th>Course Code</th>
+                            <th>Course Name</th>
+                            <th>Year</th>
+                            <th>Credit</th>
+                            <th>Type</th>
+                            <th>Department</th>
+                            <th>Number of Students</th>
+                            <th>Instructor</th>
+                            <th>Block</th>
+                            <th>Edit </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="course in courses" :key="course.code">
+                            <td>{{ course.code }}</td>
+                            <td>{{ course.name }}</td>
+                            <td>{{ course.year }}</td>
+                            <td>{{ course.credit }}</td>
+                            <td>{{ course.type }}</td>
+                            <td>{{ course.dept }}</td>
+                            <td>{{ course.num_students }}</td>
+                            <td>{{ course.instructor }}</td>
+                            <td>{{ course.block }}</td>
+                            <td>
+                                <button @click="editCourse(course.code)" class="main">✏️</button>
+                                <button @click="deleteCourse(course.code)" class="deleteButton">❌</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
             </div>
         </div>
 
@@ -153,6 +153,51 @@
         <div class="accordion">
             <button class="accordion-header" @click="toggleAccordion('busyHours')">Busy Hours</button>
             <div class="accordion-panel" :class="{ 'active': activeAccordion === 'busyHours' }">
+
+                <div id="addBusyModal" v-if="showAddBusyForm" class="modal">
+                    <div class="modal-content">
+
+                        <span class="close" @click="cancelAddBusy">&times;</span>
+                        <h2 class="header">Add a Busy Hour</h2>
+                        <!-- Add course form -->
+                        <form @submit.prevent="">
+
+                            <label for="type">Hour:</label>
+                            <select id="type" v-model="newCourse.type">
+                                <option value="0">8:30</option>
+                                <option value="1">9:30</option>
+                                <option value="2">10:30</option>
+                                <option value="3">11:30</option>
+                                <option value="4">12:30</option>
+                                <option value="5">13:30</option>
+                                <option value="6">14:30</option>
+                                <option value="7">15:30</option>
+                            </select>
+                            <p v-if="errors.type" class="error">{{ errors.type }}</p>
+
+
+                            <label for="type">Day:</label>
+                            <select id="type" v-model="newCourse.type">
+                                <option value="0">Monday</option>
+                                <option value="1">Tuesda</option>
+                                <option value="2">Wednesday</option>
+                                <option value="3">thurs</option>
+                                <option value="4">friday</option>
+
+                            </select>
+                            <p v-if="errors.type" class="error">{{ errors.type }}</p>
+
+                            <label for="instructor">Instructor Name:</label>
+                            <input type="text" id="instructor" v-model="newCourse.instructor" />
+                            <p v-if="errors.instructor" class="error">{{ errors.instructor }}</p>
+
+
+                            <button type="submit" class="miniButton">+</button>
+                            <button @click="cancelAddBusy" class="miniButton">Cancel</button>
+
+                        </form>
+                    </div>
+                </div>
 
                 <button @click="addBusyHour" class="mainButton" v-if="">Add a Busy Hour</button>
 
@@ -190,53 +235,53 @@
                 <div id="addClassModal" v-if="showAddClassForm" class="modal">
                     <div class="modal-content">
                         <span class="close" @click="cancelAddCourse">&times;</span>
-                <div v-if="showAddClassForm" class="class-form">
-                    <h2 class="header">Add a New Class</h2>
-                    <form @submit.prevent="submitClass">
-                        <!-- Add input fields for classroom ID and capacity -->
-                        <label for="classroom-id">Classroom ID:</label>
-                        <input type="text" id="classroom-id" v-model="newClass.classroomId" />
+                        <div v-if="showAddClassForm" class="class-form">
+                            <h2 class="header">Add a New Class</h2>
+                            <form @submit.prevent="submitClass">
+                                <!-- Add input fields for classroom ID and capacity -->
+                                <label for="classroom-id">Classroom ID:</label>
+                                <input type="text" id="classroom-id" v-model="newClass.classroomId" />
 
-                        <label for="capacity">Capacity:</label>
-                        <input type="number" id="capacity" v-model="newClass.capacity" />
+                                <label for="capacity">Capacity:</label>
+                                <input type="number" id="capacity" v-model="newClass.capacity" />
 
-                        <!-- Add buttons for saving and canceling -->
-                        <button type="submit" class="miniButton">Add Class</button>
-                        <button @click="cancelAddClass" class="miniButton">Cancel</button>
-                    </form>
-                    <div v-if="showSuccessMessage" class="success-message">
-                        Class successfully added
+                                <!-- Add buttons for saving and canceling -->
+                                <button type="submit" class="miniButton">Add Class</button>
+                                <button @click="cancelAddClass" class="miniButton">Cancel</button>
+                            </form>
+                            <div v-if="showSuccessMessage" class="success-message">
+                                Class successfully added
+                            </div>
+                            <!-- Error paragraphs moved to the bottom -->
+                            <p v-if="errors.classroomId" class="error">{{ errors.classroomId }}</p>
+                            <p v-if="errors.capacity" class="error">{{ errors.capacity }}</p>
+
+                        </div>
                     </div>
-                    <!-- Error paragraphs moved to the bottom -->
-                    <p v-if="errors.classroomId" class="error">{{ errors.classroomId }}</p>
-                    <p v-if="errors.capacity" class="error">{{ errors.capacity }}</p>
-
-                </div>
-                </div>
                 </div>
                 <button @click="addClass" class="mainButton" v-if="">Add a classroom</button>
-           
-               
-                    <table class="course-list">
-                        <thead>
-                            <tr>
-                                <th>Classrooms</th>
-                                <th>Course Name</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-for="(capacity, name) in classrooms" :key="name">
-                                <td>{{ name }}</td>
-                                <td>{{ capacity }}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            
+
+
+                <table class="course-list">
+                    <thead>
+                        <tr>
+                            <th>Classrooms</th>
+                            <th>Course Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(capacity, name) in classrooms" :key="name">
+                            <td>{{ name }}</td>
+                            <td>{{ capacity }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
         </div>
 
 
-        <div class="accordion">
+        <div class="accordion" id="schedule">
             <button class="accordion-header" id="schedule-button" @click="makeSchedule">Make schedule</button>
             <div class="accordion-panel" :class="{ 'active': activeAccordion === 'schedule' }">
                 <table class="course-list">
@@ -244,10 +289,10 @@
                         <tr>
                             <th>Day</th>
                             <th>Hour</th>
-                            <th>Year 1</th>
-                            <th>Year 2</th>
-                            <th>Year 3</th>
-                            <th>Year 4</th>
+                            <th colspan="2">Year 1</th>
+                            <th colspan="2">Year 2</th>
+                            <th colspan="2">Year 3</th>
+                            <th colspan="2">Year 4</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -255,19 +300,35 @@
                             <tr>
                                 <td rowspan="9">{{ day }}</td>
                             </tr>
+
                             <tr v-for="hour in getHourRange(index)" :key="hour">
-                                <td><b>{{ toHour(hour) }}</b></td>
-                                <td>{{ schedule[1][hour] ? schedule[1][hour][0].code + " " + schedule[1][hour][1] : ''
-                                    }}</td>
-                                <td>{{ schedule[2][hour] ? schedule[2][hour][0].code + " " + schedule[2][hour][1] : ''
-                                    }}</td>
-                                <td>{{ schedule[3][hour] ? schedule[3][hour][0].code + " " + schedule[3][hour][1] : ''
-                                    }}</td>
-                                <td>{{ schedule[4][hour] ? schedule[4][hour][0].code + " " + schedule[4][hour][1] : ''
-                                    }}</td>
+                                <td :style="{ backgroundColor: getDayColor(hour) }"> <b>{{ toHour(hour) }}</b></td>
+                                <template v-for="year in [1, 2, 3, 4]" :key="year">
+
+                                    <template v-if="schedule[year][hour]">
+
+                                        <template v-if="notInMiddle(schedule, hour, year)">
+                                            <td :rowspan="schedule[year][hour][0].hours"
+                                                :style="{ backgroundColor: getDayColor(hour), fontWeight: 600 }">{{
+                                                schedule[year][hour][0].code }}</td>
+                                            <td :rowspan="schedule[year][hour][0].hours"
+                                                :style="{ backgroundColor: getDayColor(hour) }">{{
+                                                schedule[year][hour][1] }}</td>
+                                        </template>
+                                        <template v-else>
+                                            
+                                        </template>
+
+                                    </template>
+                                    <template v-else>
+                                        <td :style="{ backgroundColor: getDayColor(hour) }"> </td>
+                                        <td :style="{ backgroundColor: getDayColor(hour) }"> </td>
+                                    </template>
+                                </template>
                             </tr>
                         </template>
                     </tbody>
+
                 </table>
             </div>
         </div>

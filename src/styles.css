@@ -25,8 +25,9 @@
 
 body {
     background-color: #bfd9f3; 
+    padding-left: 5%;
+    padding-right: 5%;
 }
-
 
 .success-message {
     position: fixed;
@@ -49,13 +50,15 @@ body {
 .mainButton {
     background-color: #3c8fb6;
     color: #ffffff;
-    border-radius: 5px;
+    border-radius: 6px;
     height: 50px;
     width: 150px;
     font-family: 'Roboto', sans-serif;
     font-size: 16px;
+    margin: 25px;
+    margin-bottom: 0px;
     font-weight: bold;
-
+    border: 0px;
 }
 
 .miniButton {
@@ -98,7 +101,7 @@ body {
 .header {
     display: block;
     font-family: 'Roboto', sans-serif;
-    font-size: 24px;
+    font-size: 18px;
     font-weight: bold;
     color: #3281a5;
 }
@@ -117,39 +120,46 @@ body {
 
 .accordion {
 
+--circle-x: 1.8rem;
 
-    --circle-x: 1.8rem;
-	--circle-y: 0;
-	--circle-r: 200%;
-	--circle-bg: #fff;
-	color: #000;
+--circle-y: 0;
 
-	background-color: var(--circle-bg);
+--circle-r: 200%;
 
-	margin-bottom: 1rem;
-	border-radius: min(8px, 0.5rem);
+overflow: hidden;
 
-	grid-template-rows: 0fr 0fr;
-	transition-timing-function: var(--slide-ease);
-	transition-duration: 200ms, 200ms, var(--slide-duration);
-	transition-property: opacity, box-shadow, grid-template-rows;
-	transition-delay: 0ms, 0ms, var(--slide-delay);
-	box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
-	opacity: 0.9;
+--circle-bg: #fff;
+
+color: #000;
+
+background-color: var(--circle-bg);
+
+margin: 25px;
+
+margin-bottom: 1rem;
+
+border-radius: 15px;
+
+grid-template-rows: 0fr 0fr;
+
+box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 0.1);
+
+opacity: 0.9;
 }
 
 
 .accordion-header {
-    background-color: #f1f1f1; 
+    background-color: #f1f1f1;
     color: #333;
     cursor: pointer;
     border: none;
     outline: none;
     width: 100%;
     text-align: left;
-    font-size: 18px; 
-    transition: background-color 0.3s ease; 
-    padding : 20px;
+    font-family: Roboto;
+    font-size: 18px;
+    transition: background-color 0.5s ease;
+    padding: 25px;
 }
 
 /* Add this CSS to your existing stylesheet */
@@ -161,17 +171,17 @@ body {
     display: inline-block; /* Ensure the pseudo-element is treated as a block */
 }
 
+
 .accordion-header:hover {
     background-color: #e0e0e0; /
 }
 
 
 .accordion-panel {
-    overflow-y: auto; 
-    max-height: 0; 
-    transition: all 0.5s cubic-bezier(0.215, 0.610, 0.355, 1), opacity 0.23s ease; 
-    opacity: 1; 
-
+    overflow-y: hidden;
+    max-height: 0;
+    transition: all 0.5s ease, opacity 0.23s ease;
+    opacity: 0;
 }
 
 /* The Modal (background) */
@@ -212,20 +222,26 @@ body {
   }
 
 .course-list {
-    width: 100%;
+    width: -webkit-fill-available;
     border-collapse: collapse;
+    font-size: 14px;
     font-family: 'Roboto', sans-serif;
+    margin: 20px;
+    overflow: hidden;
+    border-radius: 8px;
+    border: 1px solid black;
+    text-align: center;
   }
   
   .course-list th,
   .course-list td {
-    border: 1px solid #ddd;
-    padding: 8px;
+    padding: 10px;
+    border: 1px solid #0000001c;
   }
   
   .course-list th {
     background-color: #f2f2f2;
-    text-align: left;
+
   }
   
   .course-list tr:nth-child(even) {
@@ -239,10 +255,9 @@ body {
   
 
 .accordion-panel.active {
-    max-height: calc(200vh - 0px); 
-    opacity: 1; 
+    max-height: 100000px;
+    opacity: 1;
 }
-
 
 
 #schedule-button {
