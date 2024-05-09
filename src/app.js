@@ -478,7 +478,7 @@ const app = Vue.createApp({
 
         // Add the new busy hour to the busy schedule
         if (!this.busy[instructorName]) {
-          this.busy[instructorName] = ''
+          this.busy[instructorName] = []
         }
         this.busy[instructorName].push(processedHour) // Change processedHours to processedHour
         console.log(this.busy) // Debugging
