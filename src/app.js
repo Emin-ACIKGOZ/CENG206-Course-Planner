@@ -460,13 +460,6 @@ const app = Vue.createApp({
         const processedHour =
           parseInt(selectedHour) - 8 * (1 + 1 * this.weekdays[selectedDay]) // Change from hours to hour
 
-        // Check if all fields are filled
-        if (!instructorName || !selectedDay || !selectedHour) {
-          // Change selectedHours to selectedHour
-          this.errors.busyHour = 'All fields are required'
-          return
-        }
-
         // Check if the instructor is already busy during selected hour
         const busyTimes = this.busy[instructorName] // Move this line outside the loop
         if (busyTimes && busyTimes.includes(processedHour)) {
@@ -509,7 +502,7 @@ const app = Vue.createApp({
         isValid = false
       }
       if (!this.newBusyHour.hour) {
-        this.errors.hours = 'At least one hour must be selected'
+        this.errors.hour = 'At least one hour must be selected'
         isValid = false
       }
 

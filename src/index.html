@@ -173,7 +173,7 @@
                                 <option value="15">15:30</option>
                                 <option value="16">16:30</option>
                             </select>
-                            <p v-if="errors.type" class="error">{{ errors.type }}</p>
+                            <p v-if="errors.hour" class="error">{{ errors.hour }}</p>
 
 
                             <label for="type">Day:</label>
@@ -185,7 +185,7 @@
                                 <option value="Friday">Friday</option>
 
                             </select>
-                            <p v-if="errors.type" class="error">{{ errors.type }}</p>
+                            <p v-if="errors.day" class="error">{{ errors.day }}</p>
 
                             <label for="instructor">Instructor Name:</label>
                             <input type="text" id="instructor" v-model="newBusyHour.instructor" />
@@ -196,6 +196,9 @@
                             <button @click="cancelAddBusyHour" class="miniButton">Cancel</button>
 
                         </form>
+                        <div v-if="showSuccessMessage" class="success-message">
+                            Busy hour successfully added
+                        </div>
                     </div>
                 </div>
 
