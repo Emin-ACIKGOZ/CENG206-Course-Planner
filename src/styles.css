@@ -53,11 +53,11 @@ body {
 }
 
 .mainButton {
-    background-color: #3c8fb6;
+    background-color: #266485;
     color: #ffffff;
-    border-radius: 6px;
-    height: 50px;
-    width: 150px;
+    border-radius: 10px;
+    height: 40px;
+    width: 175px;
     font-family: 'Roboto', sans-serif;
     font-size: 16px;
     margin: 25px;
@@ -67,7 +67,7 @@ body {
 }
 
 .miniButton {
-    background-color: #3c8fb6;
+    background-color: #266485;
     color: #ffffff;
     border-radius: 5px;
     height: 20px;
@@ -78,7 +78,7 @@ body {
 }
 
 .mainButton:hover {
-    background-color: #276e8f;
+    background-color: #2b86b3;
     cursor: pointer;
 }
 
@@ -89,7 +89,7 @@ body {
 
 
 .mainButton:active {
-    background-color: #194965;
+    background-color: #2b86b3;
 }
 
 .miniButton:active {
