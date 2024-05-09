@@ -11,135 +11,335 @@
 
 <body>
 
-<div class="logo">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Ankara_Y%C4%B1ld%C4%B1r%C4%B1m_Beyaz%C4%B1t_University_logo.svg/2048px-Ankara_Y%C4%B1ld%C4%B1r%C4%B1m_Beyaz%C4%B1t_University_logo.svg.png" alt="logo">
-    <h1 class="header">Course Planner</h1>
-</div>
+
+    <div class="logo">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Ankara_Y%C4%B1ld%C4%B1r%C4%B1m_Beyaz%C4%B1t_University_logo.svg/2048px-Ankara_Y%C4%B1ld%C4%B1r%C4%B1m_Beyaz%C4%B1t_University_logo.svg.png"
+            alt="logo">
+        <h1 class="header">Course Planner</h1>
+    </div>
 
 
-<!-- Add a div between the logo and buttons to create some space -->
-<div style="height: 250px;"></div>
+
+    <div style="height: 250px;"></div>
 
 
-<div id="app" style="height: 1500px;">
+    <div id="app">
 
 
-    <!-- Add a message container -->
+        <div class="accordion">
+            <button class="accordion-header" @click="toggleAccordion('courses')">Courses</button>
+            <div class="accordion-panel" :class="{ 'active': activeAccordion === 'courses' }">
 
-    <!-- Table goes here -->
+                <div id="addCourseModal" v-if="showAddCourseForm" class="modal">
+                    <div class="modal-content">
+                        <span class="close" @click="cancelAddCourse">&times;</span>
+                        <h2 class="header">Add a New Course</h2>
+                        <!-- Add course form -->
+                        <form @submit.prevent="submitCourse">
+                            <label for="code">Course Code:</label>
+                            <input type="text" id="code" v-model="newCourse.code" />
+                            <p v-if="errors.code" class="error">{{ errors.code }}</p>
 
-    <button @click="showCourses" class="mainButton" v-if="!showAddCourseForm && !showAddClassForm && !showAddBusyHourForm && !showEditBusyHoursForm">Show Courses</button>
+                            <label for="name">Course Name:</label>
+                            <input type="text" id="name" v-model="newCourse.name" />
+                            <p v-if="errors.name" class="error">{{ errors.name }}</p>
 
+                            <label for="year">Year of Semester:</label>
+                            <input type="number" id="year" v-model="newCourse.year" />
+                            <p v-if="errors.year" class="error">{{ errors.year }}</p>
 
-    <button @click="editCourses" class="mainButton" v-if="!showAddCourseForm && !showAddClassForm && !showAddBusyHourForm && !showEditBusyHoursForm">Edit Courses</button>
+                            <label for="credit">Credit:</label>
+                            <input type="number" id="credit" v-model="newCourse.credit" />
+                            <p v-if="errors.credit" class="error">{{ errors.credit }}</p>
 
+                            <label for="type">Type (C/E):</label>
+                            <select id="type" v-model="newCourse.type">
+                                <option value="C">C</option>
+                                <option value="E">E</option>
+                            </select>
+                            <p v-if="errors.type" class="error">{{ errors.type }}</p>
 
-    <button @click="addCourse" class="mainButton" v-if="!showAddCourseForm && !showAddClassForm && !showAddBusyHourForm && !showEditBusyHoursForm">Add a Course</button>
+                            <label for="dept">Department (D/S):</label>
+                            <select id="dept" v-model="newCourse.dept">
+                                <option value="D">D</option>
+                                <option value="S">S</option>
+                            </select>
+                            <p v-if="errors.dept" class="error">{{ errors.dept }}</p>
 
+                            <label for="num_students">Number of Students:</label>
+                            <input type="number" id="num_students" v-model="newCourse.num_students" />
+                            <p v-if="errors.num_students" class="error">{{ errors.num_students }}</p>
 
-    <div v-if="showAddCourseForm" class="course-form">
-        <h2 class="header">Add a New Course </h2>
-        <form @submit.prevent="submitCourse">
-            <label for="code">Course Code:</label>
-            <input type="text" id="code" v-model="newCourse.code" />
-            <p v-if="errors.code" class="error">{{ errors.code }}</p>
+                            <label for="instructor">Instructor:</label>
+                            <input type="text" id="instructor" v-model="newCourse.instructor" />
+                            <p v-if="errors.instructor" class="error">{{ errors.instructor }}</p>
 
-            <label for="name">Course Name:</label>
-            <input type="text" id="name" v-model="newCourse.name" />
-            <p v-if="errors.name" class="error">{{ errors.name }}</p>
+                            <label for="block">Course Hours Preference (2+1/3):</label>
+                            <select id="block" v-model="newCourse.block">
+                                <option value="2+1">2+1</option>
+                                <option value="3">3</option>
+                            </select>
+                            <p v-if="errors.block" class="error">{{ errors.block }}</p>
 
-            <label for="year">Year of Semester:</label>
-            <input type="number" id="year" v-model="newCourse.year" />
-            <p v-if="errors.year" class="error">{{ errors.year }}</p>
+                            <button type="submit" class="miniButton">Add Course</button>
+                            <button @click="cancelAddCourse" class="miniButton">Cancel</button>
+                        </form>
+                    </div>
+                </div>
 
-            <label for="credit">Credit:</label>
-            <input type="number" id="credit" v-model="newCourse.credit" />
-            <p v-if="errors.credit" class="error">{{ errors.credit }}</p>
+                <button @click="addCourse" class="mainButton" v-if="">Add a Course</button>
 
-            <label for="type">Type (C/E):</label>
-            <select id="type" v-model="newCourse.type">
-                <option value="C">C</option>
-                <option value="E">E</option>
-            </select>
-            <p v-if="errors.type" class="error">{{ errors.type }}</p>
+                <table class="course-list">
+                    <thead>
+                        <tr>
+                            <th>Course Code</th>
+                            <th>Course Name</th>
+                            <th>Year</th>
+                            <th>Credit</th>
+                            <th>Type</th>
+                            <th>Department</th>
+                            <th>Number of Students</th>
+                            <th>Instructor</th>
+                            <th>Block</th>
+                            <th>Edit </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="course in courses" :key="course.code">
+                            <td>{{ course.code }}</td>
+                            <td>{{ course.name }}</td>
+                            <td>{{ course.year }}</td>
+                            <td>{{ course.credit }}</td>
+                            <td>{{ course.type }}</td>
+                            <td>{{ course.dept }}</td>
+                            <td>{{ course.num_students }}</td>
+                            <td>{{ course.instructor }}</td>
+                            <td>{{ course.block }}</td>
+                            <td>
+                                <button @click="editCourse(course.code)" class="main">✏️</button>
+                                <button @click="deleteCourse(course.code)" class="deleteButton">❌</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
 
-            <label for="dept">Department (D/S):</label>
-            <select id="dept" v-model="newCourse.dept">
-                <option value="D">D</option>
-                <option value="S">S</option>
-            </select>
-            <p v-if="errors.dept" class="error">{{ errors.dept }}</p>
-
-            <label for="num_students">Number of Students:</label>
-            <input type="number" id="num_students" v-model="newCourse.num_students" />
-            <p v-if="errors.num_students" class="error">{{ errors.num_students }}</p>
-
-            <label for="instructor">Instructor:</label>
-            <input type="text" id="instructor" v-model="newCourse.instructor" />
-            <p v-if="errors.instructor" class="error">{{ errors.instructor }}</p>
-
-            <label for="block">Course Hours Preference (2+1/3):</label>
-            <select id="block" v-model="newCourse.block">
-                <option value="2+1">2+1</option>
-                <option value="3">3</option>
-            </select>
-            <p v-if="errors.block" class="error">{{ errors.block }}</p>
-
-            <button type="submit" class="miniButton">Add Course</button>
-            <button @click="cancelAddCourse" class="miniButton">Cancel</button>
-        </form>
-
-        <div v-if="showSuccessMessage" class="success-message">
-            Course successfully added
+            </div>
         </div>
+
+
+        <div class="accordion">
+            <button class="accordion-header" @click="toggleAccordion('services')">Services</button>
+            <div class="accordion-panel" :class="{ 'active': activeAccordion === 'services' }">
+
+                <table class="course-list">
+                    <thead>
+                        <tr>
+                            <th>Course</th>
+                            <th>Service hours</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(a, b) in service" :key="name">
+                            <td>{{ b }}</td>
+                            <td>{{ a }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+
+
+        <div class="accordion">
+            <button class="accordion-header" @click="toggleAccordion('busyHours')">Busy Hours</button>
+            <div class="accordion-panel" :class="{ 'active': activeAccordion === 'busyHours' }">
+
+                <div id="addBusyModal" v-if="showAddBusyForm" class="modal">
+                    <div class="modal-content">
+
+                        <span class="close" @click="cancelAddBusy">&times;</span>
+                        <h2 class="header">Add a Busy Hour</h2>
+                        <!-- Add course form -->
+                        <form @submit.prevent="">
+
+                            <label for="type">Hour:</label>
+                            <select id="type" v-model="newCourse.type">
+                                <option value="0">8:30</option>
+                                <option value="1">9:30</option>
+                                <option value="2">10:30</option>
+                                <option value="3">11:30</option>
+                                <option value="4">12:30</option>
+                                <option value="5">13:30</option>
+                                <option value="6">14:30</option>
+                                <option value="7">15:30</option>
+                            </select>
+                            <p v-if="errors.type" class="error">{{ errors.type }}</p>
+
+
+                            <label for="type">Day:</label>
+                            <select id="type" v-model="newCourse.type">
+                                <option value="0">Monday</option>
+                                <option value="1">Tuesda</option>
+                                <option value="2">Wednesday</option>
+                                <option value="3">thurs</option>
+                                <option value="4">friday</option>
+
+                            </select>
+                            <p v-if="errors.type" class="error">{{ errors.type }}</p>
+
+                            <label for="instructor">Instructor Name:</label>
+                            <input type="text" id="instructor" v-model="newCourse.instructor" />
+                            <p v-if="errors.instructor" class="error">{{ errors.instructor }}</p>
+
+
+                            <button type="submit" class="miniButton">+</button>
+                            <button @click="cancelAddBusy" class="miniButton">Cancel</button>
+
+                        </form>
+                    </div>
+                </div>
+
+                <button @click="addBusyHour" class="mainButton" v-if="">Add a Busy Hour</button>
+
+                <table class="course-list">
+                    <thead>
+                        <tr>
+                            <th>Instructor</th>
+                            <th>Busy Hours</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(inst, busyhours) in busy" :key="name">
+                            <td>{{ busyhours }}</td>
+                            <td>{{ inst }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+
+
+
+            </div>
+        </div>
+
+
+        <div class="accordion">
+            <button class="accordion-header" @click="toggleAccordion('classrooms')">Classrooms</button>
+            <div class="accordion-panel" :class="{ 'active': activeAccordion === 'classrooms' }">
+
+                <tr v-for="(capacity, name) in classrooms" :key="name">
+                    <td>{{ name }}</td>
+                    <td>{{ capacity }}</td>
+                </tr>
+
+                <div id="addClassModal" v-if="showAddClassForm" class="modal">
+                    <div class="modal-content">
+                        <span class="close" @click="cancelAddCourse">&times;</span>
+                        <div v-if="showAddClassForm" class="class-form">
+                            <h2 class="header">Add a New Class</h2>
+                            <form @submit.prevent="submitClass">
+                                <!-- Add input fields for classroom ID and capacity -->
+                                <label for="classroom-id">Classroom ID:</label>
+                                <input type="text" id="classroom-id" v-model="newClass.classroomId" />
+
+                                <label for="capacity">Capacity:</label>
+                                <input type="number" id="capacity" v-model="newClass.capacity" />
+
+                                <!-- Add buttons for saving and canceling -->
+                                <button type="submit" class="miniButton">Add Class</button>
+                                <button @click="cancelAddClass" class="miniButton">Cancel</button>
+                            </form>
+                            <div v-if="showSuccessMessage" class="success-message">
+                                Class successfully added
+                            </div>
+                            <!-- Error paragraphs moved to the bottom -->
+                            <p v-if="errors.classroomId" class="error">{{ errors.classroomId }}</p>
+                            <p v-if="errors.capacity" class="error">{{ errors.capacity }}</p>
+
+                        </div>
+                    </div>
+                </div>
+                <button @click="addClass" class="mainButton" v-if="">Add a classroom</button>
+
+
+                <table class="course-list">
+                    <thead>
+                        <tr>
+                            <th>Classrooms</th>
+                            <th>Course Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(capacity, name) in classrooms" :key="name">
+                            <td>{{ name }}</td>
+                            <td>{{ capacity }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+
+        <div class="accordion" id="schedule">
+            <button class="accordion-header" id="schedule-button" @click="makeSchedule">Make schedule</button>
+            <div class="accordion-panel" :class="{ 'active': activeAccordion === 'schedule' }">
+                <table class="course-list">
+                    <thead>
+                        <tr>
+                            <th>Day</th>
+                            <th>Hour</th>
+                            <th colspan="2">Year 1</th>
+                            <th colspan="2">Year 2</th>
+                            <th colspan="2">Year 3</th>
+                            <th colspan="2">Year 4</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template v-for="(day, index) in Object.keys(weekdays)">
+                            <tr>
+                                <td rowspan="9">{{ day }}</td>
+                            </tr>
+
+                            <tr v-for="hour in getHourRange(index)" :key="hour">
+                                <td :style="{ backgroundColor: getDayColor(hour) }"> <b>{{ toHour(hour) }}</b></td>
+                                <template v-for="year in [1, 2, 3, 4]" :key="year">
+
+                                    <template v-if="schedule[year][hour]">
+
+                                        <template v-if="notInMiddle(schedule, hour, year)">
+                                            <td :rowspan="schedule[year][hour][0].hours"
+                                                :style="{ backgroundColor: getDayColor(hour), fontWeight: 600 }">{{
+                                                schedule[year][hour][0].code }}</td>
+                                            <td :rowspan="schedule[year][hour][0].hours"
+                                                :style="{ backgroundColor: getDayColor(hour) }">{{
+                                                schedule[year][hour][1] }}</td>
+                                        </template>
+                                        <template v-else>
+                                            
+                                        </template>
+
+                                    </template>
+                                    <template v-else>
+                                        <td :style="{ backgroundColor: getDayColor(hour) }"> </td>
+                                        <td :style="{ backgroundColor: getDayColor(hour) }"> </td>
+                                    </template>
+                                </template>
+                            </tr>
+                        </template>
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+
 
 
     </div>
 
+    <div id="displayDiv" class="hidden"></div>
 
-    <button @click="editBusyHours" class="mainButton" v-if="!showAddCourseForm && !showAddClassForm && !showAddBusyHourForm && !showEditBusyHoursForm">Edit Busy Hours</button>
-
-
-
-    <button @click="addBusyHour" class="mainButton" v-if="!showAddCourseForm && !showAddClassForm && !showAddBusyHourForm && !showEditBusyHoursForm">Add a Busy Hour</button>
-
-
-
-    <button @click="makeSchedule" class="mainButton" v-if="!showAddCourseForm && !showAddClassForm && !showAddBusyHourForm && !showEditBusyHoursForm">Make Schedule</button>
-
-
-
-
-
-    <button @click="addClass" class="mainButton" v-if="!showAddCourseForm">Add a Class</button>
-    <div v-if="showAddClassForm" class="class-form">
-        <h2 class="header">Add a New Class</h2>
-        <form @submit.prevent="submitClass">
-            <!-- Add input fields for classroom ID and capacity -->
-            <label for="classroom-id">Classroom ID:</label>
-            <input type="text" id="classroom-id" v-model="newClass.classroomId" />
-
-            <label for="capacity">Capacity:</label>
-            <input type="number" id="capacity" v-model="newClass.capacity" />
-
-            <!-- Add buttons for saving and canceling -->
-            <button type="submit" class="miniButton">Add Class</button>
-            <button @click="cancelAddClass" class="miniButton">Cancel</button>
-        </form>
-        <div v-if="showSuccessMessage" class="success-message">
-            Class successfully added
-        </div>
-        <!-- Error paragraphs moved to the bottom -->
-        <p v-if="errors.classroomId" class="error">{{ errors.classroomId }}</p>
-        <p v-if="errors.capacity" class="error">{{ errors.capacity }}</p>
-    </div>
-
-
-</div>
-
-<div id="displayDiv" class="hidden"></div>
-
-<script src="./app.js"></script>
+    <script src="./app.js"></script>
 </body>
 
 </html>
