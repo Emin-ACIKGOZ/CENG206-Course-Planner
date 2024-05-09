@@ -83,6 +83,9 @@
                             <button type="submit" class="miniButton">Add Course</button>
                             <button @click="cancelAddCourse" class="miniButton">Cancel</button>
                         </form>
+                        <div v-if="showSuccessMessage" class="success-message">
+                            Course successfully added
+                        </div>
                     </div>
                 </div>
 
