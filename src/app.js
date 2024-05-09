@@ -61,10 +61,16 @@ const app = Vue.createApp({
       },
       // Add new properties for adding a class
       showAddClassForm: false,
-      showAddBusyForm: false,
       newClass: {
         classroomId: '',
         capacity: ''
+      },
+      // New properties for adding a busy hour
+      showAddBusyHourForm: false,
+      newBusyHour: {
+        instructor: '',
+        day: '',
+        hour: ''
       },
       errors: {},
       showSuccessMessage: false,
