@@ -541,7 +541,7 @@ const app = Vue.createApp({
     },
     submitClass () {
       // Validate the new class
-      if (!this.validateNewClass()) {
+      if (this.validateNewClass()) {
         // Add the class
         const classroomName = this.newClass.classroomId.trim()
         const classroomCapacity = parseInt(this.newClass.capacity)
@@ -591,6 +591,7 @@ const app = Vue.createApp({
       // Reset errors
       this.errors = {}
     },
+
     // Functions for makeSchedule button
     findCourse (code) {
       const foundCourse = this.courses.find(course => course.code === code)
