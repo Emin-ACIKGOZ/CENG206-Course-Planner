@@ -6,27 +6,32 @@
     transform: translateX(-50%);
     z-index: 9999;
     text-align: center;
+    background-color: #194965;
+    padding-inline: 100%;
 }
 
 .logo img {
-    width: 150px;
-    height: 150px;
-    z-index: 9999;
+    width: 200px;
+    height: 200px;
     display: block;
     margin: 0 auto;
     margin-top: 20px;
 }
 
 .logo .header {
-    display: block;
-    font-size: 24px;
+    font-size: 32px;
     font-weight: bold;
+    color: #fff; /* Adjust the color to match your design */
+    white-space: nowrap;
+
+
 }
 
 body {
     background-color: #bfd9f3; 
     padding-left: 5%;
     padding-right: 5%;
+
 }
 
 .success-message {
@@ -69,6 +74,7 @@ body {
     width: 80px;
     font-family: 'Roboto', sans-serif;
     font-size: 12px;
+    margin-left: 15px;
 }
 
 .mainButton:hover {
@@ -101,9 +107,10 @@ body {
 .header {
     display: block;
     font-family: 'Roboto', sans-serif;
-    font-size: 18px;
+    font-size: 24px;
     font-weight: bold;
     color: #3281a5;
+    text-align: center;
 }
 
 .error {
@@ -149,15 +156,19 @@ opacity: 0.9;
 
 
 .accordion-header {
-    background-color: #f1f1f1;
-    color: #333;
+    background-color: #ffffff;
+    font-family: 'Roboto', sans-serif;
+    font-size: 24px;
+    font-weight: bold;
+
+    color: #275677;
     cursor: pointer;
     border: none;
     outline: none;
     width: 100%;
-    text-align: left;
+    text-align: center;
     font-family: Roboto;
-    font-size: 18px;
+
     transition: background-color 0.5s ease;
     padding: 25px;
 }
@@ -260,7 +271,4 @@ opacity: 0.9;
 }
 
 
-#schedule-button {
-    background-color: #194965;
-    color: white;
-}
+
