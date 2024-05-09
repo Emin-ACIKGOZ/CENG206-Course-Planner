@@ -157,43 +157,44 @@
                 <div id="addBusyModal" v-if="showAddBusyForm" class="modal">
                     <div class="modal-content">
 
-                        <span class="close" @click="cancelAddBusy">&times;</span>
+                        <span class="close" @click="cancelAddBusyHour">&times;</span>
                         <h2 class="header">Add a Busy Hour</h2>
                         <!-- Add course form -->
-                        <form @submit.prevent="">
+                        <form @submit.prevent="submitBusyHour">
 
                             <label for="type">Hour:</label>
-                            <select id="type" v-model="newCourse.type">
-                                <option value="0">8:30</option>
-                                <option value="1">9:30</option>
-                                <option value="2">10:30</option>
-                                <option value="3">11:30</option>
-                                <option value="4">12:30</option>
-                                <option value="5">13:30</option>
-                                <option value="6">14:30</option>
-                                <option value="7">15:30</option>
+                            <select id="type" v-model="newBusyHour.hour">
+                                <option value="8">8:30</option>
+                                <option value="9">9:30</option>
+                                <option value="10">10:30</option>
+                                <option value="11">11:30</option>
+                                <option value="12">12:30</option>
+                                <option value="13">13:30</option>
+                                <option value="14">14:30</option>
+                                <option value="15">15:30</option>
+                                <option value="16">16:30</option>
                             </select>
                             <p v-if="errors.type" class="error">{{ errors.type }}</p>
 
 
                             <label for="type">Day:</label>
-                            <select id="type" v-model="newCourse.type">
-                                <option value="0">Monday</option>
-                                <option value="1">Tuesda</option>
-                                <option value="2">Wednesday</option>
-                                <option value="3">thurs</option>
-                                <option value="4">friday</option>
+                            <select id="type" v-model="newBusyHour.day">
+                                <option value="Monday">Monday</option>
+                                <option value="Tuesday">Tuesday</option>
+                                <option value="Wednesday">Wednesday</option>
+                                <option value="Thursday">Thursday</option>
+                                <option value="Friday">Friday</option>
 
                             </select>
                             <p v-if="errors.type" class="error">{{ errors.type }}</p>
 
                             <label for="instructor">Instructor Name:</label>
-                            <input type="text" id="instructor" v-model="newCourse.instructor" />
+                            <input type="text" id="instructor" v-model="newBusyHour.instructor" />
                             <p v-if="errors.instructor" class="error">{{ errors.instructor }}</p>
 
 
                             <button type="submit" class="miniButton">+</button>
-                            <button @click="cancelAddBusy" class="miniButton">Cancel</button>
+                            <button @click="cancelAddBusyHour" class="miniButton">Cancel</button>
 
                         </form>
                     </div>
