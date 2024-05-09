@@ -13,7 +13,7 @@
 
 
     <div class="logo">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Ankara_Y%C4%B1ld%C4%B1r%C4%B1m_Beyaz%C4%B1t_University_logo.svg/2048px-Ankara_Y%C4%B1ld%C4%B1r%C4%B1m_Beyaz%C4%B1t_University_logo.svg.png"
+        <img src="https://aybu.edu.tr/images/aybuLogo.png"
             alt="logo">
         <h1 class="header">Course Planner</h1>
     </div>
@@ -23,7 +23,7 @@
     <div style="height: 250px;"></div>
 
 
-    <div id="app">
+    <div id="app" style="margin-top: 3%">
 
 
         <div class="accordion">
@@ -282,7 +282,7 @@
 
 
         <div class="accordion" id="schedule">
-            <button class="accordion-header" id="schedule-button" @click="makeSchedule">Make schedule</button>
+            <button class="accordion-header" @click="makeSchedule">Make Schedule</button>
             <div class="accordion-panel" :class="{ 'active': activeAccordion === 'schedule' }">
                 <table class="course-list">
                     <thead>
