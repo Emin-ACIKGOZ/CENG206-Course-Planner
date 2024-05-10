@@ -25,8 +25,8 @@
     <div id="app" style="margin-top: 70px">
 
 
-        <div class="accordion" :class="{ 'active': activeAccordion === 'courses' }">
-            <button class="accordion-header" :class="{ 'active': activeAccordion === 'courses' }"  @click="toggleAccordion('courses')">Courses</button>
+        <div class="accordion">
+            <button class="accordion-header" @click="toggleAccordion('courses')">Courses</button>
             <div class="accordion-panel" :class="{ 'active': activeAccordion === 'courses' }">
 
                 <div id="addCourseModal" v-if="showAddCourseForm" class="modal">
@@ -90,6 +90,10 @@
                 </div>
 
                 <button @click="addCourse" class="mainButton">Add a Course</button>
+                
+                <input type="file" id="fileInput" style="display: none" @change="onFileSelected">
+                <button @click="openImportCourseModal" class="mainButton">Import Course</button>
+                
 
                 <table class="course-list">
                     <thead>
@@ -129,8 +133,8 @@
         </div>
 
 
-        <div class="accordion" :class="{ 'active': activeAccordion === 'services' }">
-            <button class="accordion-header" :class="{ 'active': activeAccordion === 'services' }" @click="toggleAccordion('services')">Services</button>
+        <div class="accordion">
+            <button class="accordion-header" @click="toggleAccordion('services')">Services</button>
             <div class="accordion-panel" :class="{ 'active': activeAccordion === 'services' }">
 
                 <table class="course-list">
@@ -152,8 +156,8 @@
         </div>
 
 
-        <div class="accordion" :class="{ 'active': activeAccordion === 'busyHours' }" >
-            <button class="accordion-header" :class="{ 'active': activeAccordion === 'busyHours' }"  @click="toggleAccordion('busyHours')">Busy Hours</button>
+        <div class="accordion">
+            <button class="accordion-header" @click="toggleAccordion('busyHours')">Busy Hours</button>
             <div class="accordion-panel" :class="{ 'active': activeAccordion === 'busyHours' }">
 
                 <div id="addBusyModal" v-if="showAddBusyForm" class="modal">
@@ -229,8 +233,8 @@
         </div>
 
 
-        <div class="accordion" :class="{ 'active': activeAccordion === 'classrooms' }">
-            <button class="accordion-header" :class="{ 'active': activeAccordion === 'classrooms' }"  @click="toggleAccordion('classrooms')">Classrooms</button>
+        <div class="accordion">
+            <button class="accordion-header" @click="toggleAccordion('classrooms')">Classrooms</button>
             <div class="accordion-panel" :class="{ 'active': activeAccordion === 'classrooms' }">
 
                 <tr v-for="(capacity, name) in classrooms" :key="name">
@@ -287,8 +291,8 @@
         </div>
 
 
-        <div class="accordion" :class="{ 'active': activeAccordion === 'schedule' }" id="schedule">
-            <button class="accordion-header" :class="{ 'active': activeAccordion === 'schedule' }"  @click="makeSchedule">Make Schedule</button>
+        <div class="accordion" id="schedule">
+            <button class="accordion-header" @click="makeSchedule">Make Schedule</button>
             <div class="accordion-panel" :class="{ 'active': activeAccordion === 'schedule' }">
                 <table class="course-list">
                     <thead>
@@ -309,7 +313,7 @@
 
                             <tr v-for="hour in getHourRange(index)" :key="hour">
                                 <td :style="{ backgroundColor: getDayColor(hour) }"> <b>{{ toHour(hour) }}</b></td>
-                                <template v-for="year in 4" :key="year">
+                                <template v-for="year in [1, 2, 3, 4]" :key="year">
 
                                     <template v-if="schedule[year][hour]">
 
