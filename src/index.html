@@ -309,7 +309,7 @@
 
                             <tr v-for="hour in getHourRange(index)" :key="hour">
                                 <td :style="{ backgroundColor: getDayColor(hour) }"> <b>{{ toHour(hour) }}</b></td>
-                                <template v-for="year in [1, 2, 3, 4]" :key="year">
+                                <template v-for="year in 4" :key="year">
 
                                     <template v-if="schedule[year][hour]">
 
