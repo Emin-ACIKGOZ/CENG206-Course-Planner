@@ -635,6 +635,7 @@ const app = Vue.createApp({
       for (const code in this.service) {
         const hours = this.service[code]
         const course = courses.find(course => course.code === code)
+        //There may be an error here where a course in service is present but is not in courses
 
         hours.sort((a, b) => a - b)
 
@@ -642,7 +643,8 @@ const app = Vue.createApp({
         let classroom = this.findClassroom(course, hour)
 
         if (classroom === null) {
-          throw new Error("Can't find a classroom for: " + course.code)
+          this.errors.layServiceClassroom = 'Failed to find a classroom for: ' + course.code
+          return;
         }
 
         if (this.checkHourAvailable(course.year, hour, course, course.hours)) {
@@ -653,6 +655,7 @@ const app = Vue.createApp({
           )
         } else {
           // hatalar
+          this.errors.layServiceHour = 'Failed to find a suitable hour for: ' + course.code
         }
 
         courses.splice(
@@ -763,6 +766,8 @@ const app = Vue.createApp({
     },
 
     makeSchedule () {
+      // Reset errors
+      this.errors = {}
       activeAccordion = 'schedule'
       console.log('Schedule button')
       let courses = JSON.parse(JSON.stringify(this.courses))
@@ -773,7 +778,8 @@ const app = Vue.createApp({
         3: new Array(40).fill(null),
         4: new Array(40).fill(null)
       }
-
+      //Sets the hours for each course
+      //Splits 2+1 courses into a one hour course and a two hour course
       courses.forEach(course => {
         if (course.block === '2+1') {
           course.hours = 1
@@ -785,13 +791,14 @@ const app = Vue.createApp({
         }
       })
 
-      this.layService(courses)
+      this.layService(courses) // May have errors
 
       if (this.lay(courses)) {
         this.toggleAccordion('schedule')
         console.log(schedule)
       } else {
         console.log('Failed to create a schedule.')
+        this.errors.lay = 'Failed to create a schedule'
       }
     }
   },
