@@ -420,7 +420,7 @@ const app = Vue.createApp({
         this.editingCourse.dept = this.newCourse.dept;
         this.editingCourse.num_students = parseInt(this.newCourse.num_students);
         this.editingCourse.instructor = this.newCourse.instructor;
-        this.editingCourse.block = parseInt(this.newCourse.block);
+        this.editingCourse.block = this.newCourse.block;
 
         // Show success message
         this.showSuccessMessage = true;
