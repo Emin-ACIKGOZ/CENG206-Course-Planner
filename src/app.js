@@ -614,7 +614,7 @@ const app = Vue.createApp({
         const busyTimes = this.busy[instructorName] // Move this line outside the loop
         if (busyTimes && busyTimes.includes(processedHour)) {
           // Use processedHour instead of processedHours
-          this.errors.busyHour = `Instructor is already busy at`
+          this.errors.busyHour = 'Instructor is already busy at this time'
           return
         }
 
@@ -664,6 +664,7 @@ const app = Vue.createApp({
       this.errors = {}
       // Perform validation for each field
       let isValid = true
+
       if (!this.newServiceHour.course) {
         this.errors.course = 'Course name is required'
         isValid = false
@@ -676,6 +677,11 @@ const app = Vue.createApp({
         this.errors.hour = 'At least one hour must be selected'
         isValid = false
       }
+
+      //if(this.service[this.newServiceHour.course]){
+      //  this.errors.service = 'This course already has a service hour assigned to it'
+      //  isValid = false
+      //}
 
       return isValid
     },
