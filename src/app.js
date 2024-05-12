@@ -60,8 +60,7 @@ const app = Vue.createApp({
         instructor: '',
         hours: ''
       },
-      // Add new properties for adding a class
-      // Add new properties for adding a class
+
       showAddClassForm: false,
       showEditCourseForm: false,
       showEditClassForm: false,
