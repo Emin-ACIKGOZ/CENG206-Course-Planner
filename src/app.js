@@ -64,7 +64,9 @@ const app = Vue.createApp({
       // Add new properties for adding a class
       showAddClassForm: false,
       showEditCourseForm: false,
+      showEditClassForm: false,
       editingCourse: null,
+      editingClass: null,
       newClass: {
         classroomId: '',
         capacity: ''
@@ -614,6 +616,43 @@ const app = Vue.createApp({
     editBusyHours () {
       console.log('Edit Busy button')
     },
+
+
+    //Methods for editCourses button
+    editClass(classroomId) {
+
+      this.editingClass = classroomId
+
+      this.newClass.capacity = this.classrooms[this.editingClass]
+      this.newClass.classroomId = classroomId
+
+      this.showEditClassForm = true;
+
+    },
+  
+
+    cancelEditClass() {
+      this.showEditClassForm = false
+      this.editingClass = null;
+      this.clearNewClass()
+    },
+
+
+    editSubmitClass() {
+      // Validate the edited course
+    
+      if (this.validateNewClass()) {
+        // Update the course in the list of courses
+        this.classrooms[this.editingClass] = this.newClass.capacity;
+
+        // Show success message
+        this.showSuccessMessage = true;
+        setTimeout(() => {
+          this.showSuccessMessage = false;
+        }, 2000); // Adjust the delay as needed
+      }
+    },
+    
 
     //Methods for addClass button
     addClass () {

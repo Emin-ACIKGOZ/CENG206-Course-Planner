@@ -276,8 +276,6 @@
 
                 <button @click="addBusyHour" class="mainButton">Add a Busy Hour</button>
 
-                <button class="mainButton">Delete a Busy Hour</button>
-
                 <table class="course-list">
                     <thead>
                         <tr>
@@ -303,11 +301,6 @@
         <div class="accordion" :class="{ 'active': activeAccordion === 'classrooms' }">
             <button class="accordion-header" :class="{ 'active': activeAccordion === 'classrooms' }"  @click="toggleAccordion('classrooms')">Classrooms</button>
             <div class="accordion-panel" :class="{ 'active': activeAccordion === 'classrooms' }">
-
-                <tr v-for="(capacity, name) in classrooms" :key="name">
-                    <td>{{ name }}</td>
-                    <td>{{ capacity }}</td>
-                </tr>
 
                 <div id="addClassModal" v-if="showAddClassForm" class="modal">
                     <div class="modal-content">
@@ -337,21 +330,51 @@
                     </div>
                 </div>
                 <button @click="addClass" class="mainButton">Add a classroom</button>
+                
 
-                <button class="mainButton">Delete a classroom</button>
+                <div id="editClassModal" v-if="showEditClassForm" class="modal">
+                    <div class="modal-content">
+                        <span class="close" @click="cancelEditClass">&times;</span>
+                        <div v-if="showEditClassForm" class="class-form">
+                            <h2 class="header">Edit</h2>
+                            <form @submit.prevent="editSubmitClass">
+                                <!-- Add input fields for classroom ID and capacity -->
+                                <label for="classroom-id">Classroom ID:</label>
+                                <input type="text" id="classroom-id" v-model="newClass.classroomId" />
 
+                                <label for="capacity">Capacity:</label>
+                                <input type="number" id="capacity" v-model="newClass.capacity" />
+
+                                <!-- Add buttons for saving and canceling -->
+                                <button type="submit" class="miniButton">Edit Class</button>
+                                <button @click="cancelEditClass" class="miniButton">Cancel</button>
+                            </form>
+                            <div v-if="showSuccessMessage" class="success-message">
+                                Class successfully edited
+                            </div>
+                            <!-- Error paragraphs moved to the bottom -->
+                            <p v-if="errors.classroomId" class="error">{{ errors.classroomId }}</p>
+                            <p v-if="errors.capacity" class="error">{{ errors.capacity }}</p>
+
+                        </div>
+                    </div>
+                </div>
 
                 <table class="course-list">
                     <thead>
                         <tr>
                             <th>Classrooms</th>
                             <th>Course Name</th>
+                            <th>Edit</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="(capacity, name) in classrooms" :key="name">
                             <td>{{ name }}</td>
                             <td>{{ capacity }}</td>
+                            <td>
+                                <button @click="editClass(name)" class="main">✏️</button>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -377,7 +400,7 @@
                     <tbody>
                         <template v-for="(day, index) in Object.keys(weekdays)">
                             <tr>
-                                <td rowspan="9">{{ day }}</td>
+                                <td rowspan="9" :style="{ backgroundColor: getDayColor(index*8), fontWeight: 600 }">{{ day }}</td>
                             </tr>
 
                             <tr v-for="hour in getHourRange(index)" :key="hour">
