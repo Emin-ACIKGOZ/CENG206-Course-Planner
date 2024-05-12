@@ -222,6 +222,27 @@ const app = Vue.createApp({
     },
 
     //Loading Methods
+    isValidCourseData(columns) {
+      // Validation rules
+      if(columns.length !== 9){
+        return false
+      }
+      const isValidYear = parseInt(columns[2]) >= 1 && parseInt(columns[2]) <= 4
+      const isValidCredit = parseInt(columns[3]) > 0
+      const isValidType = ['C', 'E'].includes(columns[4].trim().toUpperCase())
+      const isValidDept = ['D', 'S'].includes(columns[5].trim().toUpperCase())
+      const isValidBlock = ['2+1', '3'].includes(columns[8].trim())
+      const isValidNumStudents = parseInt(columns[6]) > 0
+  
+      return (
+        isValidYear &&
+        isValidCredit &&
+        isValidType &&
+        isValidDept &&
+        isValidBlock &&
+        isValidNumStudents
+      )
+    },
     loadCourses() {
       fetch('data/courses.csv')
         .then(response => {
@@ -236,17 +257,21 @@ const app = Vue.createApp({
 
           // Parse each row into course objects
           rows.forEach(row => {
-            if (row.trim() === '') {
+            if (!row) {
               return // Skip empty strings
             }
             const columns = row.split(',')
+            if (!this.isValidCourseData(columns)) {
+              console.log('Skipped Invalid Entry: ' + columns)
+              return // Skip invalid data
+            }
             const course = new Course(
               columns[0].trim(),
               columns[1].trim(),
               parseInt(columns[2]),
               parseInt(columns[3]),
-              columns[4].trim(),
-              columns[5].trim(),
+              columns[4].trim().toUpperCase(),
+              columns[5].trim().toUpperCase(),
               parseInt(columns[6]),
               columns[7].trim(),
               columns[8]
