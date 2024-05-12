@@ -241,7 +241,6 @@
                                 <option value="13">13:30</option>
                                 <option value="14">14:30</option>
                                 <option value="15">15:30</option>
-                                <option value="16">16:30</option>
                             </select>
                             <p v-if="errors.hour" class="error">{{ errors.hour }}</p>
 
@@ -258,7 +257,10 @@
                             <p v-if="errors.day" class="error">{{ errors.day }}</p>
 
                             <label for="instructor">Instructor Name:</label>
-                            <input type="text" id="instructor" v-model="newBusyHour.instructor" />
+                            <select id="instructor" v-model="newBusyHour.instructor">
+                                <option value=""></option> 
+                                <option v-for="instructor in getInstructors()" :value="instructor">{{ instructor }}</option>
+                            </select>
                             <p v-if="errors.instructor" class="error">{{ errors.instructor }}</p>
 
 

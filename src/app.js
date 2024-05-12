@@ -524,6 +524,14 @@ const app = Vue.createApp({
       this.errors = {}
     },
 
+    getInstructors() {
+      const inst = new Set();
+      for (let i = 0; i < this.courses.length; i++) {
+        inst.add(this.courses[i].instructor);
+      }
+      return inst;
+    },
+    
     //Methods for addBusyHour button
     addBusyHour () {
       this.showAddBusyForm = true
@@ -541,16 +549,13 @@ const app = Vue.createApp({
         const selectedHour = this.newBusyHour.hour // Change from hours to hour
 
         // Process selected hour
-        const processedHour =
-          parseInt(selectedHour) - 8 * (1 + 1 * this.weekdays[selectedDay]) // Change from hours to hour
+        const processedHour = 8 * parseInt(this.weekdays[selectedDay] - 1) + parseInt(selectedHour);
 
         // Check if the instructor is already busy during selected hour
         const busyTimes = this.busy[instructorName] // Move this line outside the loop
         if (busyTimes && busyTimes.includes(processedHour)) {
           // Use processedHour instead of processedHours
-          this.errors.busyHour = `Instructor is already busy at ${
-            processedHour + 8 * (1 + 1 * this.weekdays[selectedDay])
-          }:30`
+          this.errors.busyHour = `Instructor is already busy at`
           return
         }
 
@@ -566,9 +571,11 @@ const app = Vue.createApp({
 
         // Clear the form and hide it after a delay
         setTimeout(() => {
-          this.clearNewBusyHour()
           this.showSuccessMessage = false
         }, 2000) // Adjust the delay as needed
+
+        console.log(this.busy)
+
       }
     },
     validateNewBusyHour () {
