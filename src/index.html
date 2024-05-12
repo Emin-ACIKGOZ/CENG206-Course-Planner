@@ -25,9 +25,6 @@
 
     <div id="app" style="margin-top: 70px">
 
-
-
-
         <div class="accordion" :class="{ 'active': activeAccordion === 'courses' }">
             <button class="accordion-header" :class="{ 'active': activeAccordion === 'courses' }"
                 @click="toggleAccordion('courses')">Courses</button>
@@ -214,7 +211,7 @@
                 <div id="addServiceModal" v-if="showAddServiceForm" class="modal">
                     <div class="modal-content">
                         <span class="close" @click="cancelAddService">&times;</span>
-                        <h2 class="header">Add a service Hour</h2>
+                        <h2 class="header">Add a Service Hour</h2>
                         <!-- Add course form -->
                         
 
@@ -229,7 +226,7 @@
                             <p v-if="errors.course" class="error">{{ errors.course }}</p>
 
         
-                            <label for="hour">Starting hour:</label>
+                            <label for="hour">Starting Hour:</label>
                             <select id="hour" v-model="newServiceHour.hour">
                                 <option value="8">8:30</option>
                                 <option value="9">9:30</option>
@@ -387,7 +384,7 @@
                             <select id="hour" v-model="newBusyHour.hour">
                                 <option v-for="hour in busy[editingInstructor]" :value="hour">{{ hour }}</option>
                             </select>
-                        <button @click="removeSelectedHour" class="miniButton">Remove selected hour</button>
+                        <button @click="removeSelectedHour" class="miniButton">Remove Hour</button>
                         
                         
                         <form @submit.prevent="submitBusyHour">
@@ -434,6 +431,7 @@
                         <tr>
                             <th>Instructor</th>
                             <th>Busy Hours</th>
+                            <th>Edit</th>
                             <th>Edit</th>
                         </tr>
                     </thead>
@@ -518,8 +516,8 @@
                 <table class="course-list">
                     <thead>
                         <tr>
-                            <th>Classrooms</th>
-                            <th>Course Name</th>
+                            <th>Classroom</th>
+                            <th>Capacity</th>
                             <th>Edit</th>
                         </tr>
                     </thead>

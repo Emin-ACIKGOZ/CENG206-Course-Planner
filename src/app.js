@@ -426,7 +426,7 @@ const app = Vue.createApp({
         this.showSuccessMessage = true;
         setTimeout(() => {
           this.showSuccessMessage = false;
-        }, 2000); // Adjust the delay as needed
+        }, 500); // Adjust the delay as needed
       }
     },
 
@@ -466,7 +466,7 @@ const app = Vue.createApp({
         setTimeout(() => {
           //this.showAddCourseForm = false
           this.showSuccessMessage = false
-        }, 2000) // Adjust the delay as needed
+        }, 500) // Adjust the delay as needed
       }
     },
 
@@ -631,7 +631,7 @@ const app = Vue.createApp({
         // Clear the form and hide it after a delay
         setTimeout(() => {
           this.showSuccessMessage = false
-        }, 2000) // Adjust the delay as needed
+        }, 500) // Adjust the delay as needed
 
         console.log(this.busy)
 
@@ -747,7 +747,7 @@ const app = Vue.createApp({
         // Clear the form and hide it after a delay
         setTimeout(() => {
           this.showSuccessMessage = false;
-        }, 2000);
+        }, 500);
       }
     },
 
@@ -811,7 +811,7 @@ const app = Vue.createApp({
         // Clear the form and hide it after a delay
         setTimeout(() => {
           this.showSuccessMessage = false;
-        }, 2000);
+        }, 500);
       }
     },
     
@@ -853,7 +853,7 @@ const app = Vue.createApp({
         this.showSuccessMessage = true;
         setTimeout(() => {
           this.showSuccessMessage = false;
-        }, 2000); // Adjust the delay as needed
+        }, 500); // Adjust the delay as needed
       }
     },
 
@@ -889,7 +889,7 @@ const app = Vue.createApp({
         setTimeout(() => {
           this.clearNewClass()
           this.showSuccessMessage = false
-        }, 2000) // Adjust the delay as needed
+        }, 500) // Adjust the delay as needed
       }
     },
     validateNewClass() {
