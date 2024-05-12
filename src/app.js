@@ -179,6 +179,28 @@ const app = Vue.createApp({
       }
     },
 
+    deleteBusy(instructor) {
+      if (this.busy[instructor] !== undefined) {
+        delete this.busy[instructor];
+        console.log(`Busy hours for ${instructor} deleted successfully.`);
+      } else {
+        console.log(`No busy hours found for ${instructor}.`);
+      }
+    },
+    
+
+
+    deleteService(course) {
+      if (this.service[course] !== undefined) {
+        delete this.service[course];
+        console.log(`Service hours for ${course} deleted successfully.`);
+      } else {
+        console.log(`No service hours found for ${course}.`);
+      }
+    },
+    
+    
+
     // for printing rows when printing
     notInMiddle(schedule, hour, year) {
       console.log(schedule)
@@ -442,10 +464,8 @@ const app = Vue.createApp({
         // Clear the form and hide it after a delay
         console.log(this.courses) //test
         setTimeout(() => {
-          this.clearNewCourse()
           //this.showAddCourseForm = false
           this.showSuccessMessage = false
-          this.cancelEditCourse()
         }, 2000) // Adjust the delay as needed
       }
     },
@@ -535,6 +555,16 @@ const app = Vue.createApp({
       // Reset errors
       this.errors = {}
     },
+
+    deleteClass(classroomId) {
+      if (this.classrooms[classroomId] !== undefined) {
+        delete this.classrooms[classroomId];
+        console.log(`Classroom ${classroomId} deleted successfully.`);
+      } else {
+        console.log(`Classroom ${classroomId} not found.`);
+      }
+    },
+    
 
     getInstructors() {
       const inst = new Set();
