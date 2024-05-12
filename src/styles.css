@@ -7,7 +7,7 @@
     z-index: 9999;
     text-align: center;
     background-color: #194965;
-    padding-inline: 100%;
+    padding-inline: 50%;
 }
 
 .logo img {
@@ -271,17 +271,17 @@ transition: all 0.5s ease;
   }
   
   .course-list th {
-    background-color: #f2f2f2;
+    background-color: #b9e0f3;
 
   }
   
   .course-list tr:nth-child(even) {
-    background-color: #f2f2f2;
+    background-color: #e0edf3;
   }
   
   
   .course-list tr:hover {
-    background-color: #ddd;
+    background-color: #c1d4e3;
   }
   
 
