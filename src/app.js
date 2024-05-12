@@ -63,6 +63,7 @@ const app = Vue.createApp({
 
       showAddClassForm: false,
       showEditCourseForm: false,
+      selectedHours : [],
       showEditClassForm: false,
       editingCourse: null,
       editingService: null,
@@ -739,12 +740,26 @@ const app = Vue.createApp({
       this.showEditBusyForm = true;
     },
 
+    
     removeSelectedHour() {
-      const index = this.busy[this.editingInstructor].indexOf(this.newBusyHour.hour);
-      if (index !== -1) {
-          this.busy[this.editingInstructor].splice(index, 1);
+      if (this.newBusyHour.hour.length > 0) {
+         
+          const selectedHours = [...this.newBusyHour.hour]; // Create a copy of the selected hours to iterate over
+          for (let i = 0; i < selectedHours.length; i++) {
+              const hourIndex = this.busy[this.editingInstructor].indexOf(selectedHours[i]);
+              if (hourIndex !== -1) {
+                  this.busy[this.editingInstructor].splice(hourIndex, 1);
+              }
+          }
+          if (this.newBusyHour.hour.length === 0 ) {
+            delete busyHour[this.newBusyHour]
+          }
+      } else {
+          //alert("Please select hours to remove.");
       }
     },
+  
+  
     
     cancelEditBusy() {
       this.showEditBusyForm = false;
