@@ -4,7 +4,6 @@
     top: 0;
     left: 50%;
     transform: translateX(-50%);
-    z-index: 9999;
     text-align: center;
     background-color: #194965;
     padding-inline: 50%;
@@ -41,12 +40,28 @@ body {
     transform: translateX(-50%);
     background-color: #4CAF50;
     color: white;
-    padding: 15px;
+    padding: 30px;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     opacity: 1;
     transition: opacity 1s slide-ease-in-out;
+    font-family: 'Roboto', sans-serif;
+    font-size: 20px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
 }
+
+.success-message.show {
+    opacity: 1;
+}
+
+.success-message::after {
+    content: '\2714';
+    margin-left: 10px;
+    font-size: 24px;
+}
+
 
 .success-message.show {
     opacity: 1;
@@ -61,7 +76,6 @@ body {
     font-family: 'Roboto', sans-serif;
     font-size: 16px;
     margin: 25px;
-    margin-bottom: 0px;
     font-weight: bold;
     border: 0px;
 }
