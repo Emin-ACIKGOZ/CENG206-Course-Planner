@@ -213,7 +213,7 @@
 
                 <div id="addServiceModal" v-if="showAddServiceForm" class="modal">
                     <div class="modal-content">
-                        <span class="close" @click="cancelAddServiceHour">&times;</span>
+                        <span class="close" @click="cancelAddService">&times;</span>
                         <h2 class="header">Add a service Hour</h2>
                         <!-- Add course form -->
                         
@@ -224,7 +224,6 @@
 
                             <label for="course">Course Code:</label>
                             <select id="course" v-model="newServiceHour.course">
-                                <option value=""></option>
                                 <option v-for="course in courses" :value="course.code">{{ course.code }}</option>
                             </select>
                             <p v-if="errors.course" class="error">{{ errors.course }}</p>
@@ -255,7 +254,7 @@
         
                             
                             <button type="submit" class="miniButton">Add Service</button>
-                            <button @click="cancelAddServiceHour" class="miniButton">Cancel</button>
+                            <button @click="cancelAddService" class="miniButton">Cancel</button>
                         </form>
                         <div v-if="showSuccessMessage" class="success-message">
                             Service hour successfully added
@@ -341,7 +340,6 @@
 
                             <label for="instructor">Instructor Name:</label>
                             <select id="instructor" v-model="newBusyHour.instructor">
-                                <option value=""></option>
                                 <option v-for="instructor in getInstructors()" :value="instructor">{{ instructor }}</option>
                             </select>
                             <p v-if="errors.instructor" class="error">{{ errors.instructor }}</p>
@@ -443,7 +441,7 @@
                             <td>{{ busyhours }}</td>
                             <td>
                                 <button @click="editBusy(inst)" class="main">✏️</button>
-                                <button @click="deleteCourse(inst)" class="deleteButton">❌</button>
+                                <button @click="deleteBusy(inst)" class="deleteButton">❌</button>
                             </td>
                         </tr>
                     </tbody>
@@ -496,8 +494,6 @@
                             <h2 class="header">Edit</h2>
                             <form @submit.prevent="editSubmitClass">
                                 <!-- Add input fields for classroom ID and capacity -->
-                                <label for="classroom-id">Classroom ID:</label>
-                                <input type="text" id="classroom-id" v-model="newClass.classroomId" />
 
                                 <label for="capacity">Capacity:</label>
                                 <input type="number" id="capacity" v-model="newClass.capacity" />
@@ -531,7 +527,7 @@
                             <td>{{ capacity }}</td>
                             <td>
                                 <button @click="editClass(name)" class="main">✏️</button>
-                                <button @click="deleteCourse(course.code)" class="deleteButton">❌</button>
+                                <button @click="deleteClass(name)" class="deleteButton">❌</button>
                             </td>
                         </tr>
                     </tbody>
