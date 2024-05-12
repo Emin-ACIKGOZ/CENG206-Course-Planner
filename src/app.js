@@ -1,5 +1,5 @@
 class Course {
-  constructor (
+  constructor(
     code,
     name,
     year,
@@ -24,7 +24,7 @@ class Course {
 }
 
 const app = Vue.createApp({
-  data () {
+  data() {
     return {
       //Arrays to store relevant data
       classrooms: {},
@@ -44,9 +44,6 @@ const app = Vue.createApp({
         Thursday: 3,
         Friday: 4
       },
-
-      selectedFile: null, // Seçilen dosyayı saklamak için bir değişken
-    
       // Forms and boolean flags for forms
       showAddCourseForm: false,
       newCourse: {
@@ -77,50 +74,15 @@ const app = Vue.createApp({
       errors: {},
       showSuccessMessage: false,
       activeAccordion: `courses`
+
+
     }
+
   },
 
   methods: {
-    onFileSelected(event) {
-      // Seçilen dosyayı al
-      const file = event.target.files[0];
-    
-      // Dosya okuma işlemi
-      const reader = new FileReader();
-      reader.onload = () => {
-        const content = reader.result; // Dosya içeriği
-        // CSV içeriğini parçalayarak kurs objeleri oluşturma
-        const coursesData = content.split(/\r?\n/);
-        coursesData.forEach(row => {
-          if (row.trim() === '') {
-            return; // Boş satırları atla
-          }
-          const columns = row.split(',');
-          const course = new Course(
-            columns[0].trim(),
-            columns[1].trim(),
-            parseInt(columns[2]),
-            parseInt(columns[3]),
-            columns[4].trim(),
-            columns[5].trim(),
-            parseInt(columns[6]),
-            columns[7].trim(),
-            columns[8]
-          );
-          this.courses.push(course); // Yeni kursu mevcut kurs listesine ekle
-        });
-        console.log('Courses loaded:', this.courses); // Konsola yüklenen kursları yazdır
-      };
-      reader.readAsText(file); // Dosya içeriğini oku
-    },
-    // İçe aktarma modülünü açma işlevi
-    openImportCourseModal() {
-      // Dosya seçme işlevselliğini tetikleyen bir input elementi olduğunu varsayalım
-      const inputElement = document.getElementById('fileInput');
-      inputElement.click(); // Dosya seçme penceresini aç
-    },
     //General purpose function to show errors on a page
-    getHourRange (day) {
+    getHourRange(day) {
       let s = day * 8
       let e = s + 8
 
@@ -132,7 +94,7 @@ const app = Vue.createApp({
       return hourRange
     },
 
-    getDayColor (hour) {
+    getDayColor(hour) {
       switch (Math.floor(hour / 8)) {
         case 0:
           return '#d9ffff'
@@ -149,16 +111,16 @@ const app = Vue.createApp({
       }
     },
 
-    showError (message) {
+    showError(message) {
       alert(`Error: ${message}`)
     },
 
-    toggleAccordion (accordionName) {
+    toggleAccordion(accordionName) {
       this.activeAccordion =
         this.activeAccordion === accordionName ? null : accordionName
     },
 
-    deleteCourse (code) {
+    deleteCourse(code) {
       const courseIndex = this.courses.findIndex(course => course.code === code)
       if (courseIndex !== -1) {
         this.courses.splice(courseIndex, 1)
@@ -166,7 +128,7 @@ const app = Vue.createApp({
     },
 
     // for printing rows when printing
-    notInMiddle (schedule, hour, year) {
+    notInMiddle(schedule, hour, year) {
       console.log(schedule)
 
       if (schedule[year][hour - 1] === null) {
@@ -186,7 +148,7 @@ const app = Vue.createApp({
     },
 
     //Loading Methods
-    loadCourses () {
+    loadCourses() {
       fetch('data/courses.csv')
         .then(response => {
           if (!response.ok) {
@@ -226,8 +188,46 @@ const app = Vue.createApp({
           this.showError(error.message)
         })
     },
+    onFileSelected(event) {
+    
+      const file = event.target.files[0];
 
-    loadClassrooms () {
+    
+      const reader = new FileReader();
+      reader.onload = () => {
+        const content = reader.result; 
+        
+        const coursesData = content.split(/\r?\n/);
+        coursesData.forEach(row => {
+          if (row.trim() === '') {
+            return; // Boş satırları atla
+          }
+          const columns = row.split(',');
+          const course = new Course(
+            columns[0].trim(),
+            columns[1].trim(),
+            parseInt(columns[2]),
+            parseInt(columns[3]),
+            columns[4].trim(),
+            columns[5].trim(),
+            parseInt(columns[6]),
+            columns[7].trim(),
+            columns[8]
+          );
+          this.courses.push(course); // Yeni kursu mevcut kurs listesine ekle
+        });
+        console.log('Courses loaded:', this.courses); // Konsola yüklenen kursları yazdır
+      };
+      reader.readAsText(file); // Dosya içeriğini oku
+    },
+    // İçe aktarma modülünü açma işlevi
+    openImportCourseModal() {
+      // Dosya seçme işlevselliğini tetikleyen bir input elementi olduğunu varsayalım
+      const inputElement = document.getElementById('fileInput');
+      inputElement.click(); // Dosya seçme penceresini aç
+    },
+
+    loadClassrooms() {
       fetch('data/classroom.csv')
         .then(response => {
           if (!response.ok) {
@@ -262,7 +262,42 @@ const app = Vue.createApp({
         })
     },
 
-    loadService () {
+    onFileSelectedClassroms(event) {
+      // Seçilen dosyayı al
+      const file = event.target.files[0];
+
+      // Dosya okuma işlemi
+      const reader = new FileReader();
+      reader.onload = () => {
+        const content = reader.result; // Dosya içeriği
+        // CSV içeriğini parçalayarak kurs objeleri oluşturma
+        const rows = content.split(/\r?\n/);
+        console.log(rows)
+
+        // Parse each row into classroom objects
+        rows.forEach(row => {
+          if (row.trim() === '') {
+            return // Skip empty strings
+          }
+
+          const rowArray = row.split(';')
+          const classroomName = rowArray[0].trim()
+          const classroomCapacity = parseInt(rowArray[1].trim(), 10)
+          this.classrooms[classroomName] = classroomCapacity
+        })
+
+        console.log('Classrooms loaded:', this.classrooms)
+      }
+      reader.readAsText(file); // Dosya içeriğini oku
+
+    },
+    openImportClassModal() {
+      // Dosya seçme işlevselliğini tetikleyen bir input elementi olduğunu varsayalım
+      const inputElement = document.getElementById('servicesFileInput');
+      inputElement.click(); // Dosya seçme penceresini aç
+    },
+
+    loadService() {
       fetch('data/service.csv')
         .then(response => {
           if (!response.ok) {
@@ -305,7 +340,49 @@ const app = Vue.createApp({
         })
     },
 
-    loadBusy () {
+    onFileSelectedServices(event) {
+      const file = event.target.files[0];
+
+      // Dosya okuma işlemi
+      const reader = new FileReader();
+      reader.onload = () => {
+        const content = reader.result; // Dosya içeriği
+        // CSV içeriğini parçalayarak kurs objeleri oluşturma
+        const rows = content.split(/\r?\n/);
+        rows.forEach(line => {
+          if (line.trim() === '') {
+            return; // Skip empty lines
+          }
+
+          let [course, day] = line.trim().split(',', 2);
+          let timeSlots = line.trim().split('"')[1];
+          let slots = timeSlots.replace(/"/g, '').split(',');
+
+          const times = [];
+          for (const slot of slots) {
+            const hour =
+              parseInt(slot.split(':')[0]) - 8 + 8 * this.weekdays[day];
+            times.push(hour);
+          }
+          if (this.service[course] !== undefined) {
+            this.service[course].push(...times);
+          } else {
+            this.service[course] = times;
+          }
+        });
+
+        console.log('Services loaded:', this.service);
+      };
+      reader.readAsText(file); // Dosya içeriğini oku
+    },
+    
+    openImportServicesModal() {
+      // Dosya seçme işlevselliğini tetikleyen bir input elementi olduğunu varsayalım
+      const inputElement = document.getElementById('servicesFileInput');
+      inputElement.click(); // Dosya seçme penceresini aç
+    },
+
+    loadBusy() {
       fetch('data/busy.csv')
         .then(response => {
           if (!response.ok) {
@@ -347,26 +424,68 @@ const app = Vue.createApp({
           // Handle error as needed
         })
     },
+    onFileSelectedBusy(event) {
+      // Seçilen dosyayı al
+      const file = event.target.files[0];
+
+      // Dosya okuma işlemi
+      const reader = new FileReader();
+      reader.onload = () => {
+        const content = reader.result; // Dosya içeriği
+        // CSV içeriğini parçalayarak kurs objeleri oluşturma
+        const rows = content.split(/\r?\n/);
+        // Parse each row into busy schedule
+        rows.forEach(line => {
+          if (line.trim() === '') {
+            return // Skip empty lines
+          }
+
+          let [instructor, day] = line.trim().split(',', 2)
+          let timeSlots = line.trim().split('"')[1]
+          let slots = timeSlots.replace(/"/g, '').split(',')
+
+          const times = []
+          for (const slot of slots) {
+            const hour =
+              parseInt(slot.split(':')[0]) - 8 + 8 * this.weekdays[day]
+            times.push(hour)
+          }
+          if (this.busy[instructor] !== undefined) {
+            this.busy[instructor].push(...times)
+          } else {
+            this.busy[instructor] = times
+          }
+        })
+        console.log('Busy hours loaded:', this.busy);
+      };
+      reader.readAsText(file);
+    },
+    openImportBusyModal() {
+      const inputElement = document.getElementById('busyFileInput');
+      inputElement.click();
+    },
+
+
     //Methods for showCourses button
-    showCourses () {
+    showCourses() {
       console.log('Show Courses Button')
     },
 
     //Methods for editCourses button
-    editCourses () {
+    editCourses() {
       console.log('Edit Courses Button')
     },
 
     //Methods for addCourse button
-    addCourse () {
+    addCourse() {
       this.showAddCourseForm = true
     },
-    cancelAddCourse () {
+    cancelAddCourse() {
       this.showAddCourseForm = false
       this.clearNewCourse()
     },
 
-    submitCourse () {
+    submitCourse() {
       // Validate the new course
       if (this.validateNewCourse()) {
         // Add the course to the list of courses
@@ -395,7 +514,7 @@ const app = Vue.createApp({
       }
     },
 
-    validateNewCourse () {
+    validateNewCourse() {
       // Reset errors
       this.errors = {}
 
@@ -464,7 +583,7 @@ const app = Vue.createApp({
 
       return isValid
     },
-    clearNewCourse () {
+    clearNewCourse() {
       // Clear the new course object
       this.newCourse = {
         code: '',
@@ -482,14 +601,14 @@ const app = Vue.createApp({
     },
 
     //Methods for addBusyHour button
-    addBusyHour () {
+    addBusyHour() {
       this.showAddBusyForm = true
     },
-    cancelAddBusyHour () {
+    cancelAddBusyHour() {
       this.showAddBusyForm = false
       this.clearNewBusyHour()
     },
-    submitBusyHour () {
+    submitBusyHour() {
       // Validate the new busy hour
       if (this.validateNewBusyHour()) {
         // Extract input values
@@ -505,9 +624,8 @@ const app = Vue.createApp({
         const busyTimes = this.busy[instructorName] // Move this line outside the loop
         if (busyTimes && busyTimes.includes(processedHour)) {
           // Use processedHour instead of processedHours
-          this.errors.busyHour = `Instructor is already busy at ${
-            processedHour + 8 * (1 + 1 * this.weekdays[selectedDay])
-          }:30`
+          this.errors.busyHour = `Instructor is already busy at ${processedHour + 8 * (1 + 1 * this.weekdays[selectedDay])
+            }:30`
           return
         }
 
@@ -528,7 +646,7 @@ const app = Vue.createApp({
         }, 2000) // Adjust the delay as needed
       }
     },
-    validateNewBusyHour () {
+    validateNewBusyHour() {
       // Reset errors
       this.errors = {}
 
@@ -549,7 +667,7 @@ const app = Vue.createApp({
 
       return isValid
     },
-    clearNewBusyHour () {
+    clearNewBusyHour() {
       // Clear the new busy hour object
       this.newBusyHour = {
         instructor: '',
@@ -561,19 +679,19 @@ const app = Vue.createApp({
     },
 
     //Methods for editBusyHours button
-    editBusyHours () {
+    editBusyHours() {
       console.log('Edit Busy button')
     },
 
     //Methods for addClass button
-    addClass () {
+    addClass() {
       this.showAddClassForm = true
     },
-    cancelAddClass () {
+    cancelAddClass() {
       this.showAddClassForm = false
       this.clearNewClass()
     },
-    submitClass () {
+    submitClass() {
       // Validate the new class
       if (this.validateNewClass()) {
         // Add the class
@@ -599,7 +717,7 @@ const app = Vue.createApp({
         }, 2000) // Adjust the delay as needed
       }
     },
-    validateNewClass () {
+    validateNewClass() {
       // Reset errors
       this.errors = {}
 
@@ -616,7 +734,7 @@ const app = Vue.createApp({
 
       return isValid
     },
-    clearNewClass () {
+    clearNewClass() {
       // Clear the new class object
       this.newClass = {
         classroomId: '',
@@ -627,7 +745,7 @@ const app = Vue.createApp({
     },
 
     // Functions for makeSchedule button
-    findCourse (code) {
+    findCourse(code) {
       const foundCourse = this.courses.find(course => course.code === code)
       if (foundCourse) {
         //console.log('Found course:', foundCourse)
@@ -638,7 +756,7 @@ const app = Vue.createApp({
       }
     },
 
-    findClassroom (course, hour) {
+    findClassroom(course, hour) {
       let classroom = null
 
       for (const m in this.classrooms) {
@@ -669,7 +787,7 @@ const app = Vue.createApp({
       return classroom
     },
 
-    layService (courses) {
+    layService(courses) {
       // this logic is sort of wrong
       // WONT WORK IF HOURS ARE LISTED LIKE 9:30 8:30 10:30
 
@@ -703,7 +821,7 @@ const app = Vue.createApp({
       }
     },
 
-    lay (courses, year = 1, hour = 0) {
+    lay(courses, year = 1, hour = 0) {
       if (hour >= 40) {
         return this.lay(courses, year + 1, 0)
       }
@@ -750,7 +868,7 @@ const app = Vue.createApp({
       return this.lay(courses, year, hour + 1)
     },
 
-    checkHourAvailable (year, hour, course, block) {
+    checkHourAvailable(year, hour, course, block) {
       // You cannot put a 3 hour lesson at the 6. hour of a day (Not enough time)
       if (block === 3) {
         if (hour % 8 === 6 || hour % 7 === 0) return false
@@ -799,11 +917,11 @@ const app = Vue.createApp({
       return true
     },
 
-    toHour (integer) {
+    toHour(integer) {
       return (integer % 8) + 8 + ':30'
     },
 
-    makeSchedule () {
+    makeSchedule() {
       activeAccordion = 'schedule'
       console.log('Schedule button')
       let courses = JSON.parse(JSON.stringify(this.courses))
@@ -838,12 +956,12 @@ const app = Vue.createApp({
   },
 
   //Runs upon mounting
-  mounted () {
+  mounted() {
     //Empty for now
   },
 
   //Runs upon creation
-  created () {
+  created() {
     this.loadCourses()
     this.loadClassrooms()
     this.loadBusy()
