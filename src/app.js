@@ -662,18 +662,22 @@ const app = Vue.createApp({
     validateNewServiceHour() {
       // Reset errors
       this.errors = {}
+      // Perform validation for each field
+      let isValid = true
+      if (!this.newServiceHour.course) {
+        this.errors.course = 'Course name is required'
+        isValid = false
+      }
+      if (!this.newServiceHour.day) {
+        this.errors.day = 'Day of the week is required'
+        isValid = false
+      }
+      if (!this.newServiceHour.hour) {
+        this.errors.hour = 'At least one hour must be selected'
+        isValid = false
+      }
 
-
-
-
-
-
-
-
-
-
-
-      return true
+      return isValid
     },
     clearNewBusyHour() {
       // Clear the new busy hour object
