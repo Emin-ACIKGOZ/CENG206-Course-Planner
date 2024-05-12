@@ -44,6 +44,9 @@ const app = Vue.createApp({
         Thursday: 3,
         Friday: 4
       },
+
+      selectedFile: null, // Seçilen dosyayı saklamak için bir değişken
+    
       // Forms and boolean flags for forms
       showAddCourseForm: false,
       newCourse: {
@@ -60,6 +63,8 @@ const app = Vue.createApp({
       // Add new properties for adding a class
       // Add new properties for adding a class
       showAddClassForm: false,
+      showEditCourseForm: false,
+      editingCourse: null,
       newClass: {
         classroomId: '',
         capacity: ''
@@ -78,6 +83,44 @@ const app = Vue.createApp({
   },
 
   methods: {
+    onFileSelected(event) {
+      // Seçilen dosyayı al
+      const file = event.target.files[0];
+    
+      // Dosya okuma işlemi
+      const reader = new FileReader();
+      reader.onload = () => {
+        const content = reader.result; // Dosya içeriği
+        // CSV içeriğini parçalayarak kurs objeleri oluşturma
+        const coursesData = content.split(/\r?\n/);
+        coursesData.forEach(row => {
+          if (row.trim() === '') {
+            return; // Boş satırları atla
+          }
+          const columns = row.split(',');
+          const course = new Course(
+            columns[0].trim(),
+            columns[1].trim(),
+            parseInt(columns[2]),
+            parseInt(columns[3]),
+            columns[4].trim(),
+            columns[5].trim(),
+            parseInt(columns[6]),
+            columns[7].trim(),
+            columns[8]
+          );
+          this.courses.push(course); // Yeni kursu mevcut kurs listesine ekle
+        });
+        console.log('Courses loaded:', this.courses); // Konsola yüklenen kursları yazdır
+      };
+      reader.readAsText(file); // Dosya içeriğini oku
+    },
+    // İçe aktarma modülünü açma işlevi
+    openImportCourseModal() {
+      // Dosya seçme işlevselliğini tetikleyen bir input elementi olduğunu varsayalım
+      const inputElement = document.getElementById('fileInput');
+      inputElement.click(); // Dosya seçme penceresini aç
+    },
     //General purpose function to show errors on a page
     getHourRange (day) {
       let s = day * 8
@@ -312,9 +355,48 @@ const app = Vue.createApp({
     },
 
     //Methods for editCourses button
-    editCourses () {
-      console.log('Edit Courses Button')
+    editCourse(code) {
+      this.editingCourse = this.findCourse(code);
+      if (this.editingCourse) {
+          this.newCourse = Object.assign({}, this.editingCourse);
+          this.showEditCourseForm = true;
+      } else {
+      
+      }
     },
+  
+
+    cancelEditCourse() {
+      this.showEditCourseForm = false
+      this.editingCourse = null;
+      this.clearNewCourse()
+    },
+
+
+    editSubmitCourse() {
+      // Validate the edited course
+    
+      if (this.validateNewCourse()) {
+        // Update the course in the list of courses
+        this.editingCourse.code = this.newCourse.code;
+        this.editingCourse.name = this.newCourse.name;
+        this.editingCourse.year = parseInt(this.newCourse.year);
+        this.editingCourse.credit = parseInt(this.newCourse.credit);
+        this.editingCourse.type = this.newCourse.type;
+        this.editingCourse.dept = this.newCourse.dept;
+        this.editingCourse.num_students = parseInt(this.newCourse.num_students);
+        this.editingCourse.instructor = this.newCourse.instructor;
+        this.editingCourse.block = parseInt(this.newCourse.block);
+    
+        // Show success message
+        this.showSuccessMessage = true;
+        setTimeout(() => {
+          this.showSuccessMessage = false;
+        }, 2000); // Adjust the delay as needed
+      }
+    },
+    
+    
 
     //Methods for addCourse button
     addCourse () {
@@ -324,6 +406,7 @@ const app = Vue.createApp({
       this.showAddCourseForm = false
       this.clearNewCourse()
     },
+    
 
     submitCourse () {
       // Validate the new course
@@ -350,6 +433,7 @@ const app = Vue.createApp({
           this.clearNewCourse()
           //this.showAddCourseForm = false
           this.showSuccessMessage = false
+          this.cancelEditCourse()
         }, 2000) // Adjust the delay as needed
       }
     },
