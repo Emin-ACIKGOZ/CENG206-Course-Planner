@@ -335,6 +335,31 @@ const app = Vue.createApp({
         })
     },
 
+    isValidServiceData(row) {
+      const validHours = new Set(['8:30', '9:30', '10:30', '11:30', '12:30', '13:30', '14:30', '15:30']);
+      const parts = row.trim().split('"').join('').split(",");
+    
+      const [course, day, ...slots] = parts;
+    
+      if (!course || !day || slots.length === 0) {
+        return false;
+      }
+    
+      const slotsSet = new Set(slots);
+      if (slotsSet.size !== slots.length) {
+        return false; // Check for uniqueness
+      }
+    
+      for (let slot of slots) {
+        if (!validHours.has(slot)) {
+          return false; // Check if each slot is a valid hour
+        }
+      }
+    
+      return true; // If all conditions pass
+    }
+    ,
+    
     loadService() {
       fetch('data/service.csv')
         .then(response => {
@@ -348,13 +373,14 @@ const app = Vue.createApp({
           const rows = data.split(/\r?\n/)
 
           // Parse each row into busy schedule
-          rows.forEach(line => {
-            if (line.trim() === '') {
-              return // Skip empty lines
+          rows.forEach(row => {
+            if (!this.isValidServiceData(row)) {
+              console.log('Skipping invalid entry: ' + row)
+              return // Skip invalid rows
             }
 
-            let [course, day] = line.trim().split(',', 2)
-            let timeSlots = line.trim().split('"')[1]
+            let [course, day] = row.trim().split(',', 2)
+            let timeSlots = row.trim().split('"')[1]
             let slots = timeSlots.replace(/"/g, '').split(',')
 
             const times = []
@@ -391,13 +417,13 @@ const app = Vue.createApp({
           const rows = data.split(/\r?\n/)
 
           // Parse each row into busy schedule
-          rows.forEach(line => {
-            if (line.trim() === '') {
-              return // Skip empty lines
+          rows.forEach(row => {
+            if (row.trim() === '') {
+              return // Skip empty rows
             }
 
-            let [instructor, day] = line.trim().split(',', 2)
-            let timeSlots = line.trim().split('"')[1]
+            let [instructor, day] = row.trim().split(',', 2)
+            let timeSlots = row.trim().split('"')[1]
             let slots = timeSlots.replace(/"/g, '').split(',')
 
             const times = []
@@ -648,7 +674,7 @@ const app = Vue.createApp({
         const processedHour = 8 * parseInt(this.weekdays[selectedDay] - 1) + parseInt(selectedHour);
 
         // Check if the instructor is already busy during selected hour
-        const busyTimes = this.busy[instructorName] // Move this line outside the loop
+        const busyTimes = this.busy[instructorName] // Move this row outside the loop
         if (busyTimes && busyTimes.includes(processedHour)) {
           // Use processedHour instead of processedHours
           this.errors.busyHour = 'Instructor is already busy at this time'
