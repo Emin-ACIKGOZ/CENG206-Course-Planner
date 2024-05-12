@@ -388,7 +388,7 @@
                             <select id="hour" v-model="newBusyHour.hour">
                                 <option v-for="hour in busy[editingInstructor]" :value="hour">{{ hour }}</option>
                             </select>
-                        <button @click="removeSelectedHour" class="miniButton">Remove selected hour</button>
+                        <button @click="removeSelectedHour" class="miniButton">Remove Hour</button>
                         
                         
                         <form @submit.prevent="submitBusyHour">
