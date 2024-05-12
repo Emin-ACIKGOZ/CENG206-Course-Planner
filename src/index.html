@@ -313,7 +313,7 @@
                     <tbody>
                         <tr v-for="(a, b) in service" :key="name">
                             <td>{{ b }}</td>
-                            <td>{{ a }}</td>
+                            <td>{{ convertHoursToText(a) }}</td>
                             <td> <button @click="editService(b)" class="main">✏️</button>
                                 <button @click="deleteService(b)" class="deleteButton">❌</button>
                             </td>
@@ -436,7 +436,7 @@
                     <tbody>
                         <tr v-for="(busyhours, inst) in busy" :key="inst">
                             <td>{{ inst }}</td>
-                            <td>{{ busyhours }}</td>
+                            <td>{{ convertHoursToText(busyhours) }}</td>
                             <td>
                                 <button @click="editBusy(inst)" class="main">✏️</button>
                                 <button @click="deleteBusy(inst)" class="deleteButton">❌</button>

@@ -96,6 +96,37 @@ const app = Vue.createApp({
   },
 
   methods: {
+
+    convertHoursToText(hoursArray) {
+      const weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+      let result = '';
+  
+      // Create an object to group hours by weekday
+      const hoursByWeekday = {};
+      hoursArray.forEach(hour => {
+          const weekday = Math.floor(hour / 8); // Determine the weekday
+          const time = (hour % 8) + 8; // Calculate the time
+          if (!hoursByWeekday[weekday]) {
+              hoursByWeekday[weekday] = [time];
+          } else {
+              hoursByWeekday[weekday].push(time);
+          }
+      });
+  
+      // Convert the object into text format
+      for (const weekday in hoursByWeekday) {
+          if (hoursByWeekday.hasOwnProperty(weekday)) {
+              const times = hoursByWeekday[weekday].map(time => `${time}:30`).join(', ');
+              result += `${weekdays[weekday]} ${times}; `;
+          }
+      }
+  
+      // Remove the trailing semicolon and space
+      result = result.trim().slice(0, -1);
+  
+      return result;
+    },
+
     onFileSelected(event) {
       // Seçilen dosyayı al
       const file = event.target.files[0];
@@ -759,8 +790,7 @@ const app = Vue.createApp({
       }
     },
   
-  
-    
+
     cancelEditBusy() {
       this.showEditBusyForm = false;
       this.editingInstructor = null;
