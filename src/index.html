@@ -34,10 +34,6 @@
                     <div class="modal-content">
                         <span class="close" @click="cancelAddCourse">&times;</span>
                         <h2 class="header">Add a New Course</h2>
-                        <!-- Add course form -->
-
-
-
 
                         <form @submit.prevent="submitCourse">
                             <label for="code">Course Code:</label>
@@ -86,7 +82,7 @@
                             <p v-if="errors.block" class="error">{{ errors.block }}</p>
 
                             <button type="submit" class="miniButton">Add Course</button>
-                            <button @click="cancelAddCourse" class="miniButton">Cancel</button>
+
                         </form>
 
 
@@ -278,7 +274,7 @@
                             
                             
                             <button type="submit" class="miniButton">Add Service</button>
-                            <button @click="cancelAddService" class="miniButton">Cancel</button>
+
                         </form>
                         <div v-if="showSuccessMessage" class="success-message">
                             Service hour successfully added
@@ -344,7 +340,7 @@
                             <p v-if="errors.day" class="error">{{ errors.day }}</p>
                 
                             <button type="submit" class="miniButton">Save</button>
-                            <button @click="cancelEditService" class="miniButton">Cancel</button>
+
                         </form>
                         <div v-if="showSuccessMessage" class="success-message">
                             Service hour successfully edited
@@ -422,7 +418,7 @@
         
                           
                             <button type="submit" class="miniButton">Add busy</button>
-                            <button @click="cancelAddBusyHour" class="miniButton">Cancel</button>
+
                         </form>
                         <div v-if="showSuccessMessage" class="success-message">
                             Busy hour successfully added
@@ -467,7 +463,7 @@
                             <p v-if="errors.day" class="error">{{ errors.day }}</p>
                         
                             <button type="submit" class="miniButton">Add busy</button>
-                            <button @click="cancelEditBusy" class="miniButton">Cancel</button>
+
                         </form>
                         
                       
@@ -525,7 +521,7 @@
 
                                 <!-- Add buttons for saving and canceling -->
                                 <button type="submit" class="miniButton">Add Class</button>
-                                <button @click="cancelAddClass" class="miniButton">Cancel</button>
+
                             </form>
                             <div v-if="showSuccessMessage" class="success-message">
                                 Class successfully added
@@ -553,7 +549,7 @@
 
                                 <!-- Add buttons for saving and canceling -->
                                 <button type="submit" class="miniButton">Edit Class</button>
-                                <button @click="cancelEditClass" class="miniButton">Cancel</button>
+
                             </form>
                             <div v-if="showSuccessMessage" class="success-message">
                                 Class successfully edited

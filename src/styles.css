@@ -6,7 +6,8 @@
     transform: translateX(-50%);
     text-align: center;
     background-color: #194965;
-    padding-inline: 50%;
+    width: 100%;
+    height: auto;
 }
 
 .logo img {
@@ -31,7 +32,10 @@ body {
     padding-left: 5%;
     padding-right: 5%;
 
+
 }
+
+
 
 .success-message {
     position: fixed;
@@ -184,7 +188,7 @@ transition: all 0.5s ease;
     outline: none;
     width: 100%;
     text-align: center;
-    
+
 
     transition: background-color 0.5s ease;
     padding: 25px;
@@ -192,13 +196,13 @@ transition: all 0.5s ease;
 
 /* Add this CSS to your existing stylesheet */
 .accordion-header::after {
-    content: "\276F"; 
+    content: "\276F";
     float: right;
     margin-left: 5px;
-    transition: transform 0.3s ease; 
+    transition: transform 0.3s ease;
     font-weight: 100;
     font-size: 70%;
-    
+
 }
 
 .accordion-header.active::after {
@@ -230,33 +234,99 @@ transition: all 0.5s ease;
     transition: all 0.4s ease;
 }
 
+
+
+
 /* The Modal (background) */
 .modal {
-    position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
+    position: fixed; /* Sayfanın üzerinde kalacak */
+    z-index: 999; /* Diğer öğelerin üzerinde olacak */
     left: 0;
     top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-  }
-  
+    width: 100%; /* Tam genişlik */
+    height: 100%; /* Tam yükseklik */
+    overflow: auto; /* Gerekirse kaydırmayı etkinleştir */
+    background-color: rgb(0,0,0); /* Yedek renk */
+    background-color: rgba(0,0,0,0.5); /* Siyah ve opaklık */
+
+}
+
+
   /* Modal Content/Box */
-  .modal-content {
+.modal-content {
+
     background-color: #fefefe;
-    margin: 15% auto; /* 15% from the top and centered */
+    margin: 5% auto;
     padding: 20px;
     border: 1px solid #888;
-    width: 80%; /* Could be more or less, depending on screen size */
-  }
-  
-  /* The Close Button */
+    width: 60%;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+    overflow-y: auto;
+    max-height: 70vh;
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+
+}
+body.modal-open {
+    overflow: hidden;
+}
+.modal-open {
+    overflow: hidden;
+}
+
+.modal-content label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.modal-content input,
+.modal-content select {
+    width: 50%; /* veya istediğiniz sabit bir piksel değeri */
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-bottom: 15px;
+}
+
+
+/* Styles for buttons */
+.modal-content .miniButton {
+    background-color: #266485;
+    color: #ffffff;
+    border-radius: 5px;
+    height: 50px;
+    width: 200px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 24px;
+    cursor: pointer;
+    display: block;
+    margin: 0 auto;
+}
+
+
+.modal-content .miniButton:hover {
+    background-color: #276e8f;
+}
+
+/* Success message */
+.modal-content .success-message {
+    background-color: #28a745;
+    color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 15px;
+    text-align: center;
+}
+
+
+
+/* The Close Button */
   .close {
     color: #aaa;
     float: right;
-    font-size: 28px;
+    font-size: 40px;
     font-weight: bold;
   }
   
