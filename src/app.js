@@ -795,10 +795,11 @@ const app = Vue.createApp({
 
       if (this.lay(courses)) {
         this.toggleAccordion('schedule')
-        console.log(schedule)
+        //console.log(schedule) Too long to be useful in debug console
       } else {
         console.log('Failed to create a schedule.')
         this.errors.lay = 'Failed to create a schedule'
+        console.log(this.errors)
       }
     }
   },
