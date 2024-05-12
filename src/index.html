@@ -382,7 +382,7 @@
 
                         <label for="hour">Busy hours:</label>
                         <select size="10" id="hour" v-model="newBusyHour.hour" multiple>
-                            <option v-for="hour in busy[editingInstructor]" :value="hour">{{ hour }}</option>
+                            <option v-for="hour in busy[editingInstructor]" :value="hour">{{ toHourandDay(hour) }}</option>
                         </select>
                         <button @click="removeSelectedHour" class="miniButton">Remove Hour</button>
 
