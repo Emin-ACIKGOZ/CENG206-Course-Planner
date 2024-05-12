@@ -1176,6 +1176,14 @@ const app = Vue.createApp({
       return (integer % 8) + 8 + ':30'
     },
 
+    toHourandDay(integer) {
+      const weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+      const hour = (integer % 8) + 8; 
+      const day = weekdays[Math.floor(integer / 8)];
+      return `${day} ${hour}:30`;
+    },
+  
+
     makeSchedule() {
       activeAccordion = 'schedule'
       console.log('Schedule button')
