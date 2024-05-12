@@ -87,7 +87,9 @@ const app = Vue.createApp({
       newServiceHour: {
         course: '',
         day: '',
-        hour: ''
+        hour: '',
+        dayAlt: '',
+        hourAlt: ''
       },
       errors: {},
       showSuccessMessage: false,
@@ -758,6 +760,9 @@ const app = Vue.createApp({
       this.newServiceHour = {
         course: '',
         day: '',
+        dayAlt: '',
+        hourAlt: '',
+        hour: '',
         hours: []
       }
       // Reset errors
@@ -856,20 +861,25 @@ const app = Vue.createApp({
       // Validate the new service hour
       if (this.validateNewServiceHour()) {
         
-
         // Extract input values
         const selectedCourse = this.newServiceHour.course;
         const selectedDay = this.newServiceHour.day;
         const selectedHour = this.newServiceHour.hour;
 
+        const selectedDay2 = this.newServiceHour.dayAlt;
+        const selectedHour2 = this.newServiceHour.hourAlt;
+
         this.service[selectedCourse] = [] // empty
     
         // Process selected hour
         const processedHour = 8 * parseInt(this.weekdays[selectedDay] - 1) + parseInt(selectedHour);
+        
+        const processedHour2 = 8 * parseInt(this.weekdays[selectedDay2] - 1) + parseInt(selectedHour2);
     
+
         // Check if the course already has service hours during the selected hour
         const serviceHours = this.service[selectedCourse];
-        if (serviceHours && serviceHours.includes(processedHour)) {
+        if (serviceHours && serviceHours.includes(processedHour) || serviceHours.includes(processedHour2)) {
           this.errors.serviceHour = `Service hour already exists for the course at this time.`;
           return;
         }
@@ -881,9 +891,20 @@ const app = Vue.createApp({
 
         // 3 as a placeholder. !!!!!!!!!!!!!!!!!! how to determine blocks which type of service etc?,
         //??
-        for (let i = 0; i < 3; i++) {
-          this.service[selectedCourse].push(processedHour+i);
+
+        if (this.findCourse(selectedCourse).block === "3") {
+          this.service[selectedCourse].push(processedHour);
+          this.service[selectedCourse].push(processedHour+1);
+          this.service[selectedCourse].push(processedHour+2);
         }
+
+        if (this.findCourse(selectedCourse).block === "2+1") {
+          this.service[selectedCourse].push(processedHour);
+          this.service[selectedCourse].push(processedHour+1);
+          this.service[selectedCourse].push(processedHour2);
+          
+        }
+
 
         // Show success message
         this.showSuccessMessage = true;

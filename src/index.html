@@ -218,37 +218,64 @@
                         
                         <form @submit.prevent="submitService">
                             
-
                             <label for="course">Course Code:</label>
                             <select id="course" v-model="newServiceHour.course">
                                 <option v-for="course in courses" :value="course.code">{{ course.code }}</option>
                             </select>
                             <p v-if="errors.course" class="error">{{ errors.course }}</p>
 
-        
+
+                            <div v-if="findCourse(newServiceHour.course) && findCourse(newServiceHour.course).block === '2+1'">
+
+                                <label for="hour">Starting Hour for the one hour block:</label>
+                                <select id="hour" v-model="newServiceHour.hourAlt">
+                                    <option value="8">8:30</option>
+                                    <option value="9">9:30</option>
+                                    <option value="10">10:30</option>
+                                    <option value="11">11:30</option>
+                                    <option value="12">12:30</option>
+                                    <option value="13">13:30</option>
+                                    <option value="14">14:30</option>
+                                    <option value="15">15:30</option>
+                                </select>
+                                <p v-if="errors.hour" class="error">{{ errors.hour }}</p>
+            
+                                <label for="day">Day:</label>
+                                <select id="day" v-model="newServiceHour.dayAlt">
+                                    <option value="Monday">Monday</option>
+                                    <option value="Tuesday">Tuesday</option>
+                                    <option value="Wednesday">Wednesday</option>
+                                    <option value="Thursday">Thursday</option>
+                                    <option value="Friday">Friday</option>
+                                </select>
+                                <p v-if="errors.day" class="error">{{ errors.day }}</p>
+                            </div>
+
+                            
+                          
                             <label for="hour">Starting Hour:</label>
                             <select id="hour" v-model="newServiceHour.hour">
-                                <option value="8">8:30</option>
-                                <option value="9">9:30</option>
-                                <option value="10">10:30</option>
-                                <option value="11">11:30</option>
-                                <option value="12">12:30</option>
-                                <option value="13">13:30</option>
-                                <option value="14">14:30</option>
-                                <option value="15">15:30</option>
+                                    <option value="8">8:30</option>
+                                    <option value="9">9:30</option>
+                                    <option value="10">10:30</option>
+                                    <option value="11">11:30</option>
+                                    <option value="12">12:30</option>
+                                    <option value="13">13:30</option>
+                                    <option value="14">14:30</option>
+                                    <option value="15">15:30</option>
                             </select>
                             <p v-if="errors.hour" class="error">{{ errors.hour }}</p>
-        
-                            <label for="day">Day:</label>
-                            <select id="day" v-model="newServiceHour.day">
-                                <option value="Monday">Monday</option>
-                                <option value="Tuesday">Tuesday</option>
-                                <option value="Wednesday">Wednesday</option>
-                                <option value="Thursday">Thursday</option>
-                                <option value="Friday">Friday</option>
-                            </select>
-                            <p v-if="errors.day" class="error">{{ errors.day }}</p>
-        
+            
+                                <label for="day">Day:</label>
+                                <select id="day" v-model="newServiceHour.day">
+                                    <option value="Monday">Monday</option>
+                                    <option value="Tuesday">Tuesday</option>
+                                    <option value="Wednesday">Wednesday</option>
+                                    <option value="Thursday">Thursday</option>
+                                    <option value="Friday">Friday</option>
+                                </select>
+                                <p v-if="errors.day" class="error">{{ errors.day }}</p>
+                            
                             
                             <button type="submit" class="miniButton">Add Service</button>
                             <button @click="cancelAddService" class="miniButton">Cancel</button>
@@ -263,6 +290,34 @@
                     <div class="modal-content">
                         <span class="close" @click="cancelEditService">&times;</span>
                         <h2 class="header">Edit Service Hour</h2>
+
+                        <div v-if="findCourse(editingService).block === '2+1'">
+
+                            <label for="hour">Starting Hour for the one hour block:</label>
+                            <select id="hour" v-model="newServiceHour.hourAlt">
+                                <option value="8">8:30</option>
+                                <option value="9">9:30</option>
+                                <option value="10">10:30</option>
+                                <option value="11">11:30</option>
+                                <option value="12">12:30</option>
+                                <option value="13">13:30</option>
+                                <option value="14">14:30</option>
+                                <option value="15">15:30</option>
+                            </select>
+                            <p v-if="errors.hour" class="error">{{ errors.hour }}</p>
+        
+                            <label for="day">Day:</label>
+                            <select id="day" v-model="newServiceHour.dayAlt">
+                                <option value="Monday">Monday</option>
+                                <option value="Tuesday">Tuesday</option>
+                                <option value="Wednesday">Wednesday</option>
+                                <option value="Thursday">Thursday</option>
+                                <option value="Friday">Friday</option>
+                            </select>
+                            <p v-if="errors.day" class="error">{{ errors.day }}</p>
+                        </div>
+
+
                         <!-- Edit service form -->
                         <form @submit.prevent="submitEditService">
                             <label for="hour">Starting Hour:</label>
