@@ -289,6 +289,13 @@ const app = Vue.createApp({
         })
     },
 
+    isValidClassroomData(data) {
+      return (
+        data.length === 2 &&
+        parseInt(data[1]) > 0
+      );
+    },
+
     loadClassrooms() {
       fetch('data/classroom.csv')
         .then(response => {
@@ -305,13 +312,17 @@ const app = Vue.createApp({
 
           // Parse each row into classroom objects
           rows.forEach(row => {
-            if (row.trim() === '') {
+            if (!row) {
               return // Skip empty strings
             }
 
-            const rowArray = row.split(';')
-            const classroomName = rowArray[0].trim()
-            const classroomCapacity = parseInt(rowArray[1].trim(), 10)
+            const data = row.split(';')
+            if(!this.isValidClassroomData(data)){
+              console.log('Skipping invalid entry: ' + data)
+              return
+            }
+            const classroomName = data[0].trim()
+            const classroomCapacity = parseInt(data[1].trim(), 10)
             this.classrooms[classroomName] = classroomCapacity
           })
 
