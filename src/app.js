@@ -772,12 +772,13 @@ const app = Vue.createApp({
         this.errors.hour = 'At least one hour must be selected'
         isValid = false
       }
-      if (!this.newServiceHour.dayAlt) {
-        this.errors.day = 'Day of the week is required'
+      console.log(this.newServiceHour.course.block)
+      if (!this.newServiceHour.dayAlt && this.findCourse(this.newServiceHour.course).block === "2+1") {
+        this.errors.dayAlt = 'Day of the week is required'
         isValid = false
       }
-      if (!this.newServiceHour.hourAlt) {
-        this.errors.hour = 'At least one hour must be selected'
+      if (!this.newServiceHour.hourAlt && this.findCourse(this.newServiceHour.course).block === "2+1") {
+        this.errors.hourAlt = 'At least one hour must be selected'
         isValid = false
       }
 

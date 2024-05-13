@@ -540,7 +540,7 @@
                         <option value="14">14:30</option>
                         <option value="15">15:30</option>
                     </select>
-                    <p v-if="errors.hour" class="error">{{ errors.hour }}</p>
+                    <p v-if="errors.hourAlt" class="error">{{ errors.hourAlt }}</p>
 
                     <label for="day">Day:</label>
                     <select id="day" v-model="newServiceHour.dayAlt">
@@ -550,7 +550,7 @@
                         <option value="Thursday">Thursday</option>
                         <option value="Friday">Friday</option>
                     </select>
-                    <p v-if="errors.day" class="error">{{ errors.day }}</p>
+                    <p v-if="errors.dayAlt" class="error">{{ errors.dayAlt }}</p>
                 </div>
 
                 
