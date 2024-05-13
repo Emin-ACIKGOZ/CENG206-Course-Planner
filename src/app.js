@@ -60,7 +60,7 @@ const app = Vue.createApp({
         instructor: '',
         hours: ''
       },
-
+      successWhenLaying: false,
       showAddClassForm: false,
       showEditCourseForm: false,
       selectedHours : [],
@@ -1264,15 +1264,26 @@ const app = Vue.createApp({
           course.hours = 3
         }
       })
+      
+      try {
+        this.layService(courses)
+        if (this.lay(courses)) {
+            console.log(schedule);
+            this.successWhenLaying = true;
+            this.toggleAccordion('schedule');
+        } else {
+            this.successWhenLaying = false;
+            this.toggleAccordion('schedule');
+            console.log('Failed to create a schedule.');
+        }
+    } catch (error) {
+        this.successWhenLaying = false;
+        this.toggleAccordion('schedule');
+        console.log('Failed to create a schedule.');
+    }
+    
 
-      this.layService(courses)
 
-      if (this.lay(courses)) {
-        this.toggleAccordion('schedule')
-        console.log(schedule)
-      } else {
-        console.log('Failed to create a schedule.')
-      }
     }
 
 

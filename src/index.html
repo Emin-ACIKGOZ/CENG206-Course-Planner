@@ -263,12 +263,14 @@
 
 
         <div class="accordion" :class="{ 'active': activeAccordion === 'schedule' }" id="schedule">
+            
             <button class="accordion-header" :class="{ 'active': activeAccordion === 'schedule' }"
                 @click="makeSchedule">Make Schedule</button>
+
             <div class="accordion-panel" :class="{ 'active': activeAccordion === 'schedule' }">
 
-
-                <table class="course-list">
+            <div v-if="successWhenLaying">
+                    <table class="course-list">
                     <thead>
                         <tr>
                             <th>Day</th>
@@ -315,7 +317,14 @@
                     </tbody>
 
                 </table>
+                </template>
+
+                
+            </div> 
+            <div v-else  style="text-align: center;">
+                <p class="error">{{ "Error when creating schedule." }}</p>
             </div>
+            
         </div>
 
         <!------------ Modal windowses -------------------------->
