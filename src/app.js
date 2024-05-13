@@ -100,7 +100,7 @@ const app = Vue.createApp({
   methods: {
 
 
-    onFileSelected(event) {
+    importCourse(event) {
       // Seçilen dosyayı al
       const file = event.target.files[0];
 
@@ -111,33 +111,151 @@ const app = Vue.createApp({
         // CSV içeriğini parçalayarak kurs objeleri oluşturma
         const coursesData = content.split(/\r?\n/);
         coursesData.forEach(row => {
-          if (row.trim() === '') {
-            return; // Boş satırları atla
+          if (!row) {
+            return // Skip empty strings
           }
-          const columns = row.split(',');
+          const columns = row.split(',')
+          if (!this.isValidCourseData(columns)) {
+            console.log('Skipped Invalid Entry: ' + columns)
+            return // Skip invalid data
+          }
           const course = new Course(
             columns[0].trim(),
             columns[1].trim(),
             parseInt(columns[2]),
             parseInt(columns[3]),
-            columns[4].trim(),
-            columns[5].trim(),
+            columns[4].trim().toUpperCase(),
+            columns[5].trim().toUpperCase(),
             parseInt(columns[6]),
             columns[7].trim(),
             columns[8]
-          );
-          this.courses.push(course); // Yeni kursu mevcut kurs listesine ekle
+          )
+          this.courses.push(course)
         });
         console.log('Courses loaded:', this.courses); // Konsola yüklenen kursları yazdır
       };
       reader.readAsText(file); // Dosya içeriğini oku
     },
-    // İçe aktarma modülünü açma işlevi
-    openImportCourseModal() {
-      // Dosya seçme işlevselliğini tetikleyen bir input elementi olduğunu varsayalım
-      const inputElement = document.getElementById('fileInput');
-      inputElement.click(); // Dosya seçme penceresini aç
+    importService(event) {
+      const file = event.target.files[0]; // Get the selected file
+    
+      const reader = new FileReader(); // Create a new FileReader instance
+    
+      reader.onload = () => {
+        const content = reader.result; // Get the content of the loaded file
+    
+        // Split the CSV data into rows
+        const rows = content.split(/\r?\n/);
+    
+        // Parse each row into busy schedule
+        rows.forEach(row => {
+          if (!this.isValidRowData(row)) {
+            console.log('Skipping invalid entry: ' + row);
+            return; // Skip invalid rows
+          }
+    
+          let [course, day] = row.trim().split(',', 2);
+          let timeSlots = row.trim().split('"')[1];
+          let slots = timeSlots.replace(/"/g, '').split(',');
+    
+          const times = [];
+          for (const slot of slots) {
+            const hour = parseInt(slot.split(':')[0]) - 8 + 8 * this.weekdays[day];
+            times.push(hour);
+          }
+          if (this.service[course] !== undefined) {
+            this.service[course].push(...times);
+          } else {
+            this.service[course] = times;
+          }
+        });
+    
+        console.log('Service hours added to schedule:', this.service);
+      };
+    
+      reader.readAsText(file); // Read the content of the file as text
     },
+    importBusy(event) {
+      const file = event.target.files[0]; // Get the selected file
+    
+      const reader = new FileReader(); // Create a new FileReader instance
+    
+      reader.onload = () => {
+        const content = reader.result; // Get the content of the loaded file
+    
+        // Split the CSV data into rows
+        const rows = content.split(/\r?\n/);
+    
+        // Parse each row into busy schedule
+        rows.forEach(row => {
+          if (!this.isValidRowData(row)) {
+            console.log('Skipping invalid entry: ' + row);
+            return; // Skip invalid rows
+          }
+    
+          let [instructor, day] = row.trim().split(',', 2);
+          let timeSlots = row.trim().split('"')[1];
+          let slots = timeSlots.replace(/"/g, '').split(',');
+    
+          const times = [];
+          for (const slot of slots) {
+            const hour = parseInt(slot.split(':')[0]) - 8 + 8 * this.weekdays[day];
+            times.push(hour);
+          }
+          if (this.busy[instructor] !== undefined) {
+            this.busy[instructor].push(...times);
+          } else {
+            this.busy[instructor] = times;
+          }
+        });
+    
+        console.log('Busy schedule loaded:', this.busy);
+      };
+    
+      reader.readAsText(file); // Read the content of the file as text
+    },    
+    importClassroom(event) {
+      const file = event.target.files[0]; // Get the selected file
+    
+      const reader = new FileReader(); // Create a new FileReader instance
+    
+      reader.onload = () => {
+        const content = reader.result; // Get the content of the loaded file
+    
+        // Split the CSV data into rows
+        const rows = content.split(/\r?\n/);
+    
+        // Parse each row into classroom objects
+        rows.forEach(row => {
+          if (!row) {
+            return; // Skip empty strings
+          }
+    
+          const data = row.split(';');
+          if (!this.isValidClassroomData(data)) {
+            console.log('Skipping invalid entry: ' + data);
+            return;
+          }
+          const classroomName = data[0].trim();
+          const classroomCapacity = parseInt(data[1].trim(), 10);
+          this.classrooms[classroomName] = classroomCapacity;
+        });
+    
+        console.log('Classrooms loaded:', this.classrooms);
+      };
+    
+      reader.readAsText(file); // Read the content of the file as text
+    },    
+    // İçe aktarma modülünü açma işlevi
+    openImport(inputId) {
+      const inputElement = document.getElementById(inputId);
+      if (inputElement) {
+        inputElement.click(); // Open the file selection window
+      } else {
+        console.error(`File input element with id '${inputId}' not found.`);
+      }
+    },
+    
     //General purpose function to show errors on a page
     getHourRange(day) {
       let s = day * 8

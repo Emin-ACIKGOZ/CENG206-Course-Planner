@@ -4,10 +4,10 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="src/vue.global.js"></script>
+    <script src="vue.global.js"></script>
     <title>Course Planner</title>
     <link rel="icon" href="/images/aybu_logo.ico" type="image/x-icon">
-    <link rel="stylesheet" href="src/styles.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
@@ -30,6 +30,10 @@
 
 
                 <button @click="addCourse" class="mainButton">Add a Course</button>
+                <input type="file" id="courseFileInput" style="display: none" @change="importCourse">
+                <button @click="openImport('courseFileInput')" class="mainButton">Import Course</button>
+                
+                
 
                 <table class="course-list">
                     <thead>
@@ -76,6 +80,8 @@
 
 
                 <button @click="addService" class="mainButton">Add a Service</button>
+                <input type="file" id="serviceFileInput" style="display: none" @change="importService">
+                <button @click="openImport('serviceFileInput')" class="mainButton">Import Service</button>
 
 
                 <table class="course-list">
@@ -109,6 +115,8 @@
          
         
                 <button @click="addBusyHour" class="mainButton">Add a busy hour</button>
+                <input type="file" id="busyFileInput" style="display: none" @change="importBusy">
+                <button @click="openImport('busyFileInput')" class="mainButton">Import Busy Hours</button>
         
                 <table class="course-list">
                     <thead>
@@ -138,6 +146,8 @@
             <div class="accordion-panel" :class="{ 'active': activeAccordion === 'classrooms' }">
 
                 <button @click="addClass" class="mainButton">Add a classroom</button>
+                <input type="file" id="classroomFileInput" style="display: none" @change="importClassroom">
+                <button @click="openImport('classroomFileInput')" class="mainButton">Import Classrooms</button>
 
                 <table class="course-list">
                     <thead>
@@ -671,7 +681,7 @@
 
     <div id="displayDiv" class="hidden"></div>
 
-    <script src="src/app.js"></script>
+    <script src="./app.js"></script>
 </body>
 
 </html>
