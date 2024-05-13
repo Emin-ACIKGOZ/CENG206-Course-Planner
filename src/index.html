@@ -115,6 +115,8 @@
          
         
                 <button @click="addBusyHour" class="mainButton">Add a busy hour</button>
+                <input type="file" id="busyFileInput" style="display: none" @change="importBusy">
+                <button @click="openImport('busyFileInput')" class="mainButton">Import Busy Hours</button>
         
                 <table class="course-list">
                     <thead>
@@ -144,6 +146,8 @@
             <div class="accordion-panel" :class="{ 'active': activeAccordion === 'classrooms' }">
 
                 <button @click="addClass" class="mainButton">Add a classroom</button>
+                <input type="file" id="classroomFileInput" style="display: none" @change="importClassroom">
+                <button @click="openImport('classroomFileInput')" class="mainButton">Import Classrooms</button>
 
                 <table class="course-list">
                     <thead>

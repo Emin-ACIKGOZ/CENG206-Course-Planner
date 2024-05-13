@@ -204,6 +204,77 @@ const app = Vue.createApp({
     
       reader.readAsText(file); // Read the content of the file as text
     },
+    importBusy(event) {
+      const file = event.target.files[0]; // Get the selected file
+    
+      const reader = new FileReader(); // Create a new FileReader instance
+    
+      reader.onload = () => {
+        const content = reader.result; // Get the content of the loaded file
+    
+        // Split the CSV data into rows
+        const rows = content.split(/\r?\n/);
+    
+        // Parse each row into busy schedule
+        rows.forEach(row => {
+          if (!this.isValidRowData(row)) {
+            console.log('Skipping invalid entry: ' + row);
+            return; // Skip invalid rows
+          }
+    
+          let [instructor, day] = row.trim().split(',', 2);
+          let timeSlots = row.trim().split('"')[1];
+          let slots = timeSlots.replace(/"/g, '').split(',');
+    
+          const times = [];
+          for (const slot of slots) {
+            const hour = parseInt(slot.split(':')[0]) - 8 + 8 * this.weekdays[day];
+            times.push(hour);
+          }
+          if (this.busy[instructor] !== undefined) {
+            this.busy[instructor].push(...times);
+          } else {
+            this.busy[instructor] = times;
+          }
+        });
+    
+        console.log('Busy schedule loaded:', this.busy);
+      };
+    
+      reader.readAsText(file); // Read the content of the file as text
+    },    
+    importClassroom(event) {
+      const file = event.target.files[0]; // Get the selected file
+    
+      const reader = new FileReader(); // Create a new FileReader instance
+    
+      reader.onload = () => {
+        const content = reader.result; // Get the content of the loaded file
+    
+        // Split the CSV data into rows
+        const rows = content.split(/\r?\n/);
+    
+        // Parse each row into classroom objects
+        rows.forEach(row => {
+          if (!row) {
+            return; // Skip empty strings
+          }
+    
+          const data = row.split(';');
+          if (!this.isValidClassroomData(data)) {
+            console.log('Skipping invalid entry: ' + data);
+            return;
+          }
+          const classroomName = data[0].trim();
+          const classroomCapacity = parseInt(data[1].trim(), 10);
+          this.classrooms[classroomName] = classroomCapacity;
+        });
+    
+        console.log('Classrooms loaded:', this.classrooms);
+      };
+    
+      reader.readAsText(file); // Read the content of the file as text
+    },    
     // İçe aktarma modülünü açma işlevi
     openImport(inputId) {
       const inputElement = document.getElementById(inputId);
