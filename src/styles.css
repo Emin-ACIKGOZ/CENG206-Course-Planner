@@ -67,49 +67,6 @@ body {
     opacity: 1;
 }
 
-.mainButton {
-    background-color: #266485;
-    color: #ffffff;
-    border-radius: 10px;
-    height: 40px;
-    width: 175px;
-    font-family: 'Roboto', sans-serif;
-    font-size: 16px;
-    margin: 25px;
-    font-weight: bold;
-    border: 0px;
-    margin-right: 0px;
-}
-
-.miniButton {
-    background-color: #266485;
-    color: #ffffff;
-    border-radius: 5px;
-    height: 20px;
-    width: 80px;
-    font-family: 'Roboto', sans-serif;
-    font-size: 12px;
-    margin-left: 15px;
-}
-
-.mainButton:hover {
-    background-color: #2b86b3;
-    cursor: pointer;
-}
-
-.miniButton:hover {
-    background-color: #276e8f;
-    cursor: pointer;
-}
-
-
-.mainButton:active {
-    background-color: #2b86b3;
-}
-
-.miniButton:active {
-    background-color: #194965;
-}
 
 .course-form label {
     display: block;
@@ -231,7 +188,7 @@ transition: all 0.5s ease;
 
 /* The Modal (background) */
 .modal {
-    position: absolute;
+    position: fixed;
     z-index: 999;
     left: 0;
     top: 0;
@@ -246,21 +203,20 @@ transition: all 0.5s ease;
 
 
 .modal-content {
-
     background-color: #fefefe;
-    margin: 5% auto;
     padding: 20px;
-    border: 1px solid #888;
     width: 60%;
-    position: relative;
+    position: fixed;
     top: 50%;
-    transform: translateY(-50%);
+    left: 50%;
+    transform: translate(-50%, -50%);
     overflow-y: auto;
     max-height: 70vh;
     font-family: 'Roboto', sans-serif;
-    font-size: 16px;
-
+    border-radius: 15px;
+    box-shadow: 20px 19px 20px 0px #00000033 !important;
 }
+
 body.modal-open {
     overflow: hidden;
 }
@@ -312,7 +268,16 @@ body.modal-open {
     text-align: center;
 }
 
-
+.editButton,
+.deleteButton {
+    background-color: #e4eaee;
+    color: #ffffff;
+    border-radius: 5px;
+    border: 1px solid #194965;
+    margin:0px; 
+    margin-right: 5px ;
+    cursor:pointer;
+}
 
 /* The Close Button */
   .close {
@@ -395,3 +360,42 @@ body.modal-open {
 
 
 
+/* buttons */
+
+.mainButton,
+ .miniButton {
+    background-color: #266485;
+    color: #ffffff;
+    border-radius: 10px;
+    height: 40px !important;
+    width: 175px !important;
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px !important;
+    margin: 25px ;
+    font-weight: bold;
+    border: 0px;
+    margin-right: 0px ;
+}
+
+.miniButton{
+    margin: 0px !important;
+    margin-bottom: 15px !important;
+}
+.mainButton:hover {
+    background-color: #2b86b3;
+    cursor: pointer;
+}
+
+.miniButton:hover {
+    background-color: #276e8f;
+    cursor: pointer;
+}
+
+
+.mainButton:active {
+    background-color: #2b86b3;
+}
+
+.miniButton:active {
+    background-color: #194965;
+}

@@ -1027,7 +1027,7 @@ const app = Vue.createApp({
         //console.log('Found course:', foundCourse)
         return foundCourse
       } else {
-        this.showError(`Course with code ${code} not found.`)
+        //console.log(`Course with code ${code} not found.`)
         return null
       }
     },
