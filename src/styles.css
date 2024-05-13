@@ -6,7 +6,8 @@
     transform: translateX(-50%);
     text-align: center;
     background-color: #194965;
-    padding-inline: 50%;
+    width: 100%;
+    height: auto;
 }
 
 .logo img {
@@ -20,9 +21,8 @@
 .logo .header {
     font-size: 32px;
     font-weight: bold;
-    color: #fff; /* Adjust the color to match your design */
+    color: #fff;
     white-space: nowrap;
-
 
 }
 
@@ -67,49 +67,6 @@ body {
     opacity: 1;
 }
 
-.mainButton {
-    background-color: #266485;
-    color: #ffffff;
-    border-radius: 10px;
-    height: 40px;
-    width: 175px;
-    font-family: 'Roboto', sans-serif;
-    font-size: 16px;
-    margin: 25px;
-    font-weight: bold;
-    border: 0px;
-    margin-right: 0px;
-}
-
-.miniButton {
-    background-color: #266485;
-    color: #ffffff;
-    border-radius: 5px;
-    height: 20px;
-    width: 80px;
-    font-family: 'Roboto', sans-serif;
-    font-size: 12px;
-    margin-left: 15px;
-}
-
-.mainButton:hover {
-    background-color: #2b86b3;
-    cursor: pointer;
-}
-
-.miniButton:hover {
-    background-color: #276e8f;
-    cursor: pointer;
-}
-
-
-.mainButton:active {
-    background-color: #2b86b3;
-}
-
-.miniButton:active {
-    background-color: #194965;
-}
 
 .course-form label {
     display: block;
@@ -155,7 +112,7 @@ overflow: hidden;
 color: #000;
 
 background-color: var(--circle-bg);
-
+position: relative;
 margin: 25px;
 
 margin-bottom: 1rem;
@@ -177,28 +134,27 @@ transition: all 0.5s ease;
     font-family: 'Roboto', sans-serif;
     font-size: 24px;
     font-weight: bold;
-
+    position: relative;
     color: #275677;
     cursor: pointer;
     border: none;
     outline: none;
     width: 100%;
     text-align: center;
-    
+
 
     transition: background-color 0.5s ease;
     padding: 25px;
 }
 
-/* Add this CSS to your existing stylesheet */
 .accordion-header::after {
-    content: "\276F"; 
+    content: "\276F";
     float: right;
     margin-left: 5px;
-    transition: transform 0.3s ease; 
+    transition: transform 0.3s ease;
     font-weight: 100;
     font-size: 70%;
-    
+
 }
 
 .accordion-header.active::after {
@@ -232,31 +188,102 @@ transition: all 0.5s ease;
 
 /* The Modal (background) */
 .modal {
-    position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
+    position: fixed;
+    z-index: 999;
     left: 0;
     top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-  }
-  
-  /* Modal Content/Box */
-  .modal-content {
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.2);
+
+}
+
+
+
+.modal-content {
     background-color: #fefefe;
-    margin: 15% auto; /* 15% from the top and centered */
     padding: 20px;
-    border: 1px solid #888;
-    width: 80%; /* Could be more or less, depending on screen size */
-  }
-  
-  /* The Close Button */
+    width: 60%;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    overflow-y: auto;
+    max-height: 70vh;
+    font-family: 'Roboto', sans-serif;
+    border-radius: 15px;
+    box-shadow: 20px 19px 20px 0px #00000033 !important;
+}
+
+body.modal-open {
+    overflow: hidden;
+}
+.modal-open {
+    overflow: hidden;
+}
+
+.modal-content label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.modal-content input,
+.modal-content select {
+    width: 50%;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-bottom: 15px;
+}
+
+
+/* Styles for buttons */
+.modal-content .miniButton {
+    background-color: #266485;
+    color: #ffffff;
+    border-radius: 5px;
+    height: 50px;
+    width: 200px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 24px;
+    cursor: pointer;
+    display: block;
+    margin: 0 auto;
+}
+
+
+.modal-content .miniButton:hover {
+    background-color: #276e8f;
+}
+
+/* Success message */
+.modal-content .success-message {
+    background-color: #28a745;
+    color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 15px;
+    text-align: center;
+}
+
+.editButton,
+.deleteButton {
+    background-color: #e4eaee;
+    color: #ffffff;
+    border-radius: 5px;
+    border: 1px solid #194965;
+    margin:0px; 
+    margin-right: 5px ;
+    cursor:pointer;
+}
+
+/* The Close Button */
   .close {
     color: #aaa;
     float: right;
-    font-size: 28px;
+    font-size: 50px;
     font-weight: bold;
   }
   
@@ -333,3 +360,42 @@ transition: all 0.5s ease;
 
 
 
+/* buttons */
+
+.mainButton,
+ .miniButton {
+    background-color: #266485;
+    color: #ffffff;
+    border-radius: 10px;
+    height: 40px !important;
+    width: 175px !important;
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px !important;
+    margin: 25px ;
+    font-weight: bold;
+    border: 0px;
+    margin-right: 0px ;
+}
+
+.miniButton{
+    margin: 0px !important;
+    margin-bottom: 15px !important;
+}
+.mainButton:hover {
+    background-color: #2b86b3;
+    cursor: pointer;
+}
+
+.miniButton:hover {
+    background-color: #276e8f;
+    cursor: pointer;
+}
+
+
+.mainButton:active {
+    background-color: #2b86b3;
+}
+
+.miniButton:active {
+    background-color: #194965;
+}
