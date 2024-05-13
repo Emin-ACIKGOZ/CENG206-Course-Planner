@@ -262,9 +262,9 @@
         </div>
 
 
-        <div class="accordion" :class="{ 'active': activeAccordion === 'schedule' }" id="schedule">
+        <div class="accordion" :class="{ 'active': activeAccordion === 'schedule' }" >
             
-            <button class="accordion-header" :class="{ 'active': activeAccordion === 'schedule' }"
+            <button class="accordion-header" id="schedule" :class="{ 'active': activeAccordion === 'schedule' }"
                 @click="makeSchedule">Make Schedule</button>
 
             <div class="accordion-panel" :class="{ 'active': activeAccordion === 'schedule' }">
@@ -672,7 +672,7 @@
         <button class="accordion-header" :class="{ 'active': activeAccordion === 'credits' }"
             @click="toggleAccordion('credits')">Credits</button>
 
-        <div class="accordion-panel" :class="{ 'active': activeAccordion === 'credits' }">
+        <div class="accordion-panel" style="font-family: Roboto;display: flex;margin: 0px;align-items: center;flex-direction: column;" :class="{ 'active': activeAccordion === 'credits' }">
 
             <label >Berke Kabasakal 22050111070</label >
             <br>
