@@ -573,8 +573,8 @@
                         <option value="11">11:30</option>
                         <option value="12">12:30</option>
                         <option value="13">13:30</option>
-                        <option value="14">14:30</option>
-                        <option value="15">15:30</option>
+                        <option v-if="findCourse(newServiceHour.course) && findCourse(newServiceHour.course).block === '2+1'" value="14">14:30</option>
+                        <!--option value="15">15:30</option-->
                 </select>
                 <p v-if="errors.hour" class="error">{{ errors.hour }}</p>
 

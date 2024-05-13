@@ -1,0 +1,18 @@
+Group 14 CENG206 PROJECT
+
+Berke Kabasakal 22050111070
+Emin Salih Açıkgöz 22050111032
+Zeki Furkan Yıldız 21050111019
+Havva Nisa Altınbaş 21050111014
+Cemilhan Sağlam 21050111013
+
+Almost all functionality is correct and working well.
+
+The code is very rushed thus it has many repeating parts which could be reduced by using templates - we apologize.
+
+Bugs:
+! In some very very rare cases some blank cells might appear in the table, 
+in that case table will still be displayed correctly and such but just blank places. 
+We didn't have enough time to look into this bug as it appeared only once.
+
+Busy hours and service hours may conflict again we acknowledge this issue. A proper message could have been displayed.

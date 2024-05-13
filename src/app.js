@@ -101,6 +101,8 @@ const app = Vue.createApp({
 
 
     importCourse(event) {
+
+      this.courses = []
       // Seçilen dosyayı al
       const file = event.target.files[0];
 
@@ -137,6 +139,8 @@ const app = Vue.createApp({
       reader.readAsText(file); // Dosya içeriğini oku
     },
     importService(event) {
+
+      this.service = {}
       const file = event.target.files[0]; // Get the selected file
     
       const reader = new FileReader(); // Create a new FileReader instance
@@ -176,6 +180,8 @@ const app = Vue.createApp({
       reader.readAsText(file); // Read the content of the file as text
     },
     importBusy(event) {
+
+      this.busy = {}
       const file = event.target.files[0]; // Get the selected file
     
       const reader = new FileReader(); // Create a new FileReader instance
@@ -215,6 +221,7 @@ const app = Vue.createApp({
       reader.readAsText(file); // Read the content of the file as text
     },    
     importClassroom(event) {
+      this.classroom = {}
       const file = event.target.files[0]; // Get the selected file
     
       const reader = new FileReader(); // Create a new FileReader instance
@@ -841,13 +848,23 @@ const app = Vue.createApp({
         isValid = false
       }
       console.log(this.newServiceHour.course.block)
-      if (!this.newServiceHour.dayAlt && this.findCourse(this.newServiceHour.course).block === "2+1") {
-        this.errors.dayAlt = 'Day of the week is required'
-        isValid = false
+      if (this.findCourse(this.newServiceHour.course).block === "2+1") {
+        if (!this.newServiceHour.dayAlt ) {
+          this.errors.dayAlt = 'Day of the week is required'
+          isValid = false
+        } else if ((this.newServiceHour.dayAlt === this.newServiceHour.day && (this.newServiceHour.hourAlt === this.newServiceHour.hour || parseInt(this.newServiceHour.hourAlt) === parseInt(this.newServiceHour.hour) + 1 ))
+        // or one more of the day and hour between dayAlt and hourAlt
+
+        ){
+          this.errors.dayAlt = 'Conflicting hours between 2 hour part and 1 hour part.'
+          isValid = false
+        }
       }
-      if (!this.newServiceHour.hourAlt && this.findCourse(this.newServiceHour.course).block === "2+1") {
-        this.errors.hourAlt = 'At least one hour must be selected'
-        isValid = false
+      if (this.findCourse(this.newServiceHour.course).block === "2+1" ) {
+        if ( !this.newServiceHour.hourAlt) {
+          this.errors.hourAlt = 'At least one hour must be selected'
+          isValid = false
+        }
       }
 
       //if(this.service[this.newServiceHour.course]){
