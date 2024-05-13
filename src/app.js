@@ -335,7 +335,7 @@ const app = Vue.createApp({
         })
     },
 
-    isValidServiceData(row) {
+    isValidRowData(row) {
       const validHours = new Set(['8:30', '9:30', '10:30', '11:30', '12:30', '13:30', '14:30', '15:30']);
       const parts = row.trim().split('"').join('').split(",");
     
@@ -374,7 +374,7 @@ const app = Vue.createApp({
 
           // Parse each row into busy schedule
           rows.forEach(row => {
-            if (!this.isValidServiceData(row)) {
+            if (!this.isValidRowData(row)) {
               console.log('Skipping invalid entry: ' + row)
               return // Skip invalid rows
             }
@@ -418,8 +418,9 @@ const app = Vue.createApp({
 
           // Parse each row into busy schedule
           rows.forEach(row => {
-            if (row.trim() === '') {
-              return // Skip empty rows
+            if (!this.isValidRowData(row)) {
+              console.log('Skipping invalid entry: ' + row)
+              return // Skip invalid rows
             }
 
             let [instructor, day] = row.trim().split(',', 2)
