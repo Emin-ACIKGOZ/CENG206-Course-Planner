@@ -97,6 +97,18 @@ body {
 }
 
 
+label {
+
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    left: 50%;
+    color: #000;
+    margin: 20px;
+    padding: 20px;
+
+}
+
+
 .accordion {
 
 --circle-x: 1.8rem;

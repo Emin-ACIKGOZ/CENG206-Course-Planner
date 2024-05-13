@@ -333,6 +333,7 @@
 
     </div>
 
+    
 
     
         
@@ -664,6 +665,26 @@
                 Service hour successfully edited
             </div>
         </div>
+    </div>
+
+    <div class="accordion" :class="{ 'active': activeAccordion === 'credits' }" id="credits">
+            
+        <button class="accordion-header" :class="{ 'active': activeAccordion === 'credits' }"
+            @click="toggleAccordion('credits')">Credits</button>
+
+        <div class="accordion-panel" :class="{ 'active': activeAccordion === 'credits' }">
+
+            <label >Berke Kabasakal 22050111070</label >
+            <br>
+            <label >Emin Salih Açıkgöz 22050111032</label >
+            <br>
+            <label >Zeki Furkan Yıldız 21050111019</label >
+            <br>
+            <label >Havva Nisa Altınbaş 21050111014</label >
+            <br>
+            <label >Cemilhan Sağlam 21050111013</p>
+            
+            
     </div>
 
     <div id="displayDiv" class="hidden"></div>
