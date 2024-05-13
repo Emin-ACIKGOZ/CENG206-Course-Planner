@@ -4,15 +4,13 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="vue.global.js"></script>
     <title>Course Planner</title>
     <link rel="icon" href="/images/aybu_logo.ico" type="image/x-icon">
     <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
-
-
     <div class="logo">
         <img src="/images/aybuLogo.png" alt="logo">
         <h1 class="header">Course Planner</h1>
@@ -70,7 +68,6 @@
             </div>
         </div>
 
-
         <div class="accordion" :class="{ 'active': activeAccordion === 'services' }">
             <button class="accordion-header" :class="{ 'active': activeAccordion === 'services' }"
                 @click="toggleAccordion('services')">Services</button>
@@ -100,99 +97,6 @@
                     </tbody>
                 </table>
 
-            </div>
-        </div>
-
-        <div id="addBusyModal" v-if="showAddBusyForm" class="modal">
-            <div class="modal-content">
-                <span class="close" @click="cancelAddBusyHour">&times;</span>
-                <h2 class="header">Add a Busy Hour</h2>
-                
-                <form @submit.prevent="submitBusyHour">
-
-                    <label for="instructor">Instructor Name:</label>
-                    <select id="instructor" v-model="newBusyHour.instructor">
-                        <option v-for="instructor in getInstructors()" :value="instructor">{{ instructor }}</option>
-                    </select>
-                    <p v-if="errors.instructor" class="error">{{ errors.instructor }}</p>
-
-                    <label for="hour">Hour:</label>
-                    <select id="hour" v-model="newBusyHour.hour">
-                        <option value="8">8:30</option>
-                        <option value="9">9:30</option>
-                        <option value="10">10:30</option>
-                        <option value="11">11:30</option>
-                        <option value="12">12:30</option>
-                        <option value="13">13:30</option>
-                        <option value="14">14:30</option>
-                        <option value="15">15:30</option>
-                    </select>
-                    <p v-if="errors.hour" class="error">{{ errors.hour }}</p>
-
-                    <label for="day">Day:</label>
-                    <select id="day" v-model="newBusyHour.day">
-                        <option value="Monday">Monday</option>
-                        <option value="Tuesday">Tuesday</option>
-                        <option value="Wednesday">Wednesday</option>
-                        <option value="Thursday">Thursday</option>
-                        <option value="Friday">Friday</option>
-                    </select>
-                    <p v-if="errors.day" class="error">{{ errors.day }}</p>
-
-                  
-                    <button type="submit" class="miniButton">Add busy</button>
-
-                </form>
-                <div v-if="showSuccessMessage" class="success-message">
-                    Busy hour successfully added
-                </div>
-            </div>
-        </div>
-
-        <div id="editBusyModal" v-if="showEditBusyForm" class="modal">
-            <div class="modal-content">
-                <span class="close" @click="cancelEditBusy">&times;</span>
-                <h2 class="header">Edit a Busy Hour</h2>
-
-                <label for="hour">Busy hours:</label>
-                <select size="10" id="hour" v-model="newBusyHour.hour" multiple>
-                    <option v-for="hour in busy[editingInstructor]" :value="hour">{{ toHourandDay(hour) }}</option>
-                </select>
-                <button @click="removeSelectedHour" class="miniButton">Remove hours</button>
-
-                <form @submit.prevent="submitBusyHour">
-                    
-                    <label for="addHour">Add hour:</label>
-                    <select id="addHour" v-model="newBusyHour.addedHour">
-                        <option value="8">8:30</option>
-                        <option value="9">9:30</option>
-                        <option value="10">10:30</option>
-                        <option value="11">11:30</option>
-                        <option value="12">12:30</option>
-                        <option value="13">13:30</option>
-                        <option value="14">14:30</option>
-                        <option value="15">15:30</option>
-                    </select>
-                    <p v-if="errors.hour" class="error">{{ errors.hour }}</p>
-                
-                    <label for="day">Day:</label>
-                    <select id="day" v-model="newBusyHour.day">
-                        <option value="Monday">Monday</option>
-                        <option value="Tuesday">Tuesday</option>
-                        <option value="Wednesday">Wednesday</option>
-                        <option value="Thursday">Thursday</option>
-                        <option value="Friday">Friday</option>
-                    </select>
-                    <p v-if="errors.day" class="error">{{ errors.day }}</p>
-                
-                    <button type="submit" class="miniButton">Add busy hour</button>
-
-                </form>
-                
-              
-                <div v-if="showSuccessMessage" class="success-message">
-                    Busy hour successfully edited.
-                </div>
             </div>
         </div>
 
@@ -228,9 +132,6 @@
             </div>
         </div>
         
-        
-
-
         <div class="accordion" :class="{ 'active': activeAccordion === 'classrooms' }">
             <button class="accordion-header" :class="{ 'active': activeAccordion === 'classrooms' }"
                 @click="toggleAccordion('classrooms')">Classrooms</button>
@@ -335,7 +236,98 @@
 
     
 
-    
+    <div id="addBusyModal" v-if="showAddBusyForm" class="modal">
+        <div class="modal-content">
+            <span class="close" @click="cancelAddBusyHour">&times;</span>
+            <h2 class="header">Add a Busy Hour</h2>
+            
+            <form @submit.prevent="submitBusyHour">
+
+                <label for="instructor">Instructor Name:</label>
+                <select id="instructor" v-model="newBusyHour.instructor">
+                    <option v-for="instructor in getInstructors()" :value="instructor">{{ instructor }}</option>
+                </select>
+                <p v-if="errors.instructor" class="error">{{ errors.instructor }}</p>
+
+                <label for="hour">Hour:</label>
+                <select id="hour" v-model="newBusyHour.hour">
+                    <option value="8">8:30</option>
+                    <option value="9">9:30</option>
+                    <option value="10">10:30</option>
+                    <option value="11">11:30</option>
+                    <option value="12">12:30</option>
+                    <option value="13">13:30</option>
+                    <option value="14">14:30</option>
+                    <option value="15">15:30</option>
+                </select>
+                <p v-if="errors.hour" class="error">{{ errors.hour }}</p>
+
+                <label for="day">Day:</label>
+                <select id="day" v-model="newBusyHour.day">
+                    <option value="Monday">Monday</option>
+                    <option value="Tuesday">Tuesday</option>
+                    <option value="Wednesday">Wednesday</option>
+                    <option value="Thursday">Thursday</option>
+                    <option value="Friday">Friday</option>
+                </select>
+                <p v-if="errors.day" class="error">{{ errors.day }}</p>
+
+              
+                <button type="submit" class="miniButton">Add busy</button>
+
+            </form>
+            <div v-if="showSuccessMessage" class="success-message">
+                Busy hour successfully added
+            </div>
+        </div>
+    </div>
+
+    <div id="editBusyModal" v-if="showEditBusyForm" class="modal">
+        <div class="modal-content">
+            <span class="close" @click="cancelEditBusy">&times;</span>
+            <h2 class="header">Edit a Busy Hour</h2>
+
+            <label for="hour">Busy hours:</label>
+            <select size="10" id="hour" v-model="newBusyHour.hour" multiple>
+                <option v-for="hour in busy[editingInstructor]" :value="hour">{{ toHourandDay(hour) }}</option>
+            </select>
+            <button @click="removeSelectedHour" class="miniButton">Remove hours</button>
+
+            <form @submit.prevent="submitBusyHour">
+                
+                <label for="addHour">Add hour:</label>
+                <select id="addHour" v-model="newBusyHour.addedHour">
+                    <option value="8">8:30</option>
+                    <option value="9">9:30</option>
+                    <option value="10">10:30</option>
+                    <option value="11">11:30</option>
+                    <option value="12">12:30</option>
+                    <option value="13">13:30</option>
+                    <option value="14">14:30</option>
+                    <option value="15">15:30</option>
+                </select>
+                <p v-if="errors.hour" class="error">{{ errors.hour }}</p>
+            
+                <label for="day">Day:</label>
+                <select id="day" v-model="newBusyHour.day">
+                    <option value="Monday">Monday</option>
+                    <option value="Tuesday">Tuesday</option>
+                    <option value="Wednesday">Wednesday</option>
+                    <option value="Thursday">Thursday</option>
+                    <option value="Friday">Friday</option>
+                </select>
+                <p v-if="errors.day" class="error">{{ errors.day }}</p>
+            
+                <button type="submit" class="miniButton">Add busy hour</button>
+
+            </form>
+            
+          
+            <div v-if="showSuccessMessage" class="success-message">
+                Busy hour successfully edited.
+            </div>
+        </div>
+    </div> 
         
     <div id="addCourseModal" v-if="showAddCourseForm" class="modal">
         <div class="modal-content">
@@ -465,7 +457,6 @@
         </div>
     </div>
 
-
     <div id="addClassModal" v-if="showAddClassForm" class="modal">
         <div class="modal-content">
             <span class="close" @click="cancelAddClass">&times;</span>
@@ -493,7 +484,6 @@
             </div>
         </div>
     </div>
-   
 
     <div id="editClassModal" v-if="showEditClassForm" class="modal">
         <div class="modal-content">
@@ -520,8 +510,6 @@
             </div>
         </div>
     </div>
-
-
     
     <div id="addServiceModal" v-if="showAddServiceForm" class="modal">
         <div class="modal-content">
@@ -675,15 +663,10 @@
         <div class="accordion-panel" style="font-family: Roboto;display: flex;margin: 0px;align-items: center;flex-direction: column;" :class="{ 'active': activeAccordion === 'credits' }">
 
             <label >Berke Kabasakal 22050111070</label >
-            <br>
             <label >Emin Salih Açıkgöz 22050111032</label >
-            <br>
             <label >Zeki Furkan Yıldız 21050111019</label >
-            <br>
             <label >Havva Nisa Altınbaş 21050111014</label >
-            <br>
             <label >Cemilhan Sağlam 21050111013</p>
-            
             
     </div>
 

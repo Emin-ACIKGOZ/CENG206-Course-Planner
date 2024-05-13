@@ -770,7 +770,14 @@ const app = Vue.createApp({
       }
       if (!this.newServiceHour.hour ) {
         this.errors.hour = 'At least one hour must be selected'
-
+        isValid = false
+      }
+      if (!this.newServiceHour.dayAlt) {
+        this.errors.day = 'Day of the week is required'
+        isValid = false
+      }
+      if (!this.newServiceHour.hourAlt) {
+        this.errors.hour = 'At least one hour must be selected'
         isValid = false
       }
 
@@ -920,6 +927,7 @@ const app = Vue.createApp({
           this.errors.serviceHour = `Service hour already exists for the course at this time.`;
           return;
         }
+        
     
         // Add the new service hour to the service schedule
         if (!this.service[selectedCourse]) {
