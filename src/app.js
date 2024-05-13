@@ -237,24 +237,22 @@ const app = Vue.createApp({
 
     // for printing rows when printing
     notInMiddle(schedule, hour, year) {
-      console.log(schedule)
-
-      if (schedule[year][hour - 1] === null) {
-        return true
+      if (!schedule[year][hour - 1] || !schedule[year][hour]) {
+        return true; 
       } else {
         if (hour % 8 === 0) {
           // beginning of a day
-          return true
+          return true;
         } else if (
           schedule[year][hour][0].code === schedule[year][hour - 1][0].code
         ) {
-          return false
+          return false;
         } else {
-          return true
+          return true;
         }
       }
     },
-
+    
     //Loading Methods
     isValidCourseData(columns) {
       // Validation rules
@@ -1148,7 +1146,7 @@ const app = Vue.createApp({
     checkHourAvailable(year, hour, course, block) {
       // You cannot put a 3 hour lesson at the 6. hour of a day (Not enough time)
       if (block === 3) {
-        if (hour % 8 === 6 || hour % 7 === 0) return false
+        if (hour % 8 === 6 || hour % 8 === 7) return false
       }
 
       // You cannot put a 2 hour lesson at the 7. hour of a day (Not enough time)

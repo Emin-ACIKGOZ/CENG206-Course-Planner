@@ -295,7 +295,7 @@
                                         <template v-if="notInMiddle(schedule, hour, year)">
                                             <td :rowspan="schedule[year][hour][0].hours"
                                                 :style="{ backgroundColor: getDayColor(hour), fontWeight: 600 }">{{
-                                                schedule[year][hour][0].code }}</td>
+                                                schedule[year][hour][0].code + " " + schedule[year][hour][0].instructor.split(' ').pop() }}</td>
                                             <td :rowspan="schedule[year][hour][0].hours"
                                                 :style="{ backgroundColor: getDayColor(hour) }">{{
                                                 schedule[year][hour][1] }}</td>
