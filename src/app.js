@@ -1277,7 +1277,7 @@ const app = Vue.createApp({
       try {
         this.layService(courses)
         if (this.lay(courses)) {
-            console.log(schedule);
+            console.log(this.schedule);
             this.successWhenLaying = true;
             this.toggleAccordion('schedule');
         } else {
