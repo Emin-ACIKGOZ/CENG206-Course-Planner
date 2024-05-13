@@ -269,7 +269,7 @@
 
             <div class="accordion-panel" :class="{ 'active': activeAccordion === 'schedule' }">
 
-            <div v-if="successWhenLaying">
+            <div v-if="successWhenLaying === true">
                     <table class="course-list">
                     <thead>
                         <tr>
@@ -322,7 +322,7 @@
                 
             </div> 
             <div v-else  style="text-align: center;">
-                <p class="error">{{ "Error when creating schedule." }}</p>
+                <p class="error">{{ successWhenLaying }}</p>
             </div>
             
         </div>

@@ -1272,12 +1272,12 @@ const app = Vue.createApp({
             this.successWhenLaying = true;
             this.toggleAccordion('schedule');
         } else {
-            this.successWhenLaying = false;
+            this.successWhenLaying = "A schedule couldn't be created because of the constraints.";
             this.toggleAccordion('schedule');
             console.log('Failed to create a schedule.');
         }
     } catch (error) {
-        this.successWhenLaying = false;
+        this.successWhenLaying = "Error while creating schedule.";
         this.toggleAccordion('schedule');
         console.log('Failed to create a schedule.');
     }
