@@ -129,7 +129,7 @@ const app = Vue.createApp({
       return result;
     },
 
-    onFileSelected(event) {
+    importCourse(event) {
       // Seçilen dosyayı al
       const file = event.target.files[0];
 
@@ -162,7 +162,7 @@ const app = Vue.createApp({
       reader.readAsText(file); // Dosya içeriğini oku
     },
     // İçe aktarma modülünü açma işlevi
-    openImportCourseModal() {
+    openInput() {
       // Dosya seçme işlevselliğini tetikleyen bir input elementi olduğunu varsayalım
       const inputElement = document.getElementById('fileInput');
       inputElement.click(); // Dosya seçme penceresini aç
@@ -274,6 +274,48 @@ const app = Vue.createApp({
         isValidBlock &&
         isValidNumStudents
       )
+    },
+    importCourse(event) {
+    
+      const file = event.target.files[0];
+
+    
+      const reader = new FileReader();
+      reader.onload = () => {
+        const content = reader.result; 
+        
+        const coursesData = content.split(/\r?\n/);
+        coursesData.forEach(row => {
+          if (!row) {
+            return // Skip empty strings
+          }
+          const columns = row.split(',');
+          if (!this.isValidCourseData(columns)) {
+            console.log('Skipped Invalid Entry: ' + columns)
+            return // Skip invalid data
+          }
+          const course = new Course(
+            columns[0].trim(),
+            columns[1].trim(),
+            parseInt(columns[2]),
+            parseInt(columns[3]),
+            columns[4].trim(),
+            columns[5].trim(),
+            parseInt(columns[6]),
+            columns[7].trim(),
+            columns[8]
+          );
+          this.courses.push(course); // Yeni kursu mevcut kurs listesine ekle
+        });
+        console.log('Courses loaded:', this.courses); // Konsola yüklenen kursları yazdır
+      };
+      reader.readAsText(file); // Dosya içeriğini oku
+    },
+    // İçe aktarma modülünü açma işlevi
+    openInput() {
+      // Dosya seçme işlevselliğini tetikleyen bir input elementi olduğunu varsayalım
+      const inputElement = document.getElementById('fileInput');
+      inputElement.click(); // Dosya seçme penceresini aç
     },
     loadCourses() {
       fetch('data/courses.csv')
