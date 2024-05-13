@@ -521,7 +521,7 @@ const app = Vue.createApp({
         this.showSuccessMessage = true;
         setTimeout(() => {
           this.showSuccessMessage = false;
-          this.clearNewCourse();
+          //this.clearNewCourse();
         }, 500); // Adjust the delay as needed
       }
     },
@@ -561,7 +561,7 @@ const app = Vue.createApp({
         console.log(this.courses) //test
         setTimeout(() => {
           this.showSuccessMessage = false
-          this.clearNewCourse();
+          //this.clearNewCourse();
         }, 500) // Adjust the delay as needed
       }
     },
@@ -727,7 +727,7 @@ const app = Vue.createApp({
         // Clear the form and hide it after a delay
         setTimeout(() => {
           this.showSuccessMessage = false
-          this.clearNewBusyHour();
+          //this.clearNewBusyHour();
         }, 500) // Adjust the delay as needed
 
         console.log(this.busy)
@@ -879,7 +879,7 @@ const app = Vue.createApp({
         // Clear the form and hide it after a delay
         setTimeout(() => {
           this.showSuccessMessage = false;
-          this.clearNewBusyHour();
+          //this.clearNewBusyHour();
         }, 500);
       }
     },
@@ -957,7 +957,7 @@ const app = Vue.createApp({
         // Clear the form and hide it after a delay
         setTimeout(() => {
           this.showSuccessMessage = false;
-          this.clearNewServiceHour();
+          //this.clearNewServiceHour();
         }, 500);
       }
     },
@@ -1000,7 +1000,7 @@ const app = Vue.createApp({
         this.showSuccessMessage = true;
         setTimeout(() => {
           this.showSuccessMessage = false;
-          this.clearNewClass();
+          //this.clearNewClass();
         }, 500); // Adjust the delay as needed
       }
     },
@@ -1036,7 +1036,7 @@ const app = Vue.createApp({
         // Clear the form and hide it after a delay
         setTimeout(() => {
           this.showSuccessMessage = false
-          this.clearNewClass()
+          //this.clearNewClass()
         }, 500) // Adjust the delay as needed
       }
     },
