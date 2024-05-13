@@ -1080,35 +1080,34 @@ const app = Vue.createApp({
     },
 
     findClassroom(course, hour) {
-      let classroom = null
-
-      for (const m in this.classrooms) {
-        if (this.classrooms[m] > course.num_students) {
-          var flag = false
-
-          for (let k of [1, 2, 3, 4]) {
-            // Check for the every hour in block.
-            for (let j = 0; j < course.hours; j++) {
-              if (
-                this.schedule[k][hour + j] &&
-                this.schedule[k][hour + j][1] !== null
-              ) {
-                if (this.schedule[k][hour + j][1] === m) {
-                  flag = true
-                  break
-                }
+      let smallestClassroom = null;
+      let smallestCapacity = Infinity;
+  
+      for (const classroom in this.classrooms) {
+          const capacity = this.classrooms[classroom];
+          
+          if (capacity >= course.num_students) {
+              let isAvailable = true;
+  
+              for (let k of [1, 2, 3, 4]) {
+                  for (let j = 0; j < course.hours; j++) {
+                      if (this.schedule[k][hour + j] && this.schedule[k][hour + j][1] === classroom) {
+                          isAvailable = false;
+                          break;
+                      }
+                  }
               }
-            }
+  
+              if (isAvailable && capacity < smallestCapacity) {
+                  smallestClassroom = classroom;
+                  smallestCapacity = capacity;
+              }
           }
-
-          if (!flag) {
-            classroom = m
-            break
-          }
-        }
       }
-      return classroom
-    },
+  
+      return smallestClassroom;
+   },
+  
 
     layService(courses) {
       // this logic is sort of wrong
