@@ -554,12 +554,12 @@ const app = Vue.createApp({
             parseInt(this.newCourse.block)
           )
         )
-        // Show success message
+  
         this.showSuccessMessage = true
-        // Clear the form and hide it after a delay
+      
         console.log(this.courses) //test
         setTimeout(() => {
-          //this.showAddCourseForm = false
+         
           this.showSuccessMessage = false
         }, 500) // Adjust the delay as needed
       }
@@ -881,14 +881,10 @@ const app = Vue.createApp({
       }
     },
 
-
-
     editService(course) {
 
-  
       this.editingService = course;
       this.newServiceHour.course = course;
-
       this.showEditServiceForm = true;
 
     },
