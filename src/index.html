@@ -288,7 +288,7 @@
             <h2 class="header">Edit a Busy Hour</h2>
 
             <label for="hour">Busy hours:</label>
-            <select size="10" id="hour" v-model="newBusyHour.hour" multiple>
+            <select size="10" id="hour" v-model="newBusyHour.hour2" multiple>
                 <option v-for="hour in busy[editingInstructor]" :value="hour">{{ toHourandDay(hour) }}</option>
             </select>
             <button @click="removeSelectedHour" class="miniButton">Remove hours</button>
@@ -296,7 +296,7 @@
             <form @submit.prevent="submitBusyHour">
                 
                 <label for="addHour">Add hour:</label>
-                <select id="addHour" v-model="newBusyHour.addedHour">
+                <select id="addHour" v-model="newBusyHour.hour">
                     <option value="8">8:30</option>
                     <option value="9">9:30</option>
                     <option value="10">10:30</option>

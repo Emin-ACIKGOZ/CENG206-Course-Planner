@@ -825,17 +825,17 @@ const app = Vue.createApp({
 
     
     removeSelectedHour() {
-      if (this.newBusyHour.hour.length > 0) {
+      if (this.newBusyHour.hour2.length > 0) {
          
-          const selectedHours = [...this.newBusyHour.hour]; // Create a copy of the selected hours to iterate over
+          const selectedHours = [...this.newBusyHour.hour2]; // Create a copy of the selected hours to iterate over
           for (let i = 0; i < selectedHours.length; i++) {
               const hourIndex = this.busy[this.editingInstructor].indexOf(selectedHours[i]);
               if (hourIndex !== -1) {
                   this.busy[this.editingInstructor].splice(hourIndex, 1);
               }
           }
-          if (this.newBusyHour.hour.length === 0 ) {
-            delete busyHour[this.newBusyHour]
+          if (this.busy[this.editingInstructor].length === 0 ) {
+            delete this.busy[this.editingInstructor]
           }
       } else {
           //alert("Please select hours to remove.");
