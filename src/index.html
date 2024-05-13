@@ -30,8 +30,10 @@
 
 
                 <button @click="addCourse" class="mainButton">Add a Course</button>
-                <input type="file" id="fileInput" style="display: none" @change="importCourse">
-                <button @click="openImport" class="mainButton">Import Course</button>
+                <input type="file" id="courseFileInput" style="display: none" @change="importCourse">
+                <button @click="openImport('courseFileInput')" class="mainButton">Import Course</button>
+                
+                
 
                 <table class="course-list">
                     <thead>
@@ -78,8 +80,8 @@
 
 
                 <button @click="addService" class="mainButton">Add a Service</button>
-                <input type="file" id="fileInput" style="display: none" @change="importService">
-                <button @click="openImport" class="mainButton">Import Service</button>
+                <input type="file" id="serviceFileInput" style="display: none" @change="importService">
+                <button @click="openImport('serviceFileInput')" class="mainButton">Import Service</button>
 
 
                 <table class="course-list">

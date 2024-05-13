@@ -205,11 +205,15 @@ const app = Vue.createApp({
       reader.readAsText(file); // Read the content of the file as text
     },
     // İçe aktarma modülünü açma işlevi
-    openImport() {
-      // Dosya seçme işlevselliğini tetikleyen bir input elementi olduğunu varsayalım
-      const inputElement = document.getElementById('fileInput');
-      inputElement.click(); // Dosya seçme penceresini aç
+    openImport(inputId) {
+      const inputElement = document.getElementById(inputId);
+      if (inputElement) {
+        inputElement.click(); // Open the file selection window
+      } else {
+        console.error(`File input element with id '${inputId}' not found.`);
+      }
     },
+    
     //General purpose function to show errors on a page
     getHourRange(day) {
       let s = day * 8
